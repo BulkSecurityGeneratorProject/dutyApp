@@ -12,34 +12,39 @@ import org.joda.time.LocalDate;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
- * A Author.
+ * A Book.
  */
 @Entity
-@Table(name = "T_AUTHOR")
+@Table(name = "T_BOOK")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Author implements Serializable {
+public class Book implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "title")
+    private String title;
+
+    @Column(name = "description")
+    private String description;
 
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     @JsonSerialize(using = CustomLocalDateSerializer.class)
     @JsonDeserialize(using = ISO8601LocalDateDeserializer.class)
-    @Column(name = "birth_date", nullable = false)
-    private LocalDate birthDate;
+    @Column(name = "publication_date", nullable = false)
+    private LocalDate publicationDate;
 
-    @OneToMany(mappedBy = "name")
-    @JsonIgnore
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Book> books = new HashSet<>();
+    @Column(name = "price", precision=10, scale=2)
+    private BigDecimal price;
+
+    @ManyToOne
+    private Author name;
 
     public Long getId() {
         return id;
@@ -49,28 +54,44 @@ public class Author implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public LocalDate getPublicationDate() {
+        return publicationDate;
+    }
+
+    public void setPublicationDate(LocalDate publicationDate) {
+        this.publicationDate = publicationDate;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public Author getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public LocalDate getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
-    }
-
-    public Set<Book> getBooks() {
-        return books;
-    }
-
-    public void setBooks(Set<Book> books) {
-        this.books = books;
+    public void setName(Author author) {
+        this.name = author;
     }
 
     @Override
@@ -82,9 +103,9 @@ public class Author implements Serializable {
             return false;
         }
 
-        Author author = (Author) o;
+        Book book = (Book) o;
 
-        if (id != null ? !id.equals(author.id) : author.id != null) return false;
+        if (id != null ? !id.equals(book.id) : book.id != null) return false;
 
         return true;
     }
@@ -96,10 +117,12 @@ public class Author implements Serializable {
 
     @Override
     public String toString() {
-        return "Author{" +
+        return "Book{" +
                 "id=" + id +
-                ", name='" + name + "'" +
-                ", birthDate='" + birthDate + "'" +
+                ", title='" + title + "'" +
+                ", description='" + description + "'" +
+                ", publicationDate='" + publicationDate + "'" +
+                ", price='" + price + "'" +
                 '}';
     }
 }
