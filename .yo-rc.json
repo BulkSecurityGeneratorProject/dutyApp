@@ -1,0 +1,19 @@
+{
+  "generator-jhipster": {
+    "baseName": "dutyApp",
+    "packageName": "com.g200001.dutyapp",
+    "packageFolder": "com/g200001/dutyapp",
+    "authenticationType": "xauth",
+    "hibernateCache": "ehcache",
+    "clusteredHttpSession": "no",
+    "websocket": "no",
+    "databaseType": "sql",
+    "devDatabaseType": "mysql",
+    "prodDatabaseType": "mysql",
+    "useCompass": false,
+    "buildTool": "maven",
+    "frontendBuilder": "grunt",
+    "javaVersion": "7",
+    "rememberMeKey": "4621ec4ebbfc8d19e08ca441bec7a6b9cee54829"
+  }
+}
