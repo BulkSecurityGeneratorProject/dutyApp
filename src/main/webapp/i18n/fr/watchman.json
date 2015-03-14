@@ -1,0 +1,20 @@
+{
+    "dutyappApp": {
+        "watchman" : {
+            "home": {
+                "title": "Watchmans",
+                "createLabel": "Créer un nouveau Watchman",
+                "createOrEditLabel": "Créer ou éditer un Watchman"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Watchman {{ id }} ?"
+            },
+            "detail": {
+                "title": "Watchman"
+            },
+            "email": "Email",
+            "password": "Password"
+        }
+    }
+}
+
