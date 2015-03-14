@@ -1,0 +1,60 @@
+{
+    "relationships": [
+        {
+            "relationshipId": 1,
+            "relationshipName": "EscalationPolicy",
+            "relationshipNameCapitalized": "EscalationPolicy",
+            "relationshipFieldName": "escalationPolicy",
+            "otherEntityName": "escalationPolicy",
+            "relationshipType": "many-to-one",
+            "otherEntityNameCapitalized": "EscalationPolicy",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "user_id",
+            "fieldType": "String",
+            "fieldNameCapitalized": "User_id",
+            "fieldNameUnderscored": "user_id"
+        },
+        {
+            "fieldId": 2,
+            "fieldName": "service_name",
+            "fieldType": "String",
+            "fieldNameCapitalized": "Service_name",
+            "fieldNameUnderscored": "service_name"
+        },
+        {
+            "fieldId": 3,
+            "fieldName": "api_key",
+            "fieldType": "String",
+            "fieldNameCapitalized": "Api_key",
+            "fieldNameUnderscored": "api_key"
+        },
+        {
+            "fieldId": 4,
+            "fieldName": "service_type",
+            "fieldType": "Integer",
+            "fieldNameCapitalized": "Service_type",
+            "fieldNameUnderscored": "service_type"
+        },
+        {
+            "fieldId": 5,
+            "fieldName": "is_deleted",
+            "fieldType": "Boolean",
+            "fieldNameCapitalized": "Is_deleted",
+            "fieldNameUnderscored": "is_deleted"
+        }
+    ],
+    "fieldsContainOwnerManyToMany": false,
+    "fieldsContainOneToMany": false,
+    "fieldsContainLocalDate": false,
+    "fieldsContainCustomTime": false,
+    "fieldsContainBigDecimal": false,
+    "fieldsContainDateTime": false,
+    "fieldsContainDate": false,
+    "changelogDate": "20150314192532",
+    "pagination": "pagination"
+}

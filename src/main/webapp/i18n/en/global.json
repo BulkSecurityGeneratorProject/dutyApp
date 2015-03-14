@@ -7,6 +7,8 @@
             "entities": {
                 "main": "Entities",
                 "watchman": "Watchman",
+                "service": "Service",
+                "escalationPolicy": "EscalationPolicy",
                 "additionalEntity": "JHipster will add addtional entities"
             },
             "account": {

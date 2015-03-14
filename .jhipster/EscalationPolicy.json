@@ -1,0 +1,54 @@
+{
+    "relationships": [
+        {
+            "relationshipId": 1,
+            "relationshipName": "Service",
+            "relationshipNameCapitalized": "Service",
+            "relationshipFieldName": "service",
+            "otherEntityName": "service",
+            "relationshipType": "one-to-many",
+            "otherEntityNameCapitalized": "Service"
+        },
+        {
+            "relationshipId": 2,
+            "relationshipName": "n",
+            "relationshipNameCapitalized": "N",
+            "relationshipFieldName": "n",
+            "otherEntityName": "n",
+            "relationshipType": "one-to-many",
+            "otherEntityNameCapitalized": "N"
+        }
+    ],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "policy_name",
+            "fieldType": "String",
+            "fieldNameCapitalized": "Policy_name",
+            "fieldNameUnderscored": "policy_name"
+        },
+        {
+            "fieldId": 2,
+            "fieldName": "has_cycle",
+            "fieldType": "Boolean",
+            "fieldNameCapitalized": "Has_cycle",
+            "fieldNameUnderscored": "has_cycle"
+        },
+        {
+            "fieldId": 3,
+            "fieldName": "cycle_time",
+            "fieldType": "Long",
+            "fieldNameCapitalized": "Cycle_time",
+            "fieldNameUnderscored": "cycle_time"
+        }
+    ],
+    "fieldsContainOwnerManyToMany": false,
+    "fieldsContainOneToMany": true,
+    "fieldsContainLocalDate": false,
+    "fieldsContainCustomTime": false,
+    "fieldsContainBigDecimal": false,
+    "fieldsContainDateTime": false,
+    "fieldsContainDate": false,
+    "changelogDate": "20150314194159",
+    "pagination": "pagination"
+}

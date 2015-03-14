@@ -1,0 +1,156 @@
+<div>
+
+    <h2 translate="dutyappApp.service.home.title">Service</h2>
+
+    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#saveServiceModal" ng-click="clear()">
+        <span class="glyphicon glyphicon-flash"></span> <span translate="dutyappApp.service.home.createLabel">Create a new Service</span>
+    </button>
+    <div class="modal fade" id="saveServiceModal" tabindex="-1" role="dialog" aria-labelledby="myServiceLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="editForm" role="form" novalidate
+                      class="ng-scope ng-invalid ng-invalid-required ng-dirty ng-valid-minlength"
+                      ng-submit="create()">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                ng-click="clear()">&times;</button>
+                        <h4 class="modal-title" id="myServiceLabel" translate="dutyappApp.service.home.createOrEditLabel">Create or edit a Service</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>ID</label>
+                            <input type="text" class="form-control" name="id"
+                                   ng-model="service.id" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label translate="dutyappApp.service.user_id">User_id</label>
+                            <input type="text" class="form-control" name="user_id"
+                                   ng-model="service.user_id">
+                        </div>
+                        <div class="form-group">
+                            <label translate="dutyappApp.service.service_name">Service_name</label>
+                            <input type="text" class="form-control" name="service_name"
+                                   ng-model="service.service_name">
+                        </div>
+                        <div class="form-group">
+                            <label translate="dutyappApp.service.api_key">Api_key</label>
+                            <input type="text" class="form-control" name="api_key"
+                                   ng-model="service.api_key">
+                        </div>
+                        <div class="form-group">
+                            <label translate="dutyappApp.service.service_type">Service_type</label>
+                            <input type="number" class="form-control" name="service_type"
+                                   ng-model="service.service_type">
+                        </div>
+                        <div class="form-group">
+                            <label translate="dutyappApp.service.is_deleted">Is_deleted</label>
+                            <input type="checkbox" class="form-control" name="is_deleted"
+                                   ng-model="service.is_deleted">
+                        </div>
+
+                        <div class="form-group">
+                            <label translate="dutyappApp.service.EscalationPolicy">EscalationPolicy</label>
+                            <select class="form-control" name="EscalationPolicy" ng-model="service.escalationPolicy.id" ng-options="escalationPolicy.id as escalationPolicy.policy_name for escalationPolicy in escalationpolicys">
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                        </button>
+                        <button type="submit" ng-disabled="editForm.$invalid" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteServiceConfirmation">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="deleteForm" ng-submit="confirmDelete(service.id)">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                ng-click="clear()">&times;</button>
+                        <h4 class="modal-title" translate="entity.delete.title">Confirm delete operation</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p translate="dutyappApp.service.delete.question" translate-values="{id: '{{service.id}}'}">Are you sure you want to delete this Service?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                        </button>
+                        <button type="submit" ng-disabled="deleteForm.$invalid" class="btn btn-danger">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th translate="dutyappApp.service.user_id">User_id</th>
+                    <th translate="dutyappApp.service.service_name">Service_name</th>
+                    <th translate="dutyappApp.service.api_key">Api_key</th>
+                    <th translate="dutyappApp.service.service_type">Service_type</th>
+                    <th translate="dutyappApp.service.is_deleted">Is_deleted</th>
+                    <th translate="dutyappApp.service.EscalationPolicy">EscalationPolicy</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="service in services">
+                    <td><a ui-sref="serviceDetail({id:service.id})">{{service.id}}</a></td>
+                    <td>{{service.user_id}}</td>
+                    <td>{{service.service_name}}</td>
+                    <td>{{service.api_key}}</td>
+                    <td>{{service.service_type}}</td>
+                    <td>{{service.is_deleted}}</td>
+                    <td>{{service.escalationPolicy.policy_name}}</td>
+                    <td>
+                        <button type="submit"
+                                ui-sref="serviceDetail({id:service.id})"
+                                class="btn btn-info">
+                            <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span translate="entity.action.view"> View</span>
+                        </button>
+                        <button type="submit"
+                                ng-click="update(service.id)"
+                                class="btn btn-primary">
+                            <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span translate="entity.action.edit"> Edit</span>
+                        </button>
+                        <button type="submit"
+                                ng-click="delete(service.id)"
+                                class="btn btn-danger">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete"> Delete</span>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <nav>
+            <ul class="pagination">
+                <li ng-show="links['first']" ng-click="loadPage(links['first'])"><a href="#">&lt;&lt;</a></li>
+                <li ng-show="links['prev']" ng-click="loadPage(links['prev'])"><a href="#">&lt;</a></li>
+                <li ng-show="page > 2" ng-click="loadPage(page - 2)"><a href="#">{{page - 2}}</a></li>
+                <li ng-show="page > 1" ng-click="loadPage(page - 1)"><a href="#">{{page - 1}}</a></li>
+                <li class="active"><a href="#">{{page}}</a></li>
+                <li ng-show="page < links['last']" ng-click="loadPage(page + 1)"><a href="#">{{page + 1}}</a></li>
+                <li ng-show="page < links['last'] - 1" ng-click="loadPage(page + 2)"><a href="#">{{page + 2}}</a></li>
+                <li ng-show="links['next']" ng-click="loadPage(links['next'])"><a href="#">&gt;</a></li>
+                <li ng-show="links['last']" ng-click="loadPage(links['last'])"><a href="#">&gt;&gt;</a></li>
+            </ul>
+        </nav>
+    </div>
+</div>

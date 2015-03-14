@@ -1,0 +1,22 @@
+{
+    "dutyappApp": {
+        "escalationPolicy" : {
+            "home": {
+                "title": "EscalationPolicys",
+                "createLabel": "Create a new EscalationPolicy",
+                "createOrEditLabel": "Create or edit a EscalationPolicy"
+            },
+            "delete": {
+                "question": "Are you sure you want to delete EscalationPolicy {{ id }}?"
+            },
+            "detail": {
+                "title": "EscalationPolicy"
+            },
+            "policy_name": "Policy_name",
+            "has_cycle": "Has_cycle",
+            "cycle_time": "Cycle_time",
+            "Service": "Service",
+            "n": "n"
+        }
+    }
+}

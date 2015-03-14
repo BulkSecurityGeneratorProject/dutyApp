@@ -1,0 +1,46 @@
+
+<div>
+    <h2><span translate="dutyappApp.escalationPolicy.detail.title">EscalationPolicy</span> {{escalationPolicy.id}}</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th translate="entity.detail.field">Field</th>
+                    <th translate="entity.detail.value">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span translate="dutyappApp.escalationPolicy.policy_name">Policy_name</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{escalationPolicy.policy_name}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="dutyappApp.escalationPolicy.has_cycle">Has_cycle</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{escalationPolicy.has_cycle}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="dutyappApp.escalationPolicy.cycle_time">Cycle_time</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{escalationPolicy.cycle_time}}" readonly>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            ui-sref="escalationPolicy"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>
