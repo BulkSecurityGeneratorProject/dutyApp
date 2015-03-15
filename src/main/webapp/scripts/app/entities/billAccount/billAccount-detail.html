@@ -1,0 +1,30 @@
+
+<div>
+    <h2><span translate="dutyappApp.billAccount.detail.title">BillAccount</span> {{billAccount.id}}</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th translate="entity.detail.field">Field</th>
+                    <th translate="entity.detail.value">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span translate="dutyappApp.billAccount.company_name">Company_name</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{billAccount.company_name}}" readonly>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            ui-sref="billAccount"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

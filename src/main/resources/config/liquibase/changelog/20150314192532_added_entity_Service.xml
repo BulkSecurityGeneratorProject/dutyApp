@@ -25,7 +25,7 @@
         
         <addForeignKeyConstraint baseColumnNames="escalationpolicy_id"
                                  baseTableName="T_SERVICE"
-                                 constraintName="fk_service_escalationpolicy_id"
+                                 constraintName="fk3_service_escalationpolicy_id"
                                  referencedColumnNames="id"
                                  referencedTableName="T_ESCALATIONPOLICY"/>
 

@@ -1,0 +1,22 @@
+{
+    "dutyappApp": {
+        "policyRule" : {
+            "home": {
+                "title": "PolicyRules",
+                "createLabel": "Créer un nouveau PolicyRule",
+                "createOrEditLabel": "Créer ou éditer un PolicyRule"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le PolicyRule {{ id }} ?"
+            },
+            "detail": {
+                "title": "PolicyRule"
+            },
+            "sequence": "Sequence",
+            "escalate_time": "Escalate_time",
+            "EscalationPolicy": "EscalationPolicy",
+            "Watchman": "Watchman"
+        }
+    }
+}
+

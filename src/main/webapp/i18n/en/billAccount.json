@@ -1,0 +1,18 @@
+{
+    "dutyappApp": {
+        "billAccount" : {
+            "home": {
+                "title": "BillAccounts",
+                "createLabel": "Create a new BillAccount",
+                "createOrEditLabel": "Create or edit a BillAccount"
+            },
+            "delete": {
+                "question": "Are you sure you want to delete BillAccount {{ id }}?"
+            },
+            "detail": {
+                "title": "BillAccount"
+            },
+            "company_name": "Company_name"
+        }
+    }
+}

@@ -39,6 +39,9 @@ public class EscalationPolicy implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Service> services = new HashSet<>();
 
+    @OneToMany(mappedBy = "escalationPolicy")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<PolicyRule> policyRules = new HashSet<>();
 
     public String getId() {
         return id;
@@ -78,6 +81,14 @@ public class EscalationPolicy implements Serializable {
 
     public void setServices(Set<Service> services) {
         this.services = services;
+    }
+    
+    public Set<PolicyRule> getPolicyRules() {
+    	return policyRules;
+    }
+    
+    public void setPolicyRules(Set<PolicyRule> policyRules) {
+    	this.policyRules = policyRules;
     }
 
     @Override

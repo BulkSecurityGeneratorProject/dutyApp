@@ -9,6 +9,8 @@
                 "watchman": "Watchman",
                 "service": "Service",
                 "escalationPolicy": "EscalationPolicy",
+                "policyRule": "PolicyRule",
+                "billAccount": "BillAccount",
                 "additionalEntity": "JHipster will add addtional entities"
             },
             "account": {

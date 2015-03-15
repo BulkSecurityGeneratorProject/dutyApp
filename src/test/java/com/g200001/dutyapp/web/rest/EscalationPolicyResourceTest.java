@@ -100,7 +100,7 @@ public class EscalationPolicyResourceTest {
         restEscalationPolicyMockMvc.perform(get("/api/escalationPolicys"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.[0].id").value(escalationPolicy.getId().intValue()))
+                .andExpect(jsonPath("$.[0].id").value(escalationPolicy.getId()))
                 .andExpect(jsonPath("$.[0].policy_name").value(DEFAULT_POLICY_NAME.toString()))
                 .andExpect(jsonPath("$.[0].has_cycle").value(DEFAULT_HAS_CYCLE.booleanValue()))
                 .andExpect(jsonPath("$.[0].cycle_time").value(DEFAULT_CYCLE_TIME.intValue()));
@@ -116,7 +116,7 @@ public class EscalationPolicyResourceTest {
         restEscalationPolicyMockMvc.perform(get("/api/escalationPolicys/{id}", escalationPolicy.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.id").value(escalationPolicy.getId().intValue()))
+            .andExpect(jsonPath("$.id").value(escalationPolicy.getId()))
             .andExpect(jsonPath("$.policy_name").value(DEFAULT_POLICY_NAME.toString()))
             .andExpect(jsonPath("$.has_cycle").value(DEFAULT_HAS_CYCLE.booleanValue()))
             .andExpect(jsonPath("$.cycle_time").value(DEFAULT_CYCLE_TIME.intValue()));

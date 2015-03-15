@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <property name="now" value="now()" dbms="mysql,h2"/>
+    <property name="now" value="current_timestamp" dbms="postgresql"/>
+
+    <!--
+        Added the entity PolicyRule.
+    -->
+    <changeSet id="20150314223734" author="jhipster">
+        <createTable tableName="T_POLICYRULE">
+            <column name="id" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="sequence" type="integer"/>
+            <column name="escalate_time" type="integer"/>
+            <column name="escalationpolicy_id" type="varchar(50)"/>
+        </createTable>
+        
+        <addForeignKeyConstraint baseColumnNames="escalationpolicy_id"
+                                 baseTableName="T_POLICYRULE"
+                                 constraintName="fk4_policyrule_escalationpolicy_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="T_ESCALATIONPOLICY"/>  
+		
+		
+		<createTable tableName="T_POLICYRULE_USER">
+            <column name="policyrule_id" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="user_id, policyrule_id" tableName="T_POLICYRULE_USER"/>
+
+        <addForeignKeyConstraint baseColumnNames="policyrule_id"
+                                 baseTableName="T_POLICYRULE_USER"
+                                 constraintName="fk4_policyrule_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="T_POLICYRULE"/>
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="T_POLICYRULE_USER"
+								 constraintName="fk4_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="T_USER"/>						 
+					 
+    </changeSet>
+</databaseChangeLog>
