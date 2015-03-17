@@ -35,7 +35,7 @@ public class PolicyRule implements Serializable {
     private EscalationPolicy escalationPolicy;
 
     @ManyToMany
-    @JsonIgnore
+    //@JsonIgnore
     @JoinTable(
             name = "T_POLICYRULE_USER",
             joinColumns = {@JoinColumn(name = "policyrule_id", referencedColumnName = "id")},
@@ -75,11 +75,11 @@ public class PolicyRule implements Serializable {
         this.escalationPolicy = escalationPolicy;
     }
 
-    public Set<User> getWatchmans() {
+    public Set<User> getUsers() {
         return users;
     }
 
-    public void setWatchmans(Set<User> users) {
+    public void setUsers(Set<User> users) {
         this.users = users;
     }
 

@@ -1,0 +1,20 @@
+{
+    "dutyappApp": {
+        "alert" : {
+            "home": {
+                "title": "Alerts",
+                "createLabel": "Create a new Alert",
+                "createOrEditLabel": "Create or edit a Alert"
+            },
+            "delete": {
+                "question": "Are you sure you want to delete Alert {{ id }}?"
+            },
+            "detail": {
+                "title": "Alert"
+            },
+            "alert_time": "Alert_time",
+            "Incident": "Incident",
+            "User": "User"
+        }
+    }
+}

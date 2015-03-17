@@ -6,11 +6,12 @@
             "home": "Home",
             "entities": {
                 "main": "Entities",
-                "watchman": "Watchman",
                 "service": "Service",
                 "escalationPolicy": "EscalationPolicy",
                 "policyRule": "PolicyRule",
                 "billAccount": "BillAccount",
+                "incident": "Incident",
+                "alert": "Alert",
                 "additionalEntity": "JHipster will add addtional entities"
             },
             "account": {

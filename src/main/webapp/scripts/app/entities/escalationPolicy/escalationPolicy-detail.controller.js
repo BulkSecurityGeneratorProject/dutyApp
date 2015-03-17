@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dutyappApp')
-    .controller('EscalationPolicyDetailController', function ($scope, $stateParams, EscalationPolicy, Service, N) {
+    .controller('EscalationPolicyDetailController', function ($scope, $stateParams, EscalationPolicy, Service) {
         $scope.escalationPolicy = {};
         $scope.load = function (id) {
             EscalationPolicy.get({id: id}, function(result) {

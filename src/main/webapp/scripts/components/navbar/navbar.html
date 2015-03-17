@@ -17,6 +17,14 @@
                         <span translate="global.menu.home">Home</span>
                     </a>
                 </li>
+
+                <li ui-sref-active="active">
+                    <a ui-sref="billAccount">
+                        <span class="glyphicon glyphicon-home"></span>
+                        <span translate="global.menu.entities.billAccount">billAccount</span>
+                    </a>
+                </li>
+
                 <li ui-sref-active="active" ng-switch-when="true" class="dropdown pointer">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="">
                                 <span>
@@ -28,16 +36,16 @@
                                 </span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li ui-sref-active="active" ><a ui-sref="watchman"><span class="glyphicon glyphicon-asterisk"></span>
-                        &#xA0;<span translate="global.menu.entities.watchman">watchman</span></a></li>
                         <li ui-sref-active="active" ><a ui-sref="service"><span class="glyphicon glyphicon-asterisk"></span>
                         &#xA0;<span translate="global.menu.entities.service">service</span></a></li>
                         <li ui-sref-active="active" ><a ui-sref="escalationPolicy"><span class="glyphicon glyphicon-asterisk"></span>
                         &#xA0;<span translate="global.menu.entities.escalationPolicy">escalationPolicy</span></a></li>
                         <li ui-sref-active="active" ><a ui-sref="policyRule"><span class="glyphicon glyphicon-asterisk"></span>
                         &#xA0;<span translate="global.menu.entities.policyRule">policyRule</span></a></li>
-                        <li ui-sref-active="active" ><a ui-sref="billAccount"><span class="glyphicon glyphicon-asterisk"></span>
-                        &#xA0;<span translate="global.menu.entities.billAccount">billAccount</span></a></li>
+                        <li ui-sref-active="active" ><a ui-sref="incident"><span class="glyphicon glyphicon-asterisk"></span>
+                        &#xA0;<span translate="global.menu.entities.incident">incident</span></a></li>
+                        <li ui-sref-active="active" ><a ui-sref="alert"><span class="glyphicon glyphicon-asterisk"></span>
+                        &#xA0;<span translate="global.menu.entities.alert">alert</span></a></li>
                         <!-- JHipster will add entities to the menu here -->
                     </ul>
                 </li>

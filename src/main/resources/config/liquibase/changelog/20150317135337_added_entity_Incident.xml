@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <property name="now" value="now()" dbms="mysql,h2"/>
+    <property name="now" value="current_timestamp" dbms="postgresql"/>
+
+    <!--
+        Added the entity Incident.
+    -->
+    <changeSet id="20150317135337" author="jhipster">
+        <createTable tableName="T_INCIDENT">
+            <column name="id" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="create_time" type="timestamp">
+                <constraints nullable="false" />
+            </column>
+            <column name="state" type="integer"/>
+            <column name="ack_time" type="timestamp">
+                <constraints nullable="false" />
+            </column>
+            <column name="resolve_time" type="timestamp">
+                <constraints nullable="false" />
+            </column>
+            <column name="description" type="varchar(255)"/>
+            <column name="detail" type="varchar(255)"/>
+            <column name="incident_no" type="bigint"/>
+            <column name="service_id" type="varchar(50)"/>
+            <column name="ack_user_id" type="varchar(50)"/>
+            <column name="resolve_user_id" type="varchar(50)"/>
+            <column name="assign_user_id" type="varchar(50)"/>
+        </createTable>
+        <dropDefaultValue tableName="T_INCIDENT" columnName="create_time" columnDataType="datetime"/>
+
+        <dropDefaultValue tableName="T_INCIDENT" columnName="ack_time" columnDataType="datetime"/>
+
+        <dropDefaultValue tableName="T_INCIDENT" columnName="resolve_time" columnDataType="datetime"/>
+
+        
+        <addForeignKeyConstraint baseColumnNames="service_id"
+                                 baseTableName="T_INCIDENT"
+                                 constraintName="fk_incident_service_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="T_SERVICE"/>
+
+        <addForeignKeyConstraint baseColumnNames="ack_user_id"
+                                 baseTableName="T_INCIDENT"
+                                 constraintName="fk_incident_ack_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="T_USER"/>
+
+        <addForeignKeyConstraint baseColumnNames="resolve_user_id"
+                                 baseTableName="T_INCIDENT"
+                                 constraintName="fk_incident_resolve_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="T_USER"/>
+
+        <addForeignKeyConstraint baseColumnNames="assign_user_id"
+                                 baseTableName="T_INCIDENT"
+                                 constraintName="fk_incident_assign_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="T_USER"/>
+
+    </changeSet>
+</databaseChangeLog>

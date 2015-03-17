@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <property name="now" value="now()" dbms="mysql,h2"/>
+    <property name="now" value="current_timestamp" dbms="postgresql"/>
+
+    <!--
+        Added the entity Alert.
+    -->
+    <changeSet id="20150317142227" author="jhipster">
+        <createTable tableName="T_ALERT">
+            <column name="id" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="alert_time" type="timestamp">
+                <constraints nullable="false" />
+            </column>
+            <column name="incident_id" type="varchar(50)"/>
+            <column name="user_id" type="varchar(50)"/>
+        </createTable>
+        <dropDefaultValue tableName="T_ALERT" columnName="alert_time" columnDataType="datetime"/>
+
+        
+        <addForeignKeyConstraint baseColumnNames="incident_id"
+                                 baseTableName="T_ALERT"
+                                 constraintName="fk_alert_incident_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="T_INCIDENT"/>
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="T_ALERT"
+                                 constraintName="fk_alert_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="T_USER"/>
+
+    </changeSet>
+</databaseChangeLog>

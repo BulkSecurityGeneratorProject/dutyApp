@@ -8,15 +8,6 @@
             "otherEntityName": "service",
             "relationshipType": "one-to-many",
             "otherEntityNameCapitalized": "Service"
-        },
-        {
-            "relationshipId": 2,
-            "relationshipName": "n",
-            "relationshipNameCapitalized": "N",
-            "relationshipFieldName": "n",
-            "otherEntityName": "n",
-            "relationshipType": "one-to-many",
-            "otherEntityNameCapitalized": "N"
         }
     ],
     "fields": [

@@ -12,12 +12,12 @@
         },
         {
             "relationshipId": 2,
-            "relationshipName": "Watchman",
-            "relationshipNameCapitalized": "Watchman",
-            "relationshipFieldName": "watchman",
-            "otherEntityName": "watchman",
+            "relationshipName": "User",
+            "relationshipNameCapitalized": "User",
+            "relationshipFieldName": "user",
+            "otherEntityName": "user",
             "relationshipType": "one-to-many",
-            "otherEntityNameCapitalized": "Watchman"
+            "otherEntityNameCapitalized": "User"
         }
     ],
     "fields": [

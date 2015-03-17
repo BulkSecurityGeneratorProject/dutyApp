@@ -9,6 +9,15 @@
             "relationshipType": "many-to-one",
             "otherEntityNameCapitalized": "EscalationPolicy",
             "otherEntityField": "id"
+        },
+		{
+            "relationshipId": 2,
+            "relationshipName": "Incident",
+            "relationshipNameCapitalized": "Incident",
+            "relationshipFieldName": "incident",
+            "otherEntityName": "incident",
+            "relationshipType": "one-to-many",
+            "otherEntityNameCapitalized": "Incident"
         }
     ],
     "fields": [

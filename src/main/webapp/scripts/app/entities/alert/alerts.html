@@ -1,11 +1,11 @@
 <div>
 
-    <h2 translate="dutyappApp.policyRule.home.title">PolicyRule</h2>
+    <h2 translate="dutyappApp.alert.home.title">Alert</h2>
 
-    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#savePolicyRuleModal" ng-click="clear()">
-        <span class="glyphicon glyphicon-flash"></span> <span translate="dutyappApp.policyRule.home.createLabel">Create a new PolicyRule</span>
+    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#saveAlertModal" ng-click="clear()">
+        <span class="glyphicon glyphicon-flash"></span> <span translate="dutyappApp.alert.home.createLabel">Create a new Alert</span>
     </button>
-    <div class="modal fade" id="savePolicyRuleModal" tabindex="-1" role="dialog" aria-labelledby="myPolicyRuleLabel"
+    <div class="modal fade" id="saveAlertModal" tabindex="-1" role="dialog" aria-labelledby="myAlertLabel"
          aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -16,35 +16,29 @@
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                                 ng-click="clear()">&times;</button>
-                        <h4 class="modal-title" id="myPolicyRuleLabel" translate="dutyappApp.policyRule.home.createOrEditLabel">Create or edit a PolicyRule</h4>
+                        <h4 class="modal-title" id="myAlertLabel" translate="dutyappApp.alert.home.createOrEditLabel">Create or edit a Alert</h4>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
                             <label>ID</label>
                             <input type="text" class="form-control" name="id"
-                                   ng-model="policyRule.id" readonly>
+                                   ng-model="alert.id" readonly>
                         </div>
 
                         <div class="form-group">
-                            <label translate="dutyappApp.policyRule.sequence">Sequence</label>
-                            <input type="number" class="form-control" name="sequence"
-                                   ng-model="policyRule.sequence">
-                        </div>
-                        <div class="form-group">
-                            <label translate="dutyappApp.policyRule.escalate_time">Escalate_time</label>
-                            <input type="number" class="form-control" name="escalate_time"
-                                   ng-model="policyRule.escalate_time">
+                            <label translate="dutyappApp.alert.alert_time">Alert_time</label>
+                            <input type="datetime-local" class="form-control" name="alert_time"
+                                   ng-model="alert.alert_time" ng-model-options="{timezone: 'UTC'}">
                         </div>
 
                         <div class="form-group">
-                            <label translate="dutyappApp.policyRule.EscalationPolicy">EscalationPolicy</label>
-                            <select class="form-control" name="EscalationPolicy" ng-model="policyRule.escalationPolicy.id" ng-options="escalationPolicy.id as escalationPolicy.policy_name for escalationPolicy in escalationpolicys">
+                            <label translate="dutyappApp.alert.Incident">Incident</label>
+                            <select class="form-control" name="Incident" ng-model="alert.incident.id" ng-options="incident.id as incident.description for incident in incidents">
                             </select>
                         </div>
-
                         <div class="form-group">
-                            <label translate="dutyappApp.policyRule.User">User</label>
-                            <select class="form-control" multiple name="User" ng-model="policyRule.users" ng-options="user.id as user.login for user in users track by user.id">
+                            <label translate="dutyappApp.alert.User">User</label>
+                            <select class="form-control" name="User" ng-model="alert.user.id" ng-options="user.id as user.login for user in users">
                             </select>
                         </div>
 
@@ -62,17 +56,17 @@
         </div>
     </div>
 
-    <div class="modal fade" id="deletePolicyRuleConfirmation">
+    <div class="modal fade" id="deleteAlertConfirmation">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form name="deleteForm" ng-submit="confirmDelete(policyRule.id)">
+                <form name="deleteForm" ng-submit="confirmDelete(alert.id)">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                                 ng-click="clear()">&times;</button>
                         <h4 class="modal-title" translate="entity.delete.title">Confirm delete operation</h4>
                     </div>
                     <div class="modal-body">
-                        <p translate="dutyappApp.policyRule.delete.question" translate-values="{id: '{{policyRule.id}}'}">Are you sure you want to delete this PolicyRule?</p>
+                        <p translate="dutyappApp.alert.delete.question" translate-values="{id: '{{alert.id}}'}">Are you sure you want to delete this Alert?</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
@@ -92,31 +86,31 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th translate="dutyappApp.policyRule.sequence">Sequence</th>
-                    <th translate="dutyappApp.policyRule.escalate_time">Escalate_time</th>
-                    <th translate="dutyappApp.policyRule.EscalationPolicy">EscalationPolicy</th>
+                    <th translate="dutyappApp.alert.alert_time">Alert_time</th>
+                    <th translate="dutyappApp.alert.Incident">Incident</th>
+                    <th translate="dutyappApp.alert.User">User</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="policyRule in policyRules">
-                    <td><a ui-sref="policyRuleDetail({id:policyRule.id})">{{policyRule.id}}</a></td>
-                    <td>{{policyRule.sequence}}</td>
-                    <td>{{policyRule.escalate_time}}</td>
-                    <td>{{policyRule.escalationPolicy.policy_name}}</td>
+                <tr ng-repeat="alert in alerts">
+                    <td><a ui-sref="alertDetail({id:alert.id})">{{alert.id}}</a></td>
+                    <td>{{alert.alert_time}}</td>
+                    <td>{{alert.Incident.description}}</td>
+                    <td>{{alert.User.login}}</td>
                     <td>
                         <button type="submit"
-                                ui-sref="policyRuleDetail({id:policyRule.id})"
+                                ui-sref="alertDetail({id:alert.id})"
                                 class="btn btn-info">
                             <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span translate="entity.action.view"> View</span>
                         </button>
                         <button type="submit"
-                                ng-click="update(policyRule.id)"
+                                ng-click="update(alert.id)"
                                 class="btn btn-primary">
                             <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span translate="entity.action.edit"> Edit</span>
                         </button>
                         <button type="submit"
-                                ng-click="delete(policyRule.id)"
+                                ng-click="delete(alert.id)"
                                 class="btn btn-danger">
                             <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete"> Delete</span>
                         </button>

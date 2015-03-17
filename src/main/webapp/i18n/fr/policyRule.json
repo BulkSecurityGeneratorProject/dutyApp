@@ -15,7 +15,7 @@
             "sequence": "Sequence",
             "escalate_time": "Escalate_time",
             "EscalationPolicy": "EscalationPolicy",
-            "Watchman": "Watchman"
+            "User": "User"
         }
     }
 }

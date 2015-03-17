@@ -1,0 +1,86 @@
+
+<div>
+    <h2><span translate="dutyappApp.incident.detail.title">Incident</span> {{incident.id}}</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th translate="entity.detail.field">Field</th>
+                    <th translate="entity.detail.value">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span translate="dutyappApp.incident.create_time">Create_time</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{incident.create_time}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="dutyappApp.incident.state">State</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{incident.state}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="dutyappApp.incident.ack_time">Ack_time</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{incident.ack_time}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="dutyappApp.incident.resolve_time">Resolve_time</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{incident.resolve_time}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="dutyappApp.incident.description">Description</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{incident.description}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="dutyappApp.incident.detail">Detail</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{incident.detail}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="dutyappApp.incident.incident_no">Incident_no</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{incident.incident_no}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="dutyappApp.incident.Service">Service</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{incident.Service.service_name}}" readonly>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            ui-sref="incident"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

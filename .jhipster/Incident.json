@@ -1,0 +1,113 @@
+{
+    "relationships": [
+        {
+            "relationshipId": 1,
+            "relationshipName": "Service",
+            "relationshipNameCapitalized": "Service",
+            "relationshipFieldName": "service",
+            "otherEntityName": "service",
+            "relationshipType": "many-to-one",
+            "otherEntityNameCapitalized": "Service",
+            "otherEntityField": "service_name"
+        },
+        {
+            "relationshipId": 2,
+            "relationshipName": "Alert",
+            "relationshipNameCapitalized": "Alert",
+            "relationshipFieldName": "alert",
+            "otherEntityName": "alert",
+            "relationshipType": "one-to-many",
+            "otherEntityNameCapitalized": "Alert"
+        },
+        {
+            "relationshipId": 3,
+            "relationshipName": "ack_user",
+            "relationshipNameCapitalized": "Ack_user",
+            "relationshipFieldName": "ack_user",
+            "otherEntityName": "user",
+            "relationshipType": "many-to-one",
+            "otherEntityNameCapitalized": "User",
+            "ownerSide": true
+        },
+        {
+            "relationshipId": 4,
+            "relationshipName": "resolve_user",
+            "relationshipNameCapitalized": "Resolve_user",
+            "relationshipFieldName": "resolve_user",
+            "otherEntityName": "user",
+            "relationshipType": "many-to-one",
+            "otherEntityNameCapitalized": "User",
+            "ownerSide": true
+        },
+        {
+            "relationshipId": 5,
+            "relationshipName": "assign_user",
+            "relationshipNameCapitalized": "Assign_user",
+            "relationshipFieldName": "assign_user",
+            "otherEntityName": "assign_user",
+            "relationshipType": "many-to-one",
+            "otherEntityNameCapitalized": "User",
+            "ownerSide": true
+        }
+    ],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "create_time",
+            "fieldType": "DateTime",
+            "fieldNameCapitalized": "Create_time",
+            "fieldNameUnderscored": "create_time"
+        },
+        {
+            "fieldId": 2,
+            "fieldName": "state",
+            "fieldType": "Integer",
+            "fieldNameCapitalized": "State",
+            "fieldNameUnderscored": "state"
+        },
+        {
+            "fieldId": 3,
+            "fieldName": "ack_time",
+            "fieldType": "DateTime",
+            "fieldNameCapitalized": "Ack_time",
+            "fieldNameUnderscored": "ack_time"
+        },
+        {
+            "fieldId": 4,
+            "fieldName": "resolve_time",
+            "fieldType": "DateTime",
+            "fieldNameCapitalized": "Resolve_time",
+            "fieldNameUnderscored": "resolve_time"
+        },
+        {
+            "fieldId": 5,
+            "fieldName": "description",
+            "fieldType": "String",
+            "fieldNameCapitalized": "Description",
+            "fieldNameUnderscored": "description"
+        },
+        {
+            "fieldId": 6,
+            "fieldName": "detail",
+            "fieldType": "String",
+            "fieldNameCapitalized": "Detail",
+            "fieldNameUnderscored": "detail"
+        },
+        {
+            "fieldId": 7,
+            "fieldName": "incident_no",
+            "fieldType": "Long",
+            "fieldNameCapitalized": "Incident_no",
+            "fieldNameUnderscored": "incident_no"
+        }
+    ],
+    "fieldsContainOwnerManyToMany": false,
+    "fieldsContainOneToMany": true,
+    "fieldsContainLocalDate": false,
+    "fieldsContainCustomTime": true,
+    "fieldsContainBigDecimal": false,
+    "fieldsContainDateTime": true,
+    "fieldsContainDate": false,
+    "changelogDate": "20150317135337",
+    "pagination": "pagination"
+}

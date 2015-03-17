@@ -43,6 +43,11 @@ public class Service implements Serializable {
     @ManyToOne
     private EscalationPolicy escalationPolicy;
 
+	@OneToMany(mappedBy = "service")
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Incident> incidents = new HashSet<>();
+	
     public String getId() {
         return id;
     }
@@ -97,6 +102,14 @@ public class Service implements Serializable {
 
     public void setEscalationPolicy(EscalationPolicy escalationPolicy) {
         this.escalationPolicy = escalationPolicy;
+    }
+	
+	public Set<Incident> getIncidents() {
+        return incidents;
+    }
+
+    public void setIncidents(Set<Incident> incidents) {
+        this.incidents = incidents;
     }
 
     @Override

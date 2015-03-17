@@ -1,6 +1,6 @@
 
 <div>
-    <h2><span translate="dutyappApp.policyRule.detail.title">PolicyRule</span> {{policyRule.id}}</h2>
+    <h2><span translate="dutyappApp.alert.detail.title">Alert</span> {{alert.id}}</h2>
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
@@ -12,26 +12,26 @@
             <tbody>
                 <tr>
                     <td>
-                        <span translate="dutyappApp.policyRule.sequence">Sequence</span>
+                        <span translate="dutyappApp.alert.alert_time">Alert_time</span>
                     </td>
                     <td>
-                        <input type="text" class="input-sm form-control" value="{{policyRule.sequence}}" readonly>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span translate="dutyappApp.policyRule.escalate_time">Escalate_time</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{policyRule.escalate_time}}" readonly>
+                        <input type="text" class="input-sm form-control" value="{{alert.alert_time}}" readonly>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <span translate="dutyappApp.policyRule.EscalationPolicy">EscalationPolicy</span>
+                        <span translate="dutyappApp.alert.Incident">Incident</span>
                     </td>
                     <td>
-                        <input type="text" class="input-sm form-control" value="{{policyRule.escalationPolicy.policy_name}}" readonly>
+                        <input type="text" class="input-sm form-control" value="{{alert.Incident.description}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="dutyappApp.alert.User">User</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{alert.User.login}}" readonly>
                     </td>
                 </tr>
             </tbody>
@@ -39,7 +39,7 @@
     </div>
 
     <button type="submit"
-            ui-sref="policyRule"
+            ui-sref="alert"
             class="btn btn-info">
         <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
     </button>
