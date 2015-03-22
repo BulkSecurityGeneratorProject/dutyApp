@@ -1,6 +1,6 @@
 
 <div>
-    <h2><span translate="dutyappApp.incident.detail.title">Incident</span> {{incident.id}}</h2>
+    <h2><span translate="dutyappApp.incident.details.title">Incident</span> {{incident.id}}</h2>
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
@@ -12,34 +12,10 @@
             <tbody>
                 <tr>
                     <td>
-                        <span translate="dutyappApp.incident.create_time">Create_time</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{incident.create_time}}" readonly>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
                         <span translate="dutyappApp.incident.state">State</span>
                     </td>
                     <td>
                         <input type="text" class="input-sm form-control" value="{{incident.state}}" readonly>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span translate="dutyappApp.incident.ack_time">Ack_time</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{incident.ack_time}}" readonly>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span translate="dutyappApp.incident.resolve_time">Resolve_time</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{incident.resolve_time}}" readonly>
                     </td>
                 </tr>
                 <tr>
@@ -64,6 +40,30 @@
                     </td>
                     <td>
                         <input type="text" class="input-sm form-control" value="{{incident.incident_no}}" readonly>
+                    </td>
+                </tr>
+				<tr>
+                    <td>
+                        <span translate="dutyappApp.incident.create_time">Create_time</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{incident.create_time}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="dutyappApp.incident.ack_time">Ack_time</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{incident.ack_time}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="dutyappApp.incident.resolve_time">Resolve_time</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{incident.resolve_time}}" readonly>
                     </td>
                 </tr>
                 <tr>

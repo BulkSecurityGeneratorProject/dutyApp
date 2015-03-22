@@ -1,5 +1,15 @@
 {
-    "relationships": [],
+    "relationships": [
+		{
+            "relationshipId": 1,
+            "relationshipName": "Service",
+            "relationshipNameCapitalized": "Service",
+            "relationshipFieldName": "service",
+            "otherEntityName": "service",
+            "relationshipType": "one-to-many",
+            "otherEntityNameCapitalized": "Service"
+        }
+	],
     "fields": [
         {
             "fieldId": 1,

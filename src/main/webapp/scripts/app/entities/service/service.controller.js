@@ -2,6 +2,9 @@
 
 angular.module('dutyappApp')
     .controller('ServiceController', function ($scope, Service, EscalationPolicy, ParseLinks) {
+        $scope.success = null;
+        $scope.error = null;
+
         $scope.services = [];
         $scope.escalationpolicys = EscalationPolicy.query();
         $scope.page = 1;
@@ -18,11 +21,19 @@ angular.module('dutyappApp')
         $scope.loadAll();
 
         $scope.create = function () {
+            $scope.error = null;
+
             Service.update($scope.service,
                 function () {
                     $scope.loadAll();
                     $('#saveServiceModal').modal('hide');
                     $scope.clear();
+                }).$promise.then(function () {
+                    $scope.success = 'OK';
+                }).catch(function (response) {
+                    $scope.success = null;
+                    if (response.status == 400)
+                        $scope.success = 'ERROR';
                 });
         };
 

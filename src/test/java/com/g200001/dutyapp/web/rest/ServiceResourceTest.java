@@ -1,8 +1,18 @@
 package com.g200001.dutyapp.web.rest;
 
-import com.g200001.dutyapp.Application;
-import com.g200001.dutyapp.domain.Service;
-import com.g200001.dutyapp.repository.ServiceRepository;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,13 +28,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import com.g200001.dutyapp.Application;
+import com.g200001.dutyapp.domain.Service;
+import com.g200001.dutyapp.repository.ServiceRepository;
 
 /**
  * Test class for the ServiceResource REST controller.
@@ -68,7 +74,6 @@ public class ServiceResourceTest {
     @Before
     public void initTest() {
         service = new Service();
-        service.setUser_id(DEFAULT_USER_ID);
         service.setService_name(DEFAULT_SERVICE_NAME);
         service.setApi_key(DEFAULT_API_KEY);
         service.setService_type(DEFAULT_SERVICE_TYPE);
@@ -91,7 +96,6 @@ public class ServiceResourceTest {
         List<Service> services = serviceRepository.findAll();
         assertThat(services).hasSize(1);
         Service testService = services.iterator().next();
-        assertThat(testService.getUser_id()).isEqualTo(DEFAULT_USER_ID);
         assertThat(testService.getService_name()).isEqualTo(DEFAULT_SERVICE_NAME);
         assertThat(testService.getApi_key()).isEqualTo(DEFAULT_API_KEY);
         assertThat(testService.getService_type()).isEqualTo(DEFAULT_SERVICE_TYPE);
@@ -149,7 +153,6 @@ public class ServiceResourceTest {
         serviceRepository.saveAndFlush(service);
 
         // Update the service
-        service.setUser_id(UPDATED_USER_ID);
         service.setService_name(UPDATED_SERVICE_NAME);
         service.setApi_key(UPDATED_API_KEY);
         service.setService_type(UPDATED_SERVICE_TYPE);
@@ -163,7 +166,6 @@ public class ServiceResourceTest {
         List<Service> services = serviceRepository.findAll();
         assertThat(services).hasSize(1);
         Service testService = services.iterator().next();
-        assertThat(testService.getUser_id()).isEqualTo(UPDATED_USER_ID);
         assertThat(testService.getService_name()).isEqualTo(UPDATED_SERVICE_NAME);
         assertThat(testService.getApi_key()).isEqualTo(UPDATED_API_KEY);
         assertThat(testService.getService_type()).isEqualTo(UPDATED_SERVICE_TYPE);

@@ -8,6 +8,6 @@ import java.util.List;
 /**
  * Spring Data JPA repository for the Incident entity.
  */
-public interface IncidentRepository extends JpaRepository<Incident,Long> {
+public interface IncidentRepository extends JpaRepository<Incident, String> {
 
 }

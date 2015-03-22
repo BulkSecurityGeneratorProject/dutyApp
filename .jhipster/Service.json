@@ -12,6 +12,16 @@
         },
 		{
             "relationshipId": 2,
+            "relationshipName": "BillAccount",
+            "relationshipNameCapitalized": "BillAccount",
+            "relationshipFieldName": "billAccount",
+            "otherEntityName": "billAccount",
+            "relationshipType": "many-to-one",
+            "otherEntityNameCapitalized": "BillAccount",
+            "otherEntityField": "id"
+        },
+		{
+            "relationshipId": 3,
             "relationshipName": "Incident",
             "relationshipNameCapitalized": "Incident",
             "relationshipFieldName": "incident",

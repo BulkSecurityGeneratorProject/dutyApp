@@ -12,12 +12,19 @@
             "detail": {
                 "title": "Service"
             },
+            "validate" : {
+                "service_name": {
+                    "required" : "The service name is required",
+                    "minlength": "Your service name is required to be at least {{ minlength }} character",
+                    "maxlength": "Your service name cannot be longer than {{ maxlength }} characters"
+                }
+            },
             "user_id": "User_id",
-            "service_name": "Service_name",
-            "api_key": "Api_key",
-            "service_type": "Service_type",
+            "service_name": "Service",
+            "api_key": "API key",
+            "service_type": "Type",
             "is_deleted": "Is_deleted",
-            "EscalationPolicy": "EscalationPolicy"
+            "EscalationPolicy": "Escalation Policy"
         }
     }
 }

@@ -25,9 +25,6 @@ public class Service implements Serializable {
     @GenericGenerator(name = "uuid", strategy = "uuid")
     private String id;
 
-    @Column(name = "user_id")
-    private String user_id;
-
     @Column(name = "service_name")
     private String service_name;
 
@@ -42,6 +39,9 @@ public class Service implements Serializable {
 
     @ManyToOne
     private EscalationPolicy escalationPolicy;
+    
+	@ManyToOne
+    private BillAccount billAccount;
 
 	@OneToMany(mappedBy = "service")
     @JsonIgnore
@@ -54,14 +54,6 @@ public class Service implements Serializable {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getUser_id() {
-        return user_id;
-    }
-
-    public void setUser_id(String user_id) {
-        this.user_id = user_id;
     }
 
     public String getService_name() {
@@ -104,6 +96,14 @@ public class Service implements Serializable {
         this.escalationPolicy = escalationPolicy;
     }
 	
+    public BillAccount getBillAccount() {
+    	return this.billAccount;
+    }
+    
+    public void setBillAccount(BillAccount billAccount) {
+      this.billAccount = billAccount;
+    }
+    
 	public Set<Incident> getIncidents() {
         return incidents;
     }
@@ -137,7 +137,6 @@ public class Service implements Serializable {
     public String toString() {
         return "Service{" +
                 "id=" + id +
-                ", user_id='" + user_id + "'" +
                 ", service_name='" + service_name + "'" +
                 ", api_key='" + api_key + "'" +
                 ", service_type='" + service_type + "'" +

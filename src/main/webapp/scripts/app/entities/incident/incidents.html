@@ -24,27 +24,12 @@
                             <input type="text" class="form-control" name="id"
                                    ng-model="incident.id" readonly>
                         </div>
-
-                        <div class="form-group">
-                            <label translate="dutyappApp.incident.create_time">Create_time</label>
-                            <input type="datetime-local" class="form-control" name="create_time"
-                                   ng-model="incident.create_time" ng-model-options="{timezone: 'UTC'}">
-                        </div>
                         <div class="form-group">
                             <label translate="dutyappApp.incident.state">State</label>
                             <input type="number" class="form-control" name="state"
                                    ng-model="incident.state">
                         </div>
-                        <div class="form-group">
-                            <label translate="dutyappApp.incident.ack_time">Ack_time</label>
-                            <input type="datetime-local" class="form-control" name="ack_time"
-                                   ng-model="incident.ack_time" ng-model-options="{timezone: 'UTC'}">
-                        </div>
-                        <div class="form-group">
-                            <label translate="dutyappApp.incident.resolve_time">Resolve_time</label>
-                            <input type="datetime-local" class="form-control" name="resolve_time"
-                                   ng-model="incident.resolve_time" ng-model-options="{timezone: 'UTC'}">
-                        </div>
+				
                         <div class="form-group">
                             <label translate="dutyappApp.incident.description">Description</label>
                             <input type="text" class="form-control" name="description"
@@ -61,6 +46,21 @@
                                    ng-model="incident.incident_no">
                         </div>
 
+						<div class="form-group">
+                            <label translate="dutyappApp.incident.create_time">Create_time</label>
+                            <input type="datetime-local" class="form-control" name="create_time"
+                                   ng-model="incident.create_time" ng-model-options="{timezone: 'UTC'}">
+                        </div>
+                        <div class="form-group">
+                            <label translate="dutyappApp.incident.ack_time">Ack_time</label>
+                            <input type="datetime-local" class="form-control" name="ack_time"
+                                   ng-model="incident.ack_time" ng-model-options="{timezone: 'UTC'}">
+                        </div>
+                        <div class="form-group">
+                            <label translate="dutyappApp.incident.resolve_time">Resolve_time</label>
+                            <input type="datetime-local" class="form-control" name="resolve_time"
+                                   ng-model="incident.resolve_time" ng-model-options="{timezone: 'UTC'}">
+                        </div>
                         <div class="form-group">
                             <label translate="dutyappApp.incident.Service">Service</label>
                             <select class="form-control" name="Service" ng-model="incident.service.id" ng-options="service.id as service.service_name for service in services">
@@ -111,13 +111,13 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th translate="dutyappApp.incident.create_time">Create_time</th>
                     <th translate="dutyappApp.incident.state">State</th>
-                    <th translate="dutyappApp.incident.ack_time">Ack_time</th>
-                    <th translate="dutyappApp.incident.resolve_time">Resolve_time</th>
                     <th translate="dutyappApp.incident.description">Description</th>
                     <th translate="dutyappApp.incident.detail">Detail</th>
                     <th translate="dutyappApp.incident.incident_no">Incident_no</th>
+					<th translate="dutyappApp.incident.create_time">Create_time</th>
+                    <th translate="dutyappApp.incident.ack_time">Ack_time</th>
+                    <th translate="dutyappApp.incident.resolve_time">Resolve_time</th>
                     <th translate="dutyappApp.incident.Service">Service</th>
                     <th></th>
                 </tr>
@@ -125,13 +125,13 @@
             <tbody>
                 <tr ng-repeat="incident in incidents">
                     <td><a ui-sref="incidentDetail({id:incident.id})">{{incident.id}}</a></td>
-                    <td>{{incident.create_time}}</td>
                     <td>{{incident.state}}</td>
-                    <td>{{incident.ack_time}}</td>
-                    <td>{{incident.resolve_time}}</td>
                     <td>{{incident.description}}</td>
                     <td>{{incident.detail}}</td>
                     <td>{{incident.incident_no}}</td>
+					<td>{{incident.create_time}}</td>
+                    <td>{{incident.ack_time}}</td>
+                    <td>{{incident.resolve_time}}</td>
                     <td>{{incident.Service.service_name}}</td>
                     <td>
                         <button type="submit"

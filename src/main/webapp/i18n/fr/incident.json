@@ -9,7 +9,7 @@
             "delete": {
                 "question": "Etes-vous certain de vouloir supprimer le Incident {{ id }} ?"
             },
-            "detail": {
+			"details": {
                 "title": "Incident"
             },
             "create_time": "Create_time",

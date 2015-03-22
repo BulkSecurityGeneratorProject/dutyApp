@@ -15,14 +15,20 @@
             <column name="id" type="varchar(50)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="user_id" type="varchar(255)"/>
             <column name="service_name" type="varchar(255)"/>
             <column name="api_key" type="varchar(255)"/>
             <column name="service_type" type="integer"/>
             <column name="is_deleted" type="bit"/>
+			<column name="billaccount_id" type="varchar(50)"/>
             <column name="escalationpolicy_id" type="varchar(50)"/>
         </createTable>
         
+		<addForeignKeyConstraint baseColumnNames="billaccount_id"
+                                 baseTableName="T_SERVICE"
+                                 constraintName="fk3_service_billaccount_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="T_BILLACCOUNT"/>
+		
         <addForeignKeyConstraint baseColumnNames="escalationpolicy_id"
                                  baseTableName="T_SERVICE"
                                  constraintName="fk3_service_escalationpolicy_id"

@@ -1,12 +1,11 @@
 'use strict';
 
 angular.module('dutyappApp')
-    .controller('IncidentController', function ($scope, Incident, Service, Alert, User, Assign_user, ParseLinks) {
+    .controller('IncidentController', function ($scope, Incident, Service, Alert, User, ParseLinks) {
         $scope.incidents = [];
         $scope.services = Service.query();
         $scope.alerts = Alert.query();
         $scope.users = User.query();
-        $scope.assign_users = Assign_user.query();
         $scope.page = 1;
         $scope.loadAll = function() {
             Incident.query({page: $scope.page, per_page: 20}, function(result, headers) {

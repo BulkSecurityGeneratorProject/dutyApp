@@ -15,7 +15,7 @@
             "policy_name": "Policy_name",
             "has_cycle": "Has_cycle",
             "cycle_time": "Cycle_time",
-            "Service": "Service",
+            "Service": "Service"
         }
     }
 }

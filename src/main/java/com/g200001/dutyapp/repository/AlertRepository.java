@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Spring Data JPA repository for the Alert entity.
  */
-public interface AlertRepository extends JpaRepository<Alert,Long> {
+public interface AlertRepository extends JpaRepository<Alert, String> {
 
     @Query("select alert from Alert alert where alert.user.login = ?#{principal.username}")
     List<Alert> findAllForCurrentUser();

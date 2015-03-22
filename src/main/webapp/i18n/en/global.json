@@ -51,8 +51,12 @@
                 "authenticated": "If you want to <a href=\"#/login\">authenticate</a>, you can try the default accounts:<br/>- Administrator (login=\"admin\" and password=\"admin\") <br/>- User (login=\"user\" and password=\"user\").",
                 "register": "You don't have an account yet? <a href=\"#/register\">Register a new account</a>"
             },
+            "success": {
+                "create" : "{{ entity }} created!"
+            },
             "error": {
-                "dontmatch" : "The password and its confirmation do not match!"
+                "dontmatch" : "The password and its confirmation do not match!",
+                "create" : "Create {{ entity }} failed!"
             },
             "validate": {
                 "newpassword": {

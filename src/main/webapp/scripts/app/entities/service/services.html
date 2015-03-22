@@ -1,6 +1,14 @@
 <div>
+    <ul class="nav nav-tabs">
+        <li ui-sref-active="active"><a ui-sref="service">Service</a></li>
+        <li ui-sref-active="active"><a ui-sref="home">Maintenance</a></li>
+    </ul>
 
     <h2 translate="dutyappApp.service.home.title">Service</h2>
+
+    <div class="alert alert-success" ng-show="success" translate="global.messages.success.create" translate-values="{entity: 'Service'}">
+        <strong>Service created!</strong>
+    </div>
 
     <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#saveServiceModal" ng-click="clear()">
         <span class="glyphicon glyphicon-flash"></span> <span translate="dutyappApp.service.home.createLabel">Create a new Service</span>
@@ -10,7 +18,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <form name="editForm" role="form" novalidate
-                      class="ng-scope ng-invalid ng-invalid-required ng-dirty ng-valid-minlength"
+                      class="ng-scope ng-invalid ng-invalid-required ng-dirty ng-valid-minlength form-horizontal"
                       ng-submit="create()">
 
                     <div class="modal-header">
@@ -18,43 +26,77 @@
                                 ng-click="clear()">&times;</button>
                         <h4 class="modal-title" id="myServiceLabel" translate="dutyappApp.service.home.createOrEditLabel">Create or edit a Service</h4>
                     </div>
+
                     <div class="modal-body">
-                        <div class="form-group">
-                            <label>ID</label>
-                            <input type="text" class="form-control" name="id"
-                                   ng-model="service.id" readonly>
+                        <div class="alert alert-danger" ng-show="error"
+                             translate="global.messages.error.create"  translate-values="{entity: 'Service'}">
+                            <strong>Create service failed!</strong> Please check your input and try again.
                         </div>
 
-                        <div class="form-group">
-                            <label translate="dutyappApp.service.user_id">User_id</label>
-                            <input type="text" class="form-control" name="user_id"
-                                   ng-model="service.user_id">
-                        </div>
-                        <div class="form-group">
-                            <label translate="dutyappApp.service.service_name">Service_name</label>
-                            <input type="text" class="form-control" name="service_name"
-                                   ng-model="service.service_name">
-                        </div>
-                        <div class="form-group">
-                            <label translate="dutyappApp.service.api_key">Api_key</label>
-                            <input type="text" class="form-control" name="api_key"
-                                   ng-model="service.api_key">
-                        </div>
-                        <div class="form-group">
-                            <label translate="dutyappApp.service.service_type">Service_type</label>
-                            <input type="number" class="form-control" name="service_type"
-                                   ng-model="service.service_type">
-                        </div>
-                        <div class="form-group">
-                            <label translate="dutyappApp.service.is_deleted">Is_deleted</label>
-                            <input type="checkbox" class="form-control" name="is_deleted"
-                                   ng-model="service.is_deleted">
-                        </div>
+                        <p> Services are used to integrate via email or use our API directly </p>
+                        <div class="row" >
+                            <div class="col-sm-10">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" translate="dutyappApp.service.service_name">Service_name</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" name="service_name" placeholder="service name here"
+                                               ng-model="service.service_name" ng-minlength=1 ng-maxlength=20 required >
+                                    </div>
 
-                        <div class="form-group">
-                            <label translate="dutyappApp.service.EscalationPolicy">EscalationPolicy</label>
-                            <select class="form-control" name="EscalationPolicy" ng-model="service.escalationPolicy.id" ng-options="escalationPolicy.id as escalationPolicy.policy_name for escalationPolicy in escalationpolicys">
-                            </select>
+                                    <div class="col-sm-offset-2 col-sm-8" ng-show="editForm.service_name.$dirty && editForm.service_name.$invalid">
+                                        <p class="help-block"
+                                           ng-show="editForm.service_name.$error.required" translate="dutyappApp.service.validate.service_name.required">
+                                            service name is required.
+                                        </p>
+                                        <p class="help-block"
+                                           ng-show="editForm.service_name.$error.minlength"
+                                           translate="dutyappApp.service.validate.service_name.minlength" translate-values="{minlength: '1'}">
+                                            Your service name is required to be at least 1 character
+                                        </p>
+                                        <p class="help-block"
+                                           ng-show="editForm.service_name.$error.maxlength"
+                                           translate="dutyappApp.service.validate.service_name.maxlength" translate-values="{maxlength: '20'}">
+                                            Your service name cannot be longer than 20 characters
+                                        </p>
+                                    </div>
+
+                                </div>
+
+                                <!--
+                                <div class="form-group">
+                                    <label translate="dutyappApp.service.api_key">Api_key</label>
+                                    <input type="text" class="form-control" name="api_key"
+                                           ng-model="service.api_key">
+                                </div>
+                                -->
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" translate="dutyappApp.service.service_type">Service_type</label>
+
+                                    <div class="radio col-sm-8">
+                                        <label>
+                                            <input type="radio" name="optionsRadios" id="optionsRadios1" value=0
+                                                   ng-model="service.service_type" checked>
+                                            Integrate via email
+                                        </label>
+                                    </div>
+                                    <div class="radio col-sm-offset-2 col-sm-8">
+                                        <label>
+                                            <input type="radio" name="optionsRadios" id="optionsRadios2" value=1
+                                                   ng-model="service.service_type">
+                                            Use our API directly
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" translate="dutyappApp.service.EscalationPolicy">EscalationPolicy</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control" name="EscalationPolicy" ng-model="service.escalationPolicy.id" ng-options="escalationPolicy.id as escalationPolicy.policy_name for escalationPolicy in escalationpolicys">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                     </div>
@@ -97,15 +139,13 @@
     </div>
 
     <div class="table-responsive">
-        <table class="table table-striped">
+        <table class="table table-striped table-bordered">
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th translate="dutyappApp.service.user_id">User_id</th>
                     <th translate="dutyappApp.service.service_name">Service_name</th>
                     <th translate="dutyappApp.service.api_key">Api_key</th>
                     <th translate="dutyappApp.service.service_type">Service_type</th>
-                    <th translate="dutyappApp.service.is_deleted">Is_deleted</th>
                     <th translate="dutyappApp.service.EscalationPolicy">EscalationPolicy</th>
                     <th></th>
                 </tr>
@@ -113,28 +153,39 @@
             <tbody>
                 <tr ng-repeat="service in services">
                     <td><a ui-sref="serviceDetail({id:service.id})">{{service.id}}</a></td>
-                    <td>{{service.user_id}}</td>
                     <td>{{service.service_name}}</td>
                     <td>{{service.api_key}}</td>
                     <td>{{service.service_type}}</td>
-                    <td>{{service.is_deleted}}</td>
                     <td>{{service.escalationPolicy.policy_name}}</td>
                     <td>
-                        <button type="submit"
-                                ui-sref="serviceDetail({id:service.id})"
-                                class="btn btn-info">
-                            <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span translate="entity.action.view"> View</span>
-                        </button>
-                        <button type="submit"
-                                ng-click="update(service.id)"
-                                class="btn btn-primary">
-                            <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span translate="entity.action.edit"> Edit</span>
-                        </button>
-                        <button type="submit"
-                                ng-click="delete(service.id)"
-                                class="btn btn-danger">
-                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete"> Delete</span>
-                        </button>
+                        <div class="btn-toolbar" >
+                            <div class="btn-group">
+                                <button class="btn dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <button type="submit"
+                                                ui-sref="serviceDetail({id:service.id})"
+                                                class="btn btn-info">
+                                            <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span translate="entity.action.view"> View</span>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button type="submit"
+                                                ng-click="update(service.id)"
+                                                class="btn btn-primary">
+                                            <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span translate="entity.action.edit"> Edit</span>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button type="submit"
+                                                ng-click="delete(service.id)"
+                                                class="btn btn-danger">
+                                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete"> Delete</span>
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </td>
                 </tr>
             </tbody>
