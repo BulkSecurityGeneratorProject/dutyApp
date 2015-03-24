@@ -26,6 +26,7 @@ import com.g200001.dutyapp.domain.Alert;
 import com.g200001.dutyapp.repository.AlertRepository;
 import com.g200001.dutyapp.web.rest.util.PaginationUtil;
 
+
 /**
  * REST controller for managing Alert.
  */

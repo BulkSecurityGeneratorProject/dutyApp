@@ -1,0 +1,46 @@
+
+<div>
+    <h2><span translate="dutyappApp.policyRule.detail.title">PolicyRule</span> {{policyRule.id}}</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th translate="entity.detail.field">Field</th>
+                    <th translate="entity.detail.value">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span translate="dutyappApp.policyRule.sequence">Sequence</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{policyRule.sequence}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="dutyappApp.policyRule.escalate_time">Escalate_time</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{policyRule.escalate_time}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="dutyappApp.policyRule.EscalationPolicy">EscalationPolicy</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{policyRule.escalationPolicy.policy_name}}" readonly>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            ui-sref="policyRule"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

@@ -53,4 +53,8 @@ angular.module('dutyappApp')
         $scope.clear = function () {
             $scope.policyRule = {sequence: null, escalate_time: null, id: null};
         };
+
+        $scope.removeRule = function() {
+            $scope.policyRule = null;
+        }
     });

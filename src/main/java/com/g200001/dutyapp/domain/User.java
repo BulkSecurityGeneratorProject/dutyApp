@@ -23,7 +23,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private String id;
 
     @NotNull
     @Pattern(regexp = "^[a-z0-9]*$")
@@ -70,11 +70,20 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Authority> authorities = new HashSet<>();
 
-    public Long getId() {
+    //default empty constructor
+    public User() {}
+    
+    public User(String id, String email, String login) {
+    	this.id = id;
+    	this.email = email;
+    	this.login = login;
+    }
+    
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

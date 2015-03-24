@@ -25,47 +25,27 @@
                                    ng-model="policyRule.id" readonly>
                         </div>
 
-                        <div class="pd-item-content">
-                            <div class="pd-escalation-policy pd-escalation-policy-padded">
-                                <div class="escalation-rules"  ng-show="policyRule">
-                                    <div class="escalation-rule-list">
-                                        <div class="escalation-rule-container">
-                                            <div class="escalation-policy-layer">
+                        <div class="form-group">
+                            <label translate="dutyappApp.policyRule.sequence">Sequence</label>
+                            <input type="number" class="form-control" name="sequence"
+                                   ng-model="policyRule.sequence">
+                        </div>
+                        <div class="form-group">
+                            <label translate="dutyappApp.policyRule.escalate_time">Escalate_time</label>
+                            <input type="number" class="form-control" name="escalate_time"
+                                   ng-model="policyRule.escalate_time">
+                        </div>
 
-                                                <div class="escalation-policy-circle">1</div>
+                        <div class="form-group">
+                            <label translate="dutyappApp.policyRule.EscalationPolicy">EscalationPolicy</label>
+                            <select class="form-control" name="EscalationPolicy" ng-model="policyRule.escalationPolicy.id" ng-options="escalationPolicy.id as escalationPolicy.policy_name for escalationPolicy in escalationpolicys">
+                            </select>
+                        </div>
 
-                                                <div class="escalation-policy-layer-content">
-                                                    <a class="pull-right remove-rule" ng-click="removeRule()">
-                                                        <i class="glyphicon glyphicon-remove title="remove"> </i>
-                                                    </a>
-
-                                                    <p><i class="glyphicon glyphicon-th"> </i> Alert </p>
-
-                                                    <ul class="escalation-recipient-list"  ng-repeat="user in policyRule.users | filter:query | orderBy:orderProp">
-                                                        <li><a class="escalation-recipient">
-                                                            <i class="glyphicon glyphicon-user"></i> {{user.login}}
-                                                        </a></li>
-                                                    </ul>
-                                                </div>
-
-                                                <div class="escalation-delay-in-minutes escalation-policy-layer-timeout">
-                                                    <p><i class="icon icon-arrow-down"></i> Escalatioin after
-                                                        <strong> <input type="number" name="escalate_time" min="1" max="60" step="5"
-                                                                        ng-model="policyRule.escalate_time"> min</strong></p>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                        <p></p>
-                                        <button type="submit"
-                                                ui-sref="policyRule"
-                                                class="btn btn-info col-sm-offset-1">
-                                            <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
-                                        </button>
-
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="form-group">
+                            <label translate="dutyappApp.policyRule.User">User</label>
+                            <select class="form-control" multiple name="User" ng-model="policyRule.users" ng-options="user.id as user.login for user in users track by user.id">
+                            </select>
                         </div>
 
                     </div>

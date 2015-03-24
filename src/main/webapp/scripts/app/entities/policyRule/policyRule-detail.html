@@ -1,46 +1,43 @@
 
 <div>
     <h2><span translate="dutyappApp.policyRule.detail.title">PolicyRule</span> {{policyRule.id}}</h2>
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th translate="entity.detail.field">Field</th>
-                    <th translate="entity.detail.value">Value</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <span translate="dutyappApp.policyRule.sequence">Sequence</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{policyRule.sequence}}" readonly>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span translate="dutyappApp.policyRule.escalate_time">Escalate_time</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{policyRule.escalate_time}}" readonly>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span translate="dutyappApp.policyRule.EscalationPolicy">EscalationPolicy</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{policyRule.escalationPolicy.policy_name}}" readonly>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+
+    <div class="pd-item-content">
+        <div class="pd-escalation-policy pd-escalation-policy-padded">
+            <div class="escalation-rules">
+                <div class="escalation-rule-list">
+                    <div class="escalation-rule-container">
+                        <div class="escalation-policy-layer">
+
+                            <div class="escalation-policy-circle">1</div>
+
+                            <div class="escalation-policy-layer-content">
+                                <p><i class="glyphicon glyphicon-th"> </i> Alert </p>
+                                <div> Search: <input ng-model="query"> </div>
+
+                                <ul class="escalation-recipient-list"  ng-repeat="user in policyRule.users | filter:query ">
+                                    <li><a class="escalation-recipient">
+                                        <i class="glyphicon glyphicon-user"></i> {{user.login}}
+                                    </a></li>
+                                </ul>
+                            </div>
+
+                            <div class="escalation-delay-in-minutes escalation-policy-layer-timeout">
+                                <p><i class="icon icon-arrow-down"></i> Escalatioin after <strong> {{policyRule.escalate_time}} min</strong></p>
+                            </div>
+
+                        </div>
+                    </div>
+                    <p></p>
+                    <button type="submit"
+                            ui-sref="policyRule"
+                            class="btn btn-info col-sm-offset-1">
+                        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+                    </button>
+
+                </div>
+            </div>
+        </div>
     </div>
 
-    <button type="submit"
-            ui-sref="policyRule"
-            class="btn btn-info">
-        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
-    </button>
 </div>

@@ -1,9 +1,14 @@
 package com.g200001.dutyapp.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
-import com.g200001.dutyapp.domain.PolicyRule;
-import com.g200001.dutyapp.repository.PolicyRuleRepository;
-import com.g200001.dutyapp.web.rest.util.PaginationUtil;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -11,13 +16,18 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.inject.Inject;
-import java.net.URI;
-import java.net.URISyntaxException;
-import javax.servlet.http.HttpServletResponse;
-import java.util.List;
+import com.codahale.metrics.annotation.Timed;
+import com.g200001.dutyapp.domain.PolicyRule;
+import com.g200001.dutyapp.domain.User;
+import com.g200001.dutyapp.repository.PolicyRuleRepository;
+import com.g200001.dutyapp.web.rest.util.PaginationUtil;
 
 /**
  * REST controller for managing PolicyRule.
@@ -87,7 +97,18 @@ public class PolicyRuleResource {
     @Timed
     public ResponseEntity<PolicyRule> get(@PathVariable String id, HttpServletResponse response) {
         log.debug("REST request to get PolicyRule : {}", id);
-        PolicyRule policyRule = policyRuleRepository.findOne(id);
+        //PolicyRule policyRule = policyRuleRepository.findOne(id);
+        
+      //-------- test part 
+        Set<User> users = new HashSet<>();
+        users.add(new User("111", "test1@test.com", "test1"));
+        users.add(new User("222", "test2@test.com", "test2"));
+        PolicyRule policyRule = new PolicyRule();
+        policyRule.setId("00001");;
+        policyRule.setEscalate_time(10);
+        policyRule.setUsers(users);
+      //--------------
+        
         if (policyRule == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface AlertRepository extends JpaRepository<Alert, String> {
 
-    @Query("select alert from Alert alert where alert.user.login = ?#{principal.username}")
-    List<Alert> findAllForCurrentUser();
+    //@Query("select alert from Alert alert where alert.user.login = ?#{principal.username}")
+    //List<Alert> findAllForCurrentUser();
 
 }
