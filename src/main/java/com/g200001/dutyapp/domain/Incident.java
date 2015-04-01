@@ -59,7 +59,8 @@ public class Incident implements Serializable {
     @Column(name = "incident_no")
     private Long incident_no;
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.EAGER,optional=true,cascade=CascadeType.PERSIST)
+    //@ManyToOne
     private Service service;
 
     @OneToMany(mappedBy = "incident")

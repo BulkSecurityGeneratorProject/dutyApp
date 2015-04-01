@@ -1,9 +1,23 @@
 package com.g200001.dutyapp.web.rest;
 
-import com.g200001.dutyapp.Application;
-import com.g200001.dutyapp.domain.Incident;
-import com.g200001.dutyapp.repository.IncidentRepository;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,17 +32,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-import java.util.List;
+import com.g200001.dutyapp.Application;
+import com.g200001.dutyapp.domain.Incident;
+import com.g200001.dutyapp.domain.Service;
+import com.g200001.dutyapp.repository.IncidentRepository;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 
 /**
  * Test class for the IncidentResource REST controller.
@@ -68,15 +77,19 @@ public class IncidentResourceTest {
 
     @Inject
     private IncidentRepository incidentRepository;
-
+    @Inject
+    private IncidentResource incidentResource;
+    
+    
     private MockMvc restIncidentMockMvc;
 
     private Incident incident;
+    private Service service;
 
     @PostConstruct
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        IncidentResource incidentResource = new IncidentResource();
+        //IncidentResource incidentResource = new IncidentResource();
         ReflectionTestUtils.setField(incidentResource, "incidentRepository", incidentRepository);
         this.restIncidentMockMvc = MockMvcBuilders.standaloneSetup(incidentResource).build();
     }
@@ -91,6 +104,11 @@ public class IncidentResourceTest {
         incident.setDescription(DEFAULT_DESCRIPTION);
         incident.setDetail(DEFAULT_DETAIL);
         incident.setIncident_no(DEFAULT_INCIDENT_NO);
+        
+        service = new Service();
+        service.setService_name("Service Test");
+        incident.setService(service);
+        
     }
 
     @Test
@@ -98,7 +116,7 @@ public class IncidentResourceTest {
     public void createIncident() throws Exception {
         // Validate the database is empty
         assertThat(incidentRepository.findAll()).hasSize(0);
-
+        
         // Create the Incident
         restIncidentMockMvc.perform(post("/api/incidents")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)

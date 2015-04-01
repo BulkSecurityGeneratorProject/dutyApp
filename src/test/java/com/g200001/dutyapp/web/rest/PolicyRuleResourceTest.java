@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -106,7 +107,7 @@ public class PolicyRuleResourceTest {
     public void getPolicyRule() throws Exception {
         // Initialize the database
         policyRuleRepository.saveAndFlush(policyRule);
-
+        
         // Get the policyRule
         restPolicyRuleMockMvc.perform(get("/api/policyRules/{id}", policyRule.getId()))
             .andExpect(status().isOk())

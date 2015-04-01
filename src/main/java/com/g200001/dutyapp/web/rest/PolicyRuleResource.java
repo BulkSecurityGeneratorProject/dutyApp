@@ -97,9 +97,9 @@ public class PolicyRuleResource {
     @Timed
     public ResponseEntity<PolicyRule> get(@PathVariable String id, HttpServletResponse response) {
         log.debug("REST request to get PolicyRule : {}", id);
-        //PolicyRule policyRule = policyRuleRepository.findOne(id);
+        PolicyRule policyRule = policyRuleRepository.findOne(id);
         
-      //-------- test part 
+      /*-------- test part 
         Set<User> users = new HashSet<>();
         users.add(new User("111", "test1@test.com", "test1"));
         users.add(new User("222", "test2@test.com", "test2"));
@@ -107,7 +107,7 @@ public class PolicyRuleResource {
         policyRule.setId("00001");;
         policyRule.setEscalate_time(10);
         policyRule.setUsers(users);
-      //--------------
+      //--------------*/
         
         if (policyRule == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

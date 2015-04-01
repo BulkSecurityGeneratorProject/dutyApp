@@ -22,9 +22,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codahale.metrics.annotation.Timed;
+import com.g200001.dutyapp.domain.EscalationPolicy;
 import com.g200001.dutyapp.domain.Incident;
+import com.g200001.dutyapp.domain.PolicyRule;
+import com.g200001.dutyapp.domain.Service;
 import com.g200001.dutyapp.repository.IncidentRepository;
+import com.g200001.dutyapp.repository.PolicyRuleRepository;
+import com.g200001.dutyapp.repository.ServiceRepository;
 import com.g200001.dutyapp.web.rest.util.PaginationUtil;
+
+
 
 /**
  * REST controller for managing Incident.
@@ -37,7 +44,64 @@ public class IncidentResource {
 
     @Inject
     private IncidentRepository incidentRepository;
-
+    @Inject
+    private PolicyRuleRepository policyRuleRepository;
+    @Inject
+    private ServiceRepository serviceRepository;
+    
+    //
+    private class CreateAlertThread extends Thread
+    {
+    	private final Logger log = LoggerFactory.getLogger(IncidentResource.class);
+    	
+    	private Incident _incident;
+    	public CreateAlertThread(Incident incident)
+    	{
+    		System.out.print("thread structure serviceRepository equals null: " );
+    		System.out.println( serviceRepository==null);
+    		_incident = incident;
+    	}
+    	public void run(){
+    		AlertResource alertresource = new AlertResource();
+    		Service service = _incident.getService();
+    		String id = service.getId();
+    		
+    		System.out.print("before call serviceRepository equals null: " );
+    		System.out.println(serviceRepository==null);
+    		
+    		Service _service =serviceRepository.findOne(id);
+    		EscalationPolicy  escalationPolicy = _service.getEscalationPolicy();
+    		if (escalationPolicy!=null)
+    		{
+    			PolicyRule rule=policyRuleRepository.findOneByEscalationPolicyAndSequence(escalationPolicy, 1);
+        		if (rule != null)
+        		{
+        			
+        			
+        		}
+        		else    			
+        		{
+        			//throw exception
+        		}
+        		
+    		}
+    		else
+    		{
+    			//throw exception
+    		}
+//    		System.out.println(DateTime.now().toString("hh:mm:ss")+ "incident id="+_incident.getId());
+//    		try {
+//                Thread.sleep(5000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace(); 
+//            }
+//    		System.out.println(DateTime.now().toString("hh:mm:ss")+ "incident id="+_incident.getId());
+    	}
+    }
+    
+    
+    
+    
     /**
      * POST  /incidents -> Create a new incident.
      */
@@ -50,7 +114,15 @@ public class IncidentResource {
         if (incident.getId() != null) {
             return ResponseEntity.badRequest().header("Failure", "A new incident cannot already have an ID").build();
         }
+        System.out.print(" Thread serviceRepository equals null: ");
+        System.out.println(serviceRepository==null);
+        System.out.println(incidentRepository==null);
+        System.out.println(policyRuleRepository==null);
+        
         incidentRepository.save(incident);
+        System.out.print("before Thread serviceRepository equals null: ");
+        System.out.println(serviceRepository==null);
+        new CreateAlertThread(incident).run();
         return ResponseEntity.created(new URI("/api/incidents/" + incident.getId())).build();
     }
 

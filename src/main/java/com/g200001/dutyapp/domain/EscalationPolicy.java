@@ -34,12 +34,16 @@ public class EscalationPolicy implements Serializable {
     @Column(name = "cycle_time")
     private Long cycle_time;
 
-    @OneToMany(mappedBy = "escalationPolicy")
+    //@OneToMany(mappedBy = "escalationPolicy")
+    @OneToMany(mappedBy = "escalationPolicy",fetch=FetchType.EAGER,
+    		cascade=CascadeType.PERSIST)
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Service> services = new HashSet<>();
 
-    @OneToMany(mappedBy = "escalationPolicy")
+    //@OneToMany(mappedBy = "escalationPolicy")
+    @OneToMany(mappedBy = "escalationPolicy",fetch=FetchType.EAGER,
+    		cascade=CascadeType.PERSIST)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<PolicyRule> policyRules = new HashSet<>();
 

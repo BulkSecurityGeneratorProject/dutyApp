@@ -1,8 +1,21 @@
 package com.g200001.dutyapp.web.rest;
 
-import com.g200001.dutyapp.Application;
-import com.g200001.dutyapp.domain.EscalationPolicy;
-import com.g200001.dutyapp.repository.EscalationPolicyRepository;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,13 +31,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import com.g200001.dutyapp.Application;
+import com.g200001.dutyapp.domain.EscalationPolicy;
+import com.g200001.dutyapp.domain.PolicyRule;
+import com.g200001.dutyapp.domain.User;
+import com.g200001.dutyapp.repository.EscalationPolicyRepository;
 
 /**
  * Test class for the EscalationPolicyResource REST controller.
@@ -67,6 +78,23 @@ public class EscalationPolicyResourceTest {
         escalationPolicy.setPolicy_name(DEFAULT_POLICY_NAME);
         escalationPolicy.setHas_cycle(DEFAULT_HAS_CYCLE);
         escalationPolicy.setCycle_time(DEFAULT_CYCLE_TIME);
+        
+        Set<PolicyRule> policyRules = new HashSet<PolicyRule>();
+        PolicyRule rule1 = new PolicyRule();
+        rule1.setSequence(0);
+        
+        Set<User> users = new HashSet<User>();
+        User usr1 = new User();
+        usr1.setLogin("test user1");
+        users.add(usr1);
+        User usr2 = new User();
+        usr2.setLogin("test user2");
+        usr2.setEmail("test2@g200001.com");
+        users.add(usr2);
+        
+        rule1.setUsers(users);
+        
+        escalationPolicy.setPolicyRules(policyRules);
     }
 
     @Test
@@ -111,6 +139,11 @@ public class EscalationPolicyResourceTest {
     public void getEscalationPolicy() throws Exception {
         // Initialize the database
         escalationPolicyRepository.saveAndFlush(escalationPolicy);
+        
+        EscalationPolicy policy = escalationPolicyRepository.findOne(escalationPolicy.getId());
+        assertThat(policy.getPolicyRules()).hasSize(1);
+        Iterator<PolicyRule> it = policy.getPolicyRules().iterator();
+        assertThat(it.next().getUsers()).hasSize(2);
 
         // Get the escalationPolicy
         restEscalationPolicyMockMvc.perform(get("/api/escalationPolicys/{id}", escalationPolicy.getId()))
