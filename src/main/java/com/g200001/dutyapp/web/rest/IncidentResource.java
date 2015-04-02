@@ -7,6 +7,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codahale.metrics.annotation.Timed;
+import com.g200001.dutyapp.domain.Alert;
+import com.g200001.dutyapp.domain.User;
 import com.g200001.dutyapp.domain.EscalationPolicy;
 import com.g200001.dutyapp.domain.Incident;
 import com.g200001.dutyapp.domain.PolicyRule;
@@ -29,6 +32,7 @@ import com.g200001.dutyapp.domain.Service;
 import com.g200001.dutyapp.repository.IncidentRepository;
 import com.g200001.dutyapp.repository.PolicyRuleRepository;
 import com.g200001.dutyapp.repository.ServiceRepository;
+import com.g200001.dutyapp.web.rest.IncidentBL.IncidentCreateThread;
 import com.g200001.dutyapp.web.rest.util.PaginationUtil;
 
 
@@ -43,60 +47,7 @@ public class IncidentResource {
     private final Logger log = LoggerFactory.getLogger(IncidentResource.class);
 
     @Inject
-    private IncidentRepository incidentRepository;
-    @Inject
-    private PolicyRuleRepository policyRuleRepository;
-    @Inject
-    private ServiceRepository serviceRepository;
-    
-    //
-    private class CreateAlertThread extends Thread
-    {
-    	private final Logger log = LoggerFactory.getLogger(IncidentResource.class);
-    	
-    	private Incident _incident;
-    	public CreateAlertThread(Incident incident)
-    	{
-    		_incident = incident;
-    	}
-    	public void run(){
-    		AlertResource alertresource = new AlertResource();
-    		Service service = _incident.getService();
-    		String id = service.getId();
-    		  		
-    		Service _service =serviceRepository.findOne(id);
-    		EscalationPolicy  escalationPolicy = _service.getEscalationPolicy();
-    		if (escalationPolicy!=null)
-    		{
-    			PolicyRule rule=policyRuleRepository.findOneByEscalationPolicyAndSequence(escalationPolicy, 1);
-        		if (rule != null)
-        		{
-        			
-        			
-        		}
-        		else    			
-        		{
-        			//throw exception
-        		}
-        		
-    		}
-    		else
-    		{
-    			//throw exception
-    		}
-//    		System.out.println(DateTime.now().toString("hh:mm:ss")+ "incident id="+_incident.getId());
-//    		try {
-//                Thread.sleep(5000);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace(); 
-//            }
-//    		System.out.println(DateTime.now().toString("hh:mm:ss")+ "incident id="+_incident.getId());
-    	}
-    }
-    
-    
-    
-    
+	 private IncidentRepository incidentRepository;
     /**
      * POST  /incidents -> Create a new incident.
      */
@@ -112,7 +63,7 @@ public class IncidentResource {
         
         incidentRepository.save(incident);
 
-        new CreateAlertThread(incident).run();
+        new IncidentCreateThread(incident).run();
         return ResponseEntity.created(new URI("/api/incidents/" + incident.getId())).build();
     }
 
