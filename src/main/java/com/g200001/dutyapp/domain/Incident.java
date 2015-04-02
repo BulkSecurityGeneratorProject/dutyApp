@@ -59,8 +59,8 @@ public class Incident implements Serializable {
     @Column(name = "incident_no")
     private Long incident_no;
 
-    @ManyToOne(fetch=FetchType.EAGER,optional=true,cascade=CascadeType.PERSIST)
     //@ManyToOne
+    @ManyToOne(fetch=FetchType.EAGER,cascade=CascadeType.MERGE)
     private Service service;
 
     @OneToMany(mappedBy = "incident")
@@ -199,7 +199,8 @@ public class Incident implements Serializable {
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        //return id.hashCode();
+    	return description.hashCode();
     }
 
     @Override

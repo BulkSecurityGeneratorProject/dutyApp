@@ -34,7 +34,7 @@ public class PolicyRule implements Serializable {
     @ManyToOne
     private EscalationPolicy escalationPolicy;
 
-    @ManyToMany
+    @ManyToMany(fetch=FetchType.EAGER, cascade=CascadeType.REFRESH)
     //@JsonIgnore
     @JoinTable(
             name = "T_POLICYRULE_USER",
@@ -101,7 +101,8 @@ public class PolicyRule implements Serializable {
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        //return id.hashCode();
+    	return sequence.hashCode();
     }
 
     @Override

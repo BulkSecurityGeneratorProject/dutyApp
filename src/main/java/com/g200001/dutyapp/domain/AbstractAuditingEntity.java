@@ -7,8 +7,13 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
-
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.g200001.dutyapp.domain.util.CustomDateTimeDeserializer;
+import com.g200001.dutyapp.domain.util.CustomDateTimeSerializer;
+
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
@@ -31,6 +36,9 @@ public abstract class AbstractAuditingEntity {
     @CreatedDate
     @NotNull
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    @JsonSerialize(using = CustomDateTimeSerializer.class)
+    @JsonDeserialize(using = CustomDateTimeDeserializer.class)
+    
     @Column(name = "created_date", nullable = false)
     private DateTime createdDate = DateTime.now();
 
@@ -40,6 +48,8 @@ public abstract class AbstractAuditingEntity {
 
     @LastModifiedDate
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    @JsonSerialize(using = CustomDateTimeSerializer.class)
+    @JsonDeserialize(using = CustomDateTimeDeserializer.class)
     @Column(name = "last_modified_date")
     private DateTime lastModifiedDate = DateTime.now();
 

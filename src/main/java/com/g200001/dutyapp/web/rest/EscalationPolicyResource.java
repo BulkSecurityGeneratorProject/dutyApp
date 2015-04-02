@@ -1,9 +1,13 @@
 package com.g200001.dutyapp.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
-import com.g200001.dutyapp.domain.EscalationPolicy;
-import com.g200001.dutyapp.repository.EscalationPolicyRepository;
-import com.g200001.dutyapp.web.rest.util.PaginationUtil;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -11,13 +15,18 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.inject.Inject;
-import java.net.URI;
-import java.net.URISyntaxException;
-import javax.servlet.http.HttpServletResponse;
-import java.util.List;
+import com.codahale.metrics.annotation.Timed;
+import com.g200001.dutyapp.domain.EscalationPolicy;
+import com.g200001.dutyapp.domain.PolicyRule;
+import com.g200001.dutyapp.repository.EscalationPolicyRepository;
+import com.g200001.dutyapp.web.rest.util.PaginationUtil;
 
 /**
  * REST controller for managing EscalationPolicy.
@@ -43,6 +52,11 @@ public class EscalationPolicyResource {
         if (escalationPolicy.getId() != null) {
             return ResponseEntity.badRequest().header("Failure", "A new escalationPolicy cannot already have an ID").build();
         }
+        
+        System.out.println(escalationPolicy.getPolicyRules().size());
+        Iterator<PolicyRule> it = escalationPolicy.getPolicyRules().iterator();
+        System.out.println(it.next().getUsers().size());
+        
         escalationPolicyRepository.save(escalationPolicy);
         return ResponseEntity.created(new URI("/api/escalationPolicys/" + escalationPolicy.getId())).build();
     }

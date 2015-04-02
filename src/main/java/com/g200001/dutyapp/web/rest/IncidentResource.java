@@ -57,18 +57,13 @@ public class IncidentResource {
     	private Incident _incident;
     	public CreateAlertThread(Incident incident)
     	{
-    		System.out.print("thread structure serviceRepository equals null: " );
-    		System.out.println( serviceRepository==null);
     		_incident = incident;
     	}
     	public void run(){
     		AlertResource alertresource = new AlertResource();
     		Service service = _incident.getService();
     		String id = service.getId();
-    		
-    		System.out.print("before call serviceRepository equals null: " );
-    		System.out.println(serviceRepository==null);
-    		
+    		  		
     		Service _service =serviceRepository.findOne(id);
     		EscalationPolicy  escalationPolicy = _service.getEscalationPolicy();
     		if (escalationPolicy!=null)
@@ -114,14 +109,9 @@ public class IncidentResource {
         if (incident.getId() != null) {
             return ResponseEntity.badRequest().header("Failure", "A new incident cannot already have an ID").build();
         }
-        System.out.print(" Thread serviceRepository equals null: ");
-        System.out.println(serviceRepository==null);
-        System.out.println(incidentRepository==null);
-        System.out.println(policyRuleRepository==null);
         
         incidentRepository.save(incident);
-        System.out.print("before Thread serviceRepository equals null: ");
-        System.out.println(serviceRepository==null);
+
         new CreateAlertThread(incident).run();
         return ResponseEntity.created(new URI("/api/incidents/" + incident.getId())).build();
     }

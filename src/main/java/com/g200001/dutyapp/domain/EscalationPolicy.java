@@ -34,19 +34,19 @@ public class EscalationPolicy implements Serializable {
     @Column(name = "cycle_time")
     private Long cycle_time;
 
-    //@OneToMany(mappedBy = "escalationPolicy")
-    @OneToMany(mappedBy = "escalationPolicy",fetch=FetchType.EAGER,
-    		cascade=CascadeType.PERSIST)
+    @OneToMany(mappedBy = "escalationPolicy")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Service> services = new HashSet<>();
 
     //@OneToMany(mappedBy = "escalationPolicy")
-    @OneToMany(mappedBy = "escalationPolicy",fetch=FetchType.EAGER,
-    		cascade=CascadeType.PERSIST)
+    @OneToMany(mappedBy = "escalationPolicy",fetch=FetchType.EAGER, cascade=CascadeType.ALL )
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<PolicyRule> policyRules = new HashSet<>();
 
+    //Empty Constructor
+    public EscalationPolicy() {}
+    
     public String getId() {
         return id;
     }
@@ -123,6 +123,7 @@ public class EscalationPolicy implements Serializable {
                 ", policy_name='" + policy_name + "'" +
                 ", has_cycle='" + has_cycle + "'" +
                 ", cycle_time='" + cycle_time + "'" +
+                ", policy_rules has '" + policyRules.size() +
                 '}';
     }
 }

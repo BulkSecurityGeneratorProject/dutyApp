@@ -43,7 +43,7 @@ public class Service implements Serializable {
 	@ManyToOne
     private BillAccount billAccount;
 
-	@OneToMany(mappedBy = "service")
+	@OneToMany(mappedBy = "service", fetch=FetchType.EAGER,cascade=CascadeType.ALL)
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Incident> incidents = new HashSet<>();

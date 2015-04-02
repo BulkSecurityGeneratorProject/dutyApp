@@ -9,11 +9,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,6 +33,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.g200001.dutyapp.Application;
+import com.g200001.dutyapp.domain.Incident;
 import com.g200001.dutyapp.domain.Service;
 import com.g200001.dutyapp.repository.ServiceRepository;
 
@@ -62,6 +67,7 @@ public class ServiceResourceTest {
     private MockMvc restServiceMockMvc;
 
     private Service service;
+    private Incident incident;
 
     @PostConstruct
     public void setup() {
@@ -78,6 +84,17 @@ public class ServiceResourceTest {
         service.setApi_key(DEFAULT_API_KEY);
         service.setService_type(DEFAULT_SERVICE_TYPE);
         service.setIs_deleted(DEFAULT_IS_DELETED);
+        
+        incident = new Incident();
+        incident.setDescription("Test Incident");
+        incident.setCreate_time(new DateTime(0L, DateTimeZone.UTC));
+        incident.setAck_time(new DateTime(0L, DateTimeZone.UTC));
+        incident.setResolve_time(new DateTime(0L, DateTimeZone.UTC));
+        //incident.setService(service);
+        
+        Set<Incident> incidents = new HashSet<>();
+        incidents.add(incident);
+        service.setIncidents(incidents);
     }
 
     @Test
@@ -125,6 +142,9 @@ public class ServiceResourceTest {
         // Initialize the database
         serviceRepository.saveAndFlush(service);
 
+        Service s = serviceRepository.findOne(service.getId());
+        assertThat(s.getIncidents()).hasSize(1);
+        
         // Get the service
         restServiceMockMvc.perform(get("/api/services/{id}", service.getId()))
             .andExpect(status().isOk())

@@ -36,6 +36,7 @@ import com.g200001.dutyapp.Application;
 import com.g200001.dutyapp.domain.Incident;
 import com.g200001.dutyapp.domain.Service;
 import com.g200001.dutyapp.repository.IncidentRepository;
+import com.g200001.dutyapp.repository.ServiceRepository;
 
 
 
@@ -79,9 +80,14 @@ public class IncidentResourceTest {
     private IncidentRepository incidentRepository;
     @Inject
     private IncidentResource incidentResource;
+    @Inject
+    private ServiceRepository serviceRepository;
+    @Inject
+    private ServiceResource serviceResource;
     
     
     private MockMvc restIncidentMockMvc;
+    private MockMvc restServiceMockMvc;
 
     private Incident incident;
     private Service service;
@@ -92,6 +98,9 @@ public class IncidentResourceTest {
         //IncidentResource incidentResource = new IncidentResource();
         ReflectionTestUtils.setField(incidentResource, "incidentRepository", incidentRepository);
         this.restIncidentMockMvc = MockMvcBuilders.standaloneSetup(incidentResource).build();
+        
+        ReflectionTestUtils.setField(serviceResource, "serviceRepository", serviceRepository);
+        this.restServiceMockMvc = MockMvcBuilders.standaloneSetup(serviceResource).build();
     }
 
     @Before
@@ -107,7 +116,22 @@ public class IncidentResourceTest {
         
         service = new Service();
         service.setService_name("Service Test");
-        incident.setService(service);
+     
+     // Validate the database is empty
+        assertThat(serviceRepository.findAll()).hasSize(0);
+        
+     // Create the Service
+        try {
+        restServiceMockMvc.perform(post("/api/services")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(service)))
+                .andExpect(status().isCreated());
+        } catch (Exception e){
+        	System.out.println(e.getStackTrace());
+        }
+    
+        Service s = serviceRepository.findAll().get(0);
+        incident.setService(s);
         
     }
 
@@ -162,6 +186,9 @@ public class IncidentResourceTest {
         // Initialize the database
         incidentRepository.saveAndFlush(incident);
 
+        Incident i= incidentRepository.findOne(incident.getId());
+        assertThat(i.getService().getService_name().equals("Service Test"));
+        
         // Get the incident
         restIncidentMockMvc.perform(get("/api/incidents/{id}", incident.getId()))
             .andExpect(status().isOk())

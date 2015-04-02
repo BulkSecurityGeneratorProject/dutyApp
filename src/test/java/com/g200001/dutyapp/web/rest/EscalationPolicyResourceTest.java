@@ -31,11 +31,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.g200001.dutyapp.Application;
 import com.g200001.dutyapp.domain.EscalationPolicy;
 import com.g200001.dutyapp.domain.PolicyRule;
 import com.g200001.dutyapp.domain.User;
 import com.g200001.dutyapp.repository.EscalationPolicyRepository;
+import com.g200001.dutyapp.repository.UserRepository;
 
 /**
  * Test class for the EscalationPolicyResource REST controller.
@@ -59,6 +62,8 @@ public class EscalationPolicyResourceTest {
 
     @Inject
     private EscalationPolicyRepository escalationPolicyRepository;
+    @Inject
+    private UserRepository userRepository;
 
     private MockMvc restEscalationPolicyMockMvc;
 
@@ -79,20 +84,16 @@ public class EscalationPolicyResourceTest {
         escalationPolicy.setHas_cycle(DEFAULT_HAS_CYCLE);
         escalationPolicy.setCycle_time(DEFAULT_CYCLE_TIME);
         
-        Set<PolicyRule> policyRules = new HashSet<PolicyRule>();
-        PolicyRule rule1 = new PolicyRule();
-        rule1.setSequence(0);
+        Set<PolicyRule> policyRules = new HashSet<PolicyRule>();        
         
         Set<User> users = new HashSet<User>();
-        User usr1 = new User();
-        usr1.setLogin("test user1");
-        users.add(usr1);
-        User usr2 = new User();
-        usr2.setLogin("test user2");
-        usr2.setEmail("test2@g200001.com");
-        users.add(usr2);
+        for (User usr: userRepository.findAll())
+        	users.add(usr);
         
+        PolicyRule rule1 = new PolicyRule();
+        rule1.setSequence(0);
         rule1.setUsers(users);
+        policyRules.add(rule1);
         
         escalationPolicy.setPolicyRules(policyRules);
     }
@@ -102,7 +103,11 @@ public class EscalationPolicyResourceTest {
     public void createEscalationPolicy() throws Exception {
         // Validate the database is empty
         assertThat(escalationPolicyRepository.findAll()).hasSize(0);
-
+        
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        System.out.println( mapper.writeValueAsString(escalationPolicy) );
+        		 
         // Create the EscalationPolicy
         restEscalationPolicyMockMvc.perform(post("/api/escalationPolicys")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -143,7 +148,7 @@ public class EscalationPolicyResourceTest {
         EscalationPolicy policy = escalationPolicyRepository.findOne(escalationPolicy.getId());
         assertThat(policy.getPolicyRules()).hasSize(1);
         Iterator<PolicyRule> it = policy.getPolicyRules().iterator();
-        assertThat(it.next().getUsers()).hasSize(2);
+        assertThat(it.next().getUsers()).hasSize(4);
 
         // Get the escalationPolicy
         restEscalationPolicyMockMvc.perform(get("/api/escalationPolicys/{id}", escalationPolicy.getId()))
