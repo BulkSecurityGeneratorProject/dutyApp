@@ -31,13 +31,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.g200001.dutyapp.Application;
 import com.g200001.dutyapp.domain.EscalationPolicy;
+import com.g200001.dutyapp.domain.Incident;
 import com.g200001.dutyapp.domain.PolicyRule;
 import com.g200001.dutyapp.domain.User;
 import com.g200001.dutyapp.repository.EscalationPolicyRepository;
+import com.g200001.dutyapp.repository.PolicyRuleRepository;
 import com.g200001.dutyapp.repository.UserRepository;
 
 /**
@@ -63,6 +63,10 @@ public class EscalationPolicyResourceTest {
     @Inject
     private EscalationPolicyRepository escalationPolicyRepository;
     @Inject
+    private EscalationPolicyResource escalationPolicyResource;
+    @Inject
+    private PolicyRuleRepository policyRuleRepository;
+    @Inject
     private UserRepository userRepository;
 
     private MockMvc restEscalationPolicyMockMvc;
@@ -72,7 +76,7 @@ public class EscalationPolicyResourceTest {
     @PostConstruct
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        EscalationPolicyResource escalationPolicyResource = new EscalationPolicyResource();
+        //EscalationPolicyResource escalationPolicyResource = new EscalationPolicyResource();
         ReflectionTestUtils.setField(escalationPolicyResource, "escalationPolicyRepository", escalationPolicyRepository);
         this.restEscalationPolicyMockMvc = MockMvcBuilders.standaloneSetup(escalationPolicyResource).build();
     }
@@ -103,10 +107,7 @@ public class EscalationPolicyResourceTest {
     public void createEscalationPolicy() throws Exception {
         // Validate the database is empty
         assertThat(escalationPolicyRepository.findAll()).hasSize(0);
-        
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        System.out.println( mapper.writeValueAsString(escalationPolicy) );
+        assertThat(policyRuleRepository.findAll()).hasSize(0);        
         		 
         // Create the EscalationPolicy
         restEscalationPolicyMockMvc.perform(post("/api/escalationPolicys")
@@ -121,6 +122,15 @@ public class EscalationPolicyResourceTest {
         assertThat(testEscalationPolicy.getPolicy_name()).isEqualTo(DEFAULT_POLICY_NAME);
         assertThat(testEscalationPolicy.getHas_cycle()).isEqualTo(DEFAULT_HAS_CYCLE);
         assertThat(testEscalationPolicy.getCycle_time()).isEqualTo(DEFAULT_CYCLE_TIME);
+        
+        // Validate PolicyRule/User can be accessed through service
+        assertThat(testEscalationPolicy.getPolicyRules()).hasSize(1);  
+        assertThat(testEscalationPolicy.getPolicyRules().iterator().next()
+        		.getUsers()).hasSize(userRepository.findAll().size());
+        
+        //Validate the Policy Rule in the database
+        List<PolicyRule> rules = policyRuleRepository.findAll();
+        assertThat(rules).hasSize(1);
     }
 
     @Test
@@ -148,7 +158,7 @@ public class EscalationPolicyResourceTest {
         EscalationPolicy policy = escalationPolicyRepository.findOne(escalationPolicy.getId());
         assertThat(policy.getPolicyRules()).hasSize(1);
         Iterator<PolicyRule> it = policy.getPolicyRules().iterator();
-        assertThat(it.next().getUsers()).hasSize(4);
+        assertThat(it.next().getUsers()).hasSize(userRepository.findAll().size());
 
         // Get the escalationPolicy
         restEscalationPolicyMockMvc.perform(get("/api/escalationPolicys/{id}", escalationPolicy.getId()))
@@ -206,5 +216,11 @@ public class EscalationPolicyResourceTest {
         // Validate the database is empty
         List<EscalationPolicy> escalationPolicys = escalationPolicyRepository.findAll();
         assertThat(escalationPolicys).hasSize(0);
+        List<PolicyRule> policyRules = policyRuleRepository.findAll();
+        assertThat(policyRules).hasSize(0);
+        
+        //Users should be not be deleted
+        List<User> users = userRepository.findAll();
+        assertThat(users).hasSize(4);
     }
 }

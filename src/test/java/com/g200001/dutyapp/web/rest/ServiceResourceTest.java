@@ -33,9 +33,15 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.g200001.dutyapp.Application;
+import com.g200001.dutyapp.domain.EscalationPolicy;
 import com.g200001.dutyapp.domain.Incident;
+import com.g200001.dutyapp.domain.PolicyRule;
 import com.g200001.dutyapp.domain.Service;
+import com.g200001.dutyapp.domain.User;
+import com.g200001.dutyapp.repository.EscalationPolicyRepository;
+import com.g200001.dutyapp.repository.IncidentRepository;
 import com.g200001.dutyapp.repository.ServiceRepository;
+import com.g200001.dutyapp.repository.UserRepository;
 
 /**
  * Test class for the ServiceResource REST controller.
@@ -47,13 +53,8 @@ import com.g200001.dutyapp.repository.ServiceRepository;
 @WebAppConfiguration
 @IntegrationTest
 public class ServiceResourceTest {
-
-    private static final String DEFAULT_USER_ID = "SAMPLE_TEXT";
-    private static final String UPDATED_USER_ID = "UPDATED_TEXT";
     private static final String DEFAULT_SERVICE_NAME = "SAMPLE_TEXT";
     private static final String UPDATED_SERVICE_NAME = "UPDATED_TEXT";
-    private static final String DEFAULT_API_KEY = "SAMPLE_TEXT";
-    private static final String UPDATED_API_KEY = "UPDATED_TEXT";
 
     private static final Integer DEFAULT_SERVICE_TYPE = 0;
     private static final Integer UPDATED_SERVICE_TYPE = 1;
@@ -63,6 +64,14 @@ public class ServiceResourceTest {
 
     @Inject
     private ServiceRepository serviceRepository;
+    @Inject
+    private ServiceResource serviceResource;
+    @Inject
+    private IncidentRepository incidentRepository;
+    @Inject
+    private UserRepository userRepository;
+    @Inject
+    private EscalationPolicyRepository escalationPolicyRepository;
 
     private MockMvc restServiceMockMvc;
 
@@ -72,36 +81,50 @@ public class ServiceResourceTest {
     @PostConstruct
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        ServiceResource serviceResource = new ServiceResource();
+        //ServiceResource serviceResource = new ServiceResource();
         ReflectionTestUtils.setField(serviceResource, "serviceRepository", serviceRepository);
         this.restServiceMockMvc = MockMvcBuilders.standaloneSetup(serviceResource).build();
     }
 
     @Before
     public void initTest() {
+    	// Initialize to insert one EscalationPolicy
+    	EscalationPolicy escalationPolicy = new EscalationPolicy();
+        escalationPolicy.setPolicy_name("ServiceTest Escalate Policy");
+        
+        Set<PolicyRule> policyRules = new HashSet<PolicyRule>();        
+        
+        Set<User> users = new HashSet<User>();
+        for (User usr: userRepository.findAll())
+        	users.add(usr);
+        
+        PolicyRule rule1 = new PolicyRule();
+        rule1.setSequence(0);
+        rule1.setUsers(users);
+        policyRules.add(rule1);
+        
+        escalationPolicy.setPolicyRules(policyRules);
+        escalationPolicyRepository.saveAndFlush(escalationPolicy);
+        
+        //--------------------------------
+        // Create Service Object
         service = new Service();
         service.setService_name(DEFAULT_SERVICE_NAME);
-        service.setApi_key(DEFAULT_API_KEY);
         service.setService_type(DEFAULT_SERVICE_TYPE);
-        service.setIs_deleted(DEFAULT_IS_DELETED);
-        
-        incident = new Incident();
-        incident.setDescription("Test Incident");
-        incident.setCreate_time(new DateTime(0L, DateTimeZone.UTC));
-        incident.setAck_time(new DateTime(0L, DateTimeZone.UTC));
-        incident.setResolve_time(new DateTime(0L, DateTimeZone.UTC));
-        //incident.setService(service);
-        
-        Set<Incident> incidents = new HashSet<>();
-        incidents.add(incident);
-        service.setIncidents(incidents);
-    }
-
+        service.setIs_deleted(false);
+        service.setApi_key("###");
+                    
+        //find existing Escalate Policy and set it to serivce
+        EscalationPolicy e = escalationPolicyRepository.findAll().iterator().next();
+        service.setEscalationPolicy(e);
+    }  
+    
     @Test
     @Transactional
     public void createService() throws Exception {
         // Validate the database is empty
         assertThat(serviceRepository.findAll()).hasSize(0);
+        assertThat(incidentRepository.findAll()).hasSize(0);
 
         // Create the Service
         restServiceMockMvc.perform(post("/api/services")
@@ -114,10 +137,14 @@ public class ServiceResourceTest {
         assertThat(services).hasSize(1);
         Service testService = services.iterator().next();
         assertThat(testService.getService_name()).isEqualTo(DEFAULT_SERVICE_NAME);
-        assertThat(testService.getApi_key()).isEqualTo(DEFAULT_API_KEY);
         assertThat(testService.getService_type()).isEqualTo(DEFAULT_SERVICE_TYPE);
+        assertThat(testService.getApi_key()).isNotEqualTo(null);
         assertThat(testService.getIs_deleted()).isEqualTo(DEFAULT_IS_DELETED);
-    }
+        
+        // Validate escalationPolicy can be accessed through service  
+        assertThat(testService.getEscalationPolicy().getPolicy_name())
+        	.isEqualTo("ServiceTest Escalate Policy");
+        }
 
     @Test
     @Transactional
@@ -131,7 +158,7 @@ public class ServiceResourceTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[0].id").value(service.getId()))
                 .andExpect(jsonPath("$.[0].service_name").value(DEFAULT_SERVICE_NAME.toString()))
-                .andExpect(jsonPath("$.[0].api_key").value(DEFAULT_API_KEY.toString()))
+                .andExpect(jsonPath("$.[0].api_key").exists())
                 .andExpect(jsonPath("$.[0].service_type").value(DEFAULT_SERVICE_TYPE))
                 .andExpect(jsonPath("$.[0].is_deleted").value(DEFAULT_IS_DELETED.booleanValue()));
     }
@@ -141,9 +168,6 @@ public class ServiceResourceTest {
     public void getService() throws Exception {
         // Initialize the database
         serviceRepository.saveAndFlush(service);
-
-        Service s = serviceRepository.findOne(service.getId());
-        assertThat(s.getIncidents()).hasSize(1);
         
         // Get the service
         restServiceMockMvc.perform(get("/api/services/{id}", service.getId()))
@@ -151,7 +175,7 @@ public class ServiceResourceTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(service.getId()))
             .andExpect(jsonPath("$.service_name").value(DEFAULT_SERVICE_NAME.toString()))
-            .andExpect(jsonPath("$.api_key").value(DEFAULT_API_KEY.toString()))
+            .andExpect(jsonPath("$.api_key").exists())
             .andExpect(jsonPath("$.service_type").value(DEFAULT_SERVICE_TYPE))
             .andExpect(jsonPath("$.is_deleted").value(DEFAULT_IS_DELETED.booleanValue()));
     }
@@ -172,7 +196,6 @@ public class ServiceResourceTest {
 
         // Update the service
         service.setService_name(UPDATED_SERVICE_NAME);
-        service.setApi_key(UPDATED_API_KEY);
         service.setService_type(UPDATED_SERVICE_TYPE);
         service.setIs_deleted(UPDATED_IS_DELETED);
         restServiceMockMvc.perform(put("/api/services")
@@ -185,24 +208,90 @@ public class ServiceResourceTest {
         assertThat(services).hasSize(1);
         Service testService = services.iterator().next();
         assertThat(testService.getService_name()).isEqualTo(UPDATED_SERVICE_NAME);
-        assertThat(testService.getApi_key()).isEqualTo(UPDATED_API_KEY);
         assertThat(testService.getService_type()).isEqualTo(UPDATED_SERVICE_TYPE);
         assertThat(testService.getIs_deleted()).isEqualTo(UPDATED_IS_DELETED);
     }
 
+    /* When delete the service, it should deletes all the incidents that
+     * belongs to the service; but should not delete the escalate policy 
+     */
+    
     @Test
     @Transactional
     public void deleteService() throws Exception {
         // Initialize the database
         serviceRepository.saveAndFlush(service);
 
+        // create an Incident and save
+        incident = new Incident();
+        incident.setDescription("Test Incident");
+        incident.setCreate_time(new DateTime(0L, DateTimeZone.UTC));
+        incident.setAck_time(new DateTime(0L, DateTimeZone.UTC));
+        incident.setResolve_time(new DateTime(0L, DateTimeZone.UTC));
+        incident.setService(service); 
+        incidentRepository.saveAndFlush(incident);
+        
+        //validate the incident is in database now
+        List<Service> services = serviceRepository.findAll();
+        assertThat(services).hasSize(1);
+        List<Incident> incidents = incidentRepository.findAll();
+        assertThat(incidents).hasSize(1);
+        
         // Get the service
         restServiceMockMvc.perform(delete("/api/services/{id}", service.getId())
                 .accept(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
 
         // Validate the database is empty
-        List<Service> services = serviceRepository.findAll();
+        services = serviceRepository.findAll();
         assertThat(services).hasSize(0);
+        incidents = incidentRepository.findAll();
+        assertThat(incidents).hasSize(0);
+        
+        //Escapolicy should be not be deleted
+        List<EscalationPolicy> escalationPolicys = escalationPolicyRepository.findAll();
+        assertThat(escalationPolicys).hasSize(1);
+    }
+    
+    @Test
+    @Transactional
+    public void disableService() throws Exception {
+    	// Initialize the database
+    	service.setIs_deleted(false);
+        serviceRepository.saveAndFlush(service);
+        
+        // Validate the service is enable now
+        service = serviceRepository.findOne(service.getId());
+        assertThat(service.getIs_deleted()).isEqualTo(false);
+        
+     // Get the service
+        restServiceMockMvc.perform(put("/api/services/{id}/disable", service.getId())
+                .accept(TestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk());
+        
+     // Validate the service is enable now
+        service = serviceRepository.findOne(service.getId());
+        assertThat(service.getIs_deleted()).isEqualTo(true);       
+    }
+    
+    @Test
+    @Transactional
+    public void enableService() throws Exception {
+    	// Initialize the database
+    	service.setIs_deleted(true);
+        serviceRepository.saveAndFlush(service);
+        
+        // Validate the service is enable now
+        service = serviceRepository.findOne(service.getId());
+        assertThat(service.getIs_deleted()).isEqualTo(true);
+        
+     // Get the service
+        restServiceMockMvc.perform(put("/api/services/{id}/enable", service.getId())
+                .accept(TestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk());
+        
+     // Validate the service is enable now
+        service = serviceRepository.findOne(service.getId());
+        assertThat(service.getIs_deleted()).isEqualTo(false);       
     }
 }
