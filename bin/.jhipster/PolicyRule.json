@@ -1,0 +1,48 @@
+{
+    "relationships": [
+        {
+            "relationshipId": 1,
+            "relationshipName": "EscalationPolicy",
+            "relationshipNameCapitalized": "EscalationPolicy",
+            "relationshipFieldName": "escalationPolicy",
+            "otherEntityName": "escalationPolicy",
+            "relationshipType": "many-to-one",
+            "otherEntityNameCapitalized": "EscalationPolicy",
+            "otherEntityField": "policy_name"
+        },
+        {
+            "relationshipId": 2,
+            "relationshipName": "User",
+            "relationshipNameCapitalized": "User",
+            "relationshipFieldName": "user",
+            "otherEntityName": "user",
+            "relationshipType": "one-to-many",
+            "otherEntityNameCapitalized": "User"
+        }
+    ],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "sequence",
+            "fieldType": "Integer",
+            "fieldNameCapitalized": "Sequence",
+            "fieldNameUnderscored": "sequence"
+        },
+        {
+            "fieldId": 2,
+            "fieldName": "escalate_time",
+            "fieldType": "Integer",
+            "fieldNameCapitalized": "Escalate_time",
+            "fieldNameUnderscored": "escalate_time"
+        }
+    ],
+    "fieldsContainOwnerManyToMany": false,
+    "fieldsContainOneToMany": true,
+    "fieldsContainLocalDate": false,
+    "fieldsContainCustomTime": false,
+    "fieldsContainBigDecimal": false,
+    "fieldsContainDateTime": false,
+    "fieldsContainDate": false,
+    "changelogDate": "20150314223734",
+    "pagination": "pagination"
+}

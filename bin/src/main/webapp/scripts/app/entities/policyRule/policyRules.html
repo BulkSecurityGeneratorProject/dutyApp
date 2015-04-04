@@ -1,0 +1,161 @@
+<div>
+
+    <h2 translate="dutyappApp.policyRule.home.title">PolicyRule</h2>
+
+    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#savePolicyRuleModal" ng-click="clear()">
+        <span class="glyphicon glyphicon-flash"></span> <span translate="dutyappApp.policyRule.home.createLabel">Create a new PolicyRule</span>
+    </button>
+    <div class="modal fade" id="savePolicyRuleModal" tabindex="-1" role="dialog" aria-labelledby="myPolicyRuleLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="editForm" role="form" novalidate
+                      class="ng-scope ng-invalid ng-invalid-required ng-dirty ng-valid-minlength"
+                      ng-submit="create()">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                ng-click="clear()">&times;</button>
+                        <h4 class="modal-title" id="myPolicyRuleLabel" translate="dutyappApp.policyRule.home.createOrEditLabel">Create or edit a PolicyRule</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>ID</label>
+                            <input type="text" class="form-control" name="id"
+                                   ng-model="policyRule.id" readonly>
+                        </div>
+
+                        <div class="pd-item-content">
+                            <div class="pd-escalation-policy pd-escalation-policy-padded">
+                                <div class="escalation-rules"  ng-show="policyRule">
+                                    <div class="escalation-rule-list">
+                                        <div class="escalation-rule-container">
+                                            <div class="escalation-policy-layer">
+
+                                                <div class="escalation-policy-circle">1</div>
+
+                                                <div class="escalation-policy-layer-content">
+                                                    <a class="pull-right remove-rule" ng-click="removeRule()">
+                                                        <i class="glyphicon glyphicon-remove title="remove"> </i>
+                                                    </a>
+
+                                                    <p><i class="glyphicon glyphicon-th"> </i> Alert </p>
+
+                                                    <ul class="escalation-recipient-list"  ng-repeat="user in policyRule.users | filter:query | orderBy:orderProp">
+                                                        <li><a class="escalation-recipient">
+                                                            <i class="glyphicon glyphicon-user"></i> {{user.login}}
+                                                        </a></li>
+                                                    </ul>
+                                                </div>
+
+                                                <div class="escalation-delay-in-minutes escalation-policy-layer-timeout">
+                                                    <p><i class="icon icon-arrow-down"></i> Escalatioin after
+                                                        <strong> <input type="number" name="escalate_time" min="1" max="60" step="5"
+                                                                        ng-model="policyRule.escalate_time"> min</strong></p>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <p></p>
+                                        <button type="submit"
+                                                ui-sref="policyRule"
+                                                class="btn btn-info col-sm-offset-1">
+                                            <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+                                        </button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                        </button>
+                        <button type="submit" ng-disabled="editForm.$invalid" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deletePolicyRuleConfirmation">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="deleteForm" ng-submit="confirmDelete(policyRule.id)">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                ng-click="clear()">&times;</button>
+                        <h4 class="modal-title" translate="entity.delete.title">Confirm delete operation</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p translate="dutyappApp.policyRule.delete.question" translate-values="{id: '{{policyRule.id}}'}">Are you sure you want to delete this PolicyRule?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                        </button>
+                        <button type="submit" ng-disabled="deleteForm.$invalid" class="btn btn-danger">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th translate="dutyappApp.policyRule.sequence">Sequence</th>
+                    <th translate="dutyappApp.policyRule.escalate_time">Escalate_time</th>
+                    <th translate="dutyappApp.policyRule.EscalationPolicy">EscalationPolicy</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="policyRule in policyRules">
+                    <td><a ui-sref="policyRuleDetail({id:policyRule.id})">{{policyRule.id}}</a></td>
+                    <td>{{policyRule.sequence}}</td>
+                    <td>{{policyRule.escalate_time}}</td>
+                    <td>{{policyRule.escalationPolicy.policy_name}}</td>
+                    <td>
+                        <button type="submit"
+                                ui-sref="policyRuleDetail({id:policyRule.id})"
+                                class="btn btn-info">
+                            <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span translate="entity.action.view"> View</span>
+                        </button>
+                        <button type="submit"
+                                ng-click="update(policyRule.id)"
+                                class="btn btn-primary">
+                            <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span translate="entity.action.edit"> Edit</span>
+                        </button>
+                        <button type="submit"
+                                ng-click="delete(policyRule.id)"
+                                class="btn btn-danger">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete"> Delete</span>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <nav>
+            <ul class="pagination">
+                <li ng-show="links['first']" ng-click="loadPage(links['first'])"><a href="#">&lt;&lt;</a></li>
+                <li ng-show="links['prev']" ng-click="loadPage(links['prev'])"><a href="#">&lt;</a></li>
+                <li ng-show="page > 2" ng-click="loadPage(page - 2)"><a href="#">{{page - 2}}</a></li>
+                <li ng-show="page > 1" ng-click="loadPage(page - 1)"><a href="#">{{page - 1}}</a></li>
+                <li class="active"><a href="#">{{page}}</a></li>
+                <li ng-show="page < links['last']" ng-click="loadPage(page + 1)"><a href="#">{{page + 1}}</a></li>
+                <li ng-show="page < links['last'] - 1" ng-click="loadPage(page + 2)"><a href="#">{{page + 2}}</a></li>
+                <li ng-show="links['next']" ng-click="loadPage(links['next'])"><a href="#">&gt;</a></li>
+                <li ng-show="links['last']" ng-click="loadPage(links['last'])"><a href="#">&gt;&gt;</a></li>
+            </ul>
+        </nav>
+    </div>
+</div>

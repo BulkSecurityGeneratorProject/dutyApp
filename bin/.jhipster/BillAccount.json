@@ -1,0 +1,31 @@
+{
+    "relationships": [
+		{
+            "relationshipId": 1,
+            "relationshipName": "Service",
+            "relationshipNameCapitalized": "Service",
+            "relationshipFieldName": "service",
+            "otherEntityName": "service",
+            "relationshipType": "one-to-many",
+            "otherEntityNameCapitalized": "Service"
+        }
+	],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "company_name",
+            "fieldType": "String",
+            "fieldNameCapitalized": "Company_name",
+            "fieldNameUnderscored": "company_name"
+        }
+    ],
+    "fieldsContainOwnerManyToMany": false,
+    "fieldsContainOneToMany": false,
+    "fieldsContainLocalDate": false,
+    "fieldsContainCustomTime": false,
+    "fieldsContainBigDecimal": false,
+    "fieldsContainDateTime": false,
+    "fieldsContainDate": false,
+    "changelogDate": "20150315212633",
+    "pagination": "pagination"
+}

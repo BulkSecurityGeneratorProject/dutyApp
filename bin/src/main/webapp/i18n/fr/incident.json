@@ -1,0 +1,30 @@
+{
+    "dutyappApp": {
+        "incident" : {
+            "home": {
+                "title": "Incidents",
+                "createLabel": "Créer un nouveau Incident",
+                "createOrEditLabel": "Créer ou éditer un Incident"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Incident {{ id }} ?"
+            },
+			"details": {
+                "title": "Incident"
+            },
+            "create_time": "Create_time",
+            "state": "State",
+            "ack_time": "Ack_time",
+            "resolve_time": "Resolve_time",
+            "description": "Description",
+            "detail": "Detail",
+            "incident_no": "Incident_no",
+            "Service": "Service",
+            "Alert": "Alert",
+            "ack_user": "ack_user",
+            "resolve_user": "resolve_user",
+            "assign_user": "assign_user"
+        }
+    }
+}
+

@@ -1,0 +1,42 @@
+{
+    "relationships": [
+        {
+            "relationshipId": 1,
+            "relationshipName": "Incident",
+            "relationshipNameCapitalized": "Incident",
+            "relationshipFieldName": "incident",
+            "otherEntityName": "incident",
+            "relationshipType": "many-to-one",
+            "otherEntityNameCapitalized": "Incident",
+            "otherEntityField": "description"
+        },
+        {
+            "relationshipId": 2,
+            "relationshipName": "User",
+            "relationshipNameCapitalized": "User",
+            "relationshipFieldName": "user",
+            "otherEntityName": "user",
+            "relationshipType": "many-to-one",
+            "otherEntityNameCapitalized": "User",
+            "otherEntityField": "login"
+        }
+    ],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "alert_time",
+            "fieldType": "DateTime",
+            "fieldNameCapitalized": "Alert_time",
+            "fieldNameUnderscored": "alert_time"
+        }
+    ],
+    "fieldsContainOwnerManyToMany": false,
+    "fieldsContainOneToMany": false,
+    "fieldsContainLocalDate": false,
+    "fieldsContainCustomTime": true,
+    "fieldsContainBigDecimal": false,
+    "fieldsContainDateTime": true,
+    "fieldsContainDate": false,
+    "changelogDate": "20150317142227",
+    "pagination": "pagination"
+}

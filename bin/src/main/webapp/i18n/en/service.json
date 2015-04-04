@@ -1,0 +1,30 @@
+{
+    "dutyappApp": {
+        "service" : {
+            "home": {
+                "title": "Services",
+                "createLabel": "Create a new Service",
+                "createOrEditLabel": "Create or edit a Service"
+            },
+            "delete": {
+                "question": "Are you sure you want to delete Service {{ id }}?"
+            },
+            "detail": {
+                "title": "Service"
+            },
+            "validate" : {
+                "service_name": {
+                    "required" : "The service name is required",
+                    "minlength": "Your service name is required to be at least {{ minlength }} character",
+                    "maxlength": "Your service name cannot be longer than {{ maxlength }} characters"
+                }
+            },
+            "user_id": "User_id",
+            "service_name": "Service",
+            "api_key": "API key",
+            "service_type": "Type",
+            "is_deleted": "Is_deleted",
+            "EscalationPolicy": "Escalation Policy"
+        }
+    }
+}

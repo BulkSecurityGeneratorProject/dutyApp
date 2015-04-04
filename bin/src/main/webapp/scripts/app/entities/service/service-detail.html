@@ -1,0 +1,62 @@
+
+<div>
+    <h2><span translate="dutyappApp.service.detail.title">Service</span> {{service.id}}</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th translate="entity.detail.field">Field</th>
+                    <th translate="entity.detail.value">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span translate="dutyappApp.service.service_name">Service_name</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{service.service_name}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="dutyappApp.service.api_key">Api_key</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{service.api_key}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="dutyappApp.service.service_type">Service_type</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{service.service_type}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="dutyappApp.service.is_deleted">Is_deleted</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{service.is_deleted}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="dutyappApp.service.EscalationPolicy">EscalationPolicy</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{service.EscalationPolicy.id}}" readonly>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            ui-sref="service"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

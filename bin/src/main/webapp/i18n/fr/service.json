@@ -1,0 +1,24 @@
+{
+    "dutyappApp": {
+        "service" : {
+            "home": {
+                "title": "Services",
+                "createLabel": "Créer un nouveau Service",
+                "createOrEditLabel": "Créer ou éditer un Service"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Service {{ id }} ?"
+            },
+            "detail": {
+                "title": "Service"
+            },
+            "user_id": "User_id",
+            "service_name": "Service_name",
+            "api_key": "Api_key",
+            "service_type": "Service_type",
+            "is_deleted": "Is_deleted",
+            "EscalationPolicy": "EscalationPolicy"
+        }
+    }
+}
+
