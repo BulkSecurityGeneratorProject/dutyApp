@@ -1,7 +1,6 @@
 <div>
 
     <h2 translate="dutyappApp.escalationPolicy.home.title">EscalationPolicy</h2>
-
     <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#saveEscalationPolicyModal" ng-click="clear()">
         <span class="glyphicon glyphicon-flash"></span> <span translate="dutyappApp.escalationPolicy.home.createLabel">Create a new EscalationPolicy</span>
     </button>
@@ -81,8 +80,8 @@
         </div>
     </div>
 
-    <div class="table-responsive">
-        <table class="table table-striped">
+    <div class="table-responsive ">
+        <table class="table table-bordered table-striped">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -99,27 +98,41 @@
                     <td>{{escalationPolicy.has_cycle}}</td>
                     <td>{{escalationPolicy.cycle_time}}</td>
                     <td>
-                        <button type="submit"
-                                ui-sref="escalationPolicyDetail({id:escalationPolicy.id})"
-                                class="btn btn-info">
-                            <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span translate="entity.action.view"> View</span>
-                        </button>
-                        <button type="submit"
-                                ng-click="update(escalationPolicy.id)"
-                                class="btn btn-primary">
-                            <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span translate="entity.action.edit"> Edit</span>
-                        </button>
-                        <button type="submit"
-                                ng-click="delete(escalationPolicy.id)"
-                                class="btn btn-danger">
-                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete"> Delete</span>
-                        </button>
+                        <div class="btn-toolbar" >
+                            <div class="btn-group">
+                                <button class="btn dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <button type="submit"
+                                                ui-sref="escalationPolicyDetail({id:escalationPolicy.id})"
+                                                class="btn btn-info">
+                                            <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span translate="entity.action.view"> View</span>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button type="submit"
+                                                ng-click="update(escalationPolicy.id)"
+                                                class="btn btn-primary">
+                                            <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span translate="entity.action.edit"> Edit</span>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button type="submit"
+                                                ng-click="delete(escalationPolicy.id)"
+                                                class="btn btn-danger">
+                                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete"> Delete</span>
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </td>
                 </tr>
             </tbody>
         </table>
+
         <nav>
-            <ul class="pagination">
+            <ul class="pagination ">
                 <li ng-show="links['first']" ng-click="loadPage(links['first'])"><a href="#">&lt;&lt;</a></li>
                 <li ng-show="links['prev']" ng-click="loadPage(links['prev'])"><a href="#">&lt;</a></li>
                 <li ng-show="page > 2" ng-click="loadPage(page - 2)"><a href="#">{{page - 2}}</a></li>

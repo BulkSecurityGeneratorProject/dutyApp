@@ -158,7 +158,7 @@ ul#strength {
     padding: 6px 12px;
 }
 
-.pd-escalation-policy::before {
+/*.pd-escalation-policy::before {
     margin-left: 17px;
     content: "";
     display: block;
@@ -167,7 +167,7 @@ ul#strength {
     height: 80%;
     margin-top: 10px;
     border-left: 2px solid #efefef;
-}
+}*/
 
 .escalation-rule-container {
   display: block
@@ -182,7 +182,7 @@ ul#strength {
   z-index: 5;
 }
 
-.escalation-policy-layer::before {
+/*.escalation-policy-layer::before {
   position: absolute;
   margin-left: -31px;
   display: block;
@@ -201,7 +201,7 @@ ul#strength {
     display: table;
     content: "";
     line-height: 0;
-}
+} */
 
 <!--   -->
 .escalation-policy-layer .escalation-policy-circle {
@@ -232,7 +232,7 @@ ul#strength {
     padding: 10px;
 }
 
-.escalation-policy-layer .escalation-policy-layer-content:before, .escalation-policy-layer .escalation-policy-layer-content:after, .escalation-policy-layer .escalation-policy-layer-timeout:before, .escalation-policy-layer .escalation-policy-layer-timeout:after {
+/*.escalation-policy-layer .escalation-policy-layer-content:before, .escalation-policy-layer .escalation-policy-layer-content:after, .escalation-policy-layer .escalation-policy-layer-timeout:before, .escalation-policy-layer .escalation-policy-layer-timeout:after {
     display: table;
     content: "";
     line-height: 0;
@@ -254,7 +254,7 @@ ul#strength {
     border-top: 1px #ddd solid;
     border-left: 1px #ddd solid;
     display: none;
-}
+}*/
 
 .escalation-policy-layer .escalation-policy-layer-content .remove-rule {
     color: #333;
