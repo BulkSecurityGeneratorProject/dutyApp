@@ -40,7 +40,7 @@ public class Service implements Serializable {
 	@ManyToOne
     private BillAccount billAccount;
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.EAGER,cascade=CascadeType.DETACH)
     private EscalationPolicy escalationPolicy;
 	
 /*	@OneToMany(mappedBy = "service", fetch=FetchType.EAGER,cascade=CascadeType.ALL)

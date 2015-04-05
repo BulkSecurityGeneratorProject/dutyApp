@@ -11,5 +11,5 @@ import com.g200001.dutyapp.domain.Service;
  * Spring Data JPA repository for the Incident entity.
  */
 public interface IncidentRepository extends JpaRepository<Incident, String> {
-	List<Incident> findAllByService(Service service);
+	List<Incident> findByService(Service service);
 }

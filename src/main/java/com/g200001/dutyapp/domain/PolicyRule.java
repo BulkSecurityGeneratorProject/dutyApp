@@ -31,10 +31,11 @@ public class PolicyRule implements Serializable {
     @Column(name = "escalate_time")
     private Integer escalate_time;
 
-    @ManyToOne
+    @ManyToOne (fetch=FetchType.EAGER, cascade=CascadeType.DETACH)
+    @JsonIgnore
     private EscalationPolicy escalationPolicy;
 
-    @ManyToMany
+    @ManyToMany (fetch=FetchType.EAGER, cascade=CascadeType.DETACH)
     //@JsonIgnore
     @JoinTable(
             name = "T_POLICYRULE_USER",

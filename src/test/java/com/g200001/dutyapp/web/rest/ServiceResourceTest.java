@@ -198,7 +198,7 @@ public class ServiceResourceTest {
         service.setService_name(UPDATED_SERVICE_NAME);
         service.setService_type(UPDATED_SERVICE_TYPE);
         service.setIs_deleted(UPDATED_IS_DELETED);
-        restServiceMockMvc.perform(put("/api/services")
+        restServiceMockMvc.perform(put("/api/services/{id}", service.getId())
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(service)))
                 .andExpect(status().isOk());

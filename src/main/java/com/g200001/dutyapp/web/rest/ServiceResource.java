@@ -69,16 +69,21 @@ public class ServiceResource {
     /**
      * PUT  /services -> Updates an existing service.
      */
-    @RequestMapping(value = "/services",
+    @RequestMapping(value = "/services/{id}",
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Void> update(@RequestBody Service service) throws URISyntaxException {
+    public ResponseEntity<Void> update(@PathVariable String id, @RequestBody Service service) throws URISyntaxException {
         log.debug("REST request to update Service : {}", service);
-        if (service.getId() == null) {
-            return create(service);
+        
+        Service s = serviceRepository.findOne(id);
+        if (s.getId() == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        serviceRepository.save(service);
+        
+        service.setId(id);
+        s = service;
+        serviceRepository.save(s);
         return ResponseEntity.ok().build();
     }
 
@@ -124,7 +129,7 @@ public class ServiceResource {
         log.debug("REST request to delete Service : {}", id);
         //delete all the incidents that belongs to the service
         Service s = serviceRepository.findOne(id);
-        List<Incident> incidents = incidentRepository.findAllByService(s);
+        List<Incident> incidents = incidentRepository.findByService(s);
         incidentRepository.delete(incidents);
         
         serviceRepository.delete(id);

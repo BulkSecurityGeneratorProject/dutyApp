@@ -46,13 +46,13 @@ public class Incident implements Serializable {
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = CustomDateTimeSerializer.class)
     @JsonDeserialize(using = CustomDateTimeDeserializer.class)
-    @Column(name = "ack_time", nullable = false)
+    @Column(name = "ack_time")
     private DateTime ack_time;
 
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = CustomDateTimeSerializer.class)
     @JsonDeserialize(using = CustomDateTimeDeserializer.class)
-    @Column(name = "resolve_time", nullable = false)
+    @Column(name = "resolve_time")
     private DateTime resolve_time;
 
     @Column(name = "description")

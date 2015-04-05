@@ -129,18 +129,23 @@ public class IncidentResource {
     }
 
     /**
-     * PUT  /incidents -> Updates an existing incident.
+     * PUT  /incidents/:id -> Updates an existing incident.
      */
-    @RequestMapping(value = "/incidents",
+    @RequestMapping(value = "/incidents/{id}",
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Void> update(@RequestBody Incident incident) throws URISyntaxException {
+    public ResponseEntity<Void> update(@PathVariable String id, @RequestBody Incident incident) throws URISyntaxException {
         log.debug("REST request to update Incident : {}", incident);
-        if (incident.getId() == null) {
-            return create(incident);
+        
+        Incident i = incidentRepository.findOne(id);
+        if (i.getId() == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        incidentRepository.save(incident);
+      
+        incident.setId(id);
+        i = incident;
+        incidentRepository.save(i);
         return ResponseEntity.ok().build();
     }
 

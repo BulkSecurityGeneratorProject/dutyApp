@@ -104,7 +104,6 @@ public class IncidentResourceTest {
     
     
     private MockMvc restIncidentMockMvc;
-    private MockMvc restServiceMockMvc;
 
     private Incident incident;
     private Service service;
@@ -115,22 +114,10 @@ public class IncidentResourceTest {
         //IncidentResource incidentResource = new IncidentResource();
         ReflectionTestUtils.setField(incidentResource, "incidentRepository", incidentRepository);
         this.restIncidentMockMvc = MockMvcBuilders.standaloneSetup(incidentResource).build();
-        
-        ReflectionTestUtils.setField(serviceResource, "serviceRepository", serviceRepository);
-        this.restServiceMockMvc = MockMvcBuilders.standaloneSetup(serviceResource).build();
     }
 
     @Before
-    public void initTest() {
-        incident = new Incident();
-        incident.setCreate_time(DEFAULT_CREATE_TIME);
-        incident.setState(DEFAULT_STATE);
-        incident.setAck_time(DEFAULT_ACK_TIME);
-        incident.setResolve_time(DEFAULT_RESOLVE_TIME);
-        incident.setDescription(DEFAULT_DESCRIPTION);
-        incident.setDetail(DEFAULT_DETAIL);
-        incident.setIncident_no(DEFAULT_INCIDENT_NO);
-             
+    public void initTest() {             
      // Validate the database is empty
         assertThat(serviceRepository.findAll()).hasSize(0);
         
@@ -153,19 +140,22 @@ public class IncidentResourceTest {
         escalationPolicy.setPolicyRules(policyRules);
         escalationPolicyRepository.saveAndFlush(escalationPolicy);   
         
-     // Create the Service
+        // Create the Service
         service = new Service();
         service.setService_name(SERVICE_NAME);
-        
-     // find existing Escalate Policy and set it to serivce
-        EscalationPolicy e = escalationPolicyRepository.findAll().iterator().next();
-        service.setEscalationPolicy(e);
-        
+        service.setEscalationPolicy(escalationPolicy);       
         serviceRepository.saveAndFlush(service);
     
-        //set an existing service
-        Service s = serviceRepository.findAll().get(0);
-        incident.setService(s);
+        // Create the Incident
+        incident = new Incident();
+        incident.setCreate_time(DEFAULT_CREATE_TIME);
+        incident.setState(DEFAULT_STATE);
+        incident.setAck_time(DEFAULT_ACK_TIME);
+        incident.setResolve_time(DEFAULT_RESOLVE_TIME);
+        incident.setDescription(DEFAULT_DESCRIPTION);
+        incident.setDetail(DEFAULT_DETAIL);
+        incident.setIncident_no(DEFAULT_INCIDENT_NO);
+        incident.setService(service);
         
         //now set the assign user using an existing user
         User user = userRepository.findOneByLogin("admin");
@@ -265,7 +255,7 @@ public class IncidentResourceTest {
     public void updateIncident() throws Exception {
         // Initialize the database
         incidentRepository.saveAndFlush(incident);
-
+        
         // Update the incident
         incident.setCreate_time(UPDATED_CREATE_TIME);
         incident.setState(UPDATED_STATE);
@@ -275,7 +265,7 @@ public class IncidentResourceTest {
         incident.setDetail(UPDATED_DETAIL);
         incident.setIncident_no(UPDATED_INCIDENT_NO);     
         
-        restIncidentMockMvc.perform(put("/api/incidents")
+        restIncidentMockMvc.perform(put("/api/incidents/{id}", incident.getId())
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(incident)))
                 .andExpect(status().isOk());
