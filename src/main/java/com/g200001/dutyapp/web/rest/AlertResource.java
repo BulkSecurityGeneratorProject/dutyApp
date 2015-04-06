@@ -56,18 +56,23 @@ public class AlertResource {
     }
 
     /**
-     * PUT  /alerts -> Updates an existing alert.
+     * PUT  /alerts/:id -> Updates an existing alert.
      */
-    @RequestMapping(value = "/alerts",
+    @RequestMapping(value = "/alerts/{id}",
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Void> update(@RequestBody Alert alert) throws URISyntaxException {
+    public ResponseEntity<Void> update(@PathVariable String id, @RequestBody Alert alert) throws URISyntaxException {
         log.debug("REST request to update Alert : {}", alert);
-        if (alert.getId() == null) {
-            return create(alert);
+        
+        Alert a = alertRepository.findOne(id);
+        if (a.getId() == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        alertRepository.save(alert);
+        
+        alert.setId(id);
+        a = alert;
+        alertRepository.save(a);
         return ResponseEntity.ok().build();
     }
 

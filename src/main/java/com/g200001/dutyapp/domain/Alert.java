@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.g200001.dutyapp.domain.util.CustomDateTimeDeserializer;
 import com.g200001.dutyapp.domain.util.CustomDateTimeSerializer;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
@@ -12,6 +13,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -35,7 +37,8 @@ public class Alert implements Serializable {
     @Column(name = "alert_time", nullable = false)
     private DateTime alert_time;
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY,cascade=CascadeType.DETACH)
+    @JsonIgnore
     private Incident incident;
 
     @ManyToOne
@@ -91,7 +94,7 @@ public class Alert implements Serializable {
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+    	return id==null? 0 : id.hashCode();
     }
 
     @Override

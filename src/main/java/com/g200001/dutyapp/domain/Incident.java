@@ -24,10 +24,18 @@ import java.util.Set;
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Incident implements Serializable {
 
+	public static final int CREATED = 0;
+	public static final int ACKNOWLEDGED = 1;
+	public static final int RESOLVED = 2;
+	public static final int REASSIGNED = 3;
+	
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid")
     private String id;
+    
+    @Column(name = "state")
+    private Integer state;
 
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = CustomDateTimeSerializer.class)
@@ -35,19 +43,16 @@ public class Incident implements Serializable {
     @Column(name = "create_time", nullable = false)
     private DateTime create_time;
 
-    @Column(name = "state")
-    private Integer state;
-
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = CustomDateTimeSerializer.class)
     @JsonDeserialize(using = CustomDateTimeDeserializer.class)
-    @Column(name = "ack_time", nullable = false)
+    @Column(name = "ack_time")
     private DateTime ack_time;
 
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = CustomDateTimeSerializer.class)
     @JsonDeserialize(using = CustomDateTimeDeserializer.class)
-    @Column(name = "resolve_time", nullable = false)
+    @Column(name = "resolve_time")
     private DateTime resolve_time;
 
     @Column(name = "description")
@@ -59,22 +64,23 @@ public class Incident implements Serializable {
     @Column(name = "incident_no")
     private Long incident_no;
 
+    //TO-DO: use PERSIST OR DETACH??
     //@ManyToOne
-    @ManyToOne(fetch=FetchType.EAGER,cascade=CascadeType.MERGE)
+    @ManyToOne(fetch=FetchType.EAGER,cascade=CascadeType.DETACH)
     private Service service;
 
-    @OneToMany(mappedBy = "incident")
+    /*@OneToMany(mappedBy = "incident")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Alert> alerts = new HashSet<>();
+    private Set<Alert> alerts = new HashSet<>();*/
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.EAGER)
     private User ack_user;
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.EAGER)
     private User resolve_user;
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.EAGER)
     private User assign_user;
 
     public String getId() {
@@ -149,13 +155,13 @@ public class Incident implements Serializable {
         this.service = service;
     }
 
-    public Set<Alert> getAlerts() {
+/*    public Set<Alert> getAlerts() {
         return alerts;
     }
 
     public void setAlerts(Set<Alert> alerts) {
         this.alerts = alerts;
-    }
+    }*/
 
     public User getAck_user() {
         return ack_user;
@@ -199,8 +205,7 @@ public class Incident implements Serializable {
 
     @Override
     public int hashCode() {
-        //return id.hashCode();
-    	return description.hashCode();
+        return id==null? 0 : id.hashCode();
     }
 
     @Override

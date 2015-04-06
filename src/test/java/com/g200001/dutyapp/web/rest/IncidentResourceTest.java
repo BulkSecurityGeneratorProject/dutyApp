@@ -9,7 +9,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -33,10 +35,17 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.g200001.dutyapp.Application;
+import com.g200001.dutyapp.domain.Alert;
+import com.g200001.dutyapp.domain.EscalationPolicy;
 import com.g200001.dutyapp.domain.Incident;
+import com.g200001.dutyapp.domain.PolicyRule;
 import com.g200001.dutyapp.domain.Service;
+import com.g200001.dutyapp.domain.User;
+import com.g200001.dutyapp.repository.AlertRepository;
+import com.g200001.dutyapp.repository.EscalationPolicyRepository;
 import com.g200001.dutyapp.repository.IncidentRepository;
 import com.g200001.dutyapp.repository.ServiceRepository;
+import com.g200001.dutyapp.repository.UserRepository;
 
 
 
@@ -75,6 +84,8 @@ public class IncidentResourceTest {
 
     private static final Long DEFAULT_INCIDENT_NO = 0L;
     private static final Long UPDATED_INCIDENT_NO = 1L;
+    
+    private static final String SERVICE_NAME = "Service Test";
 
     @Inject
     private IncidentRepository incidentRepository;
@@ -84,10 +95,15 @@ public class IncidentResourceTest {
     private ServiceRepository serviceRepository;
     @Inject
     private ServiceResource serviceResource;
+    @Inject
+    private UserRepository userRepository;
+    @Inject
+    private AlertRepository alertRepository;
+    @Inject
+    private EscalationPolicyRepository escalationPolicyRepository;
     
     
     private MockMvc restIncidentMockMvc;
-    private MockMvc restServiceMockMvc;
 
     private Incident incident;
     private Service service;
@@ -98,13 +114,39 @@ public class IncidentResourceTest {
         //IncidentResource incidentResource = new IncidentResource();
         ReflectionTestUtils.setField(incidentResource, "incidentRepository", incidentRepository);
         this.restIncidentMockMvc = MockMvcBuilders.standaloneSetup(incidentResource).build();
-        
-        ReflectionTestUtils.setField(serviceResource, "serviceRepository", serviceRepository);
-        this.restServiceMockMvc = MockMvcBuilders.standaloneSetup(serviceResource).build();
     }
 
     @Before
-    public void initTest() {
+    public void initTest() {             
+     // Validate the database is empty
+        assertThat(serviceRepository.findAll()).hasSize(0);
+        
+     // create EscalationPolicy
+    	EscalationPolicy escalationPolicy = new EscalationPolicy();
+        escalationPolicy.setPolicy_name("IncidentTest Escalate Policy");
+        
+        Set<PolicyRule> policyRules = new HashSet<PolicyRule>();        
+        
+        Set<User> users = new HashSet<User>();
+        for (User usr: userRepository.findAll())
+        	users.add(usr);
+        
+        PolicyRule rule1 = new PolicyRule();
+        rule1.setSequence(0);
+        rule1.setEscalate_time(10);
+        rule1.setUsers(users);
+        policyRules.add(rule1);
+        
+        escalationPolicy.setPolicyRules(policyRules);
+        escalationPolicyRepository.saveAndFlush(escalationPolicy);   
+        
+        // Create the Service
+        service = new Service();
+        service.setService_name(SERVICE_NAME);
+        service.setEscalationPolicy(escalationPolicy);       
+        serviceRepository.saveAndFlush(service);
+    
+        // Create the Incident
         incident = new Incident();
         incident.setCreate_time(DEFAULT_CREATE_TIME);
         incident.setState(DEFAULT_STATE);
@@ -113,26 +155,11 @@ public class IncidentResourceTest {
         incident.setDescription(DEFAULT_DESCRIPTION);
         incident.setDetail(DEFAULT_DETAIL);
         incident.setIncident_no(DEFAULT_INCIDENT_NO);
+        incident.setService(service);
         
-        service = new Service();
-        service.setService_name("Service Test");
-     
-     // Validate the database is empty
-        assertThat(serviceRepository.findAll()).hasSize(0);
-        
-     // Create the Service
-        try {
-        restServiceMockMvc.perform(post("/api/services")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(service)))
-                .andExpect(status().isCreated());
-        } catch (Exception e){
-        	System.out.println(e.getStackTrace());
-        }
-    
-        Service s = serviceRepository.findAll().get(0);
-        incident.setService(s);
-        
+        //now set the assign user using an existing user
+        User user = userRepository.findOneByLogin("admin");
+        incident.setAssign_user(user);        
     }
 
     @Test
@@ -140,6 +167,7 @@ public class IncidentResourceTest {
     public void createIncident() throws Exception {
         // Validate the database is empty
         assertThat(incidentRepository.findAll()).hasSize(0);
+        assertThat(alertRepository.findAll()).hasSize(0);
         
         // Create the Incident
         restIncidentMockMvc.perform(post("/api/incidents")
@@ -151,13 +179,27 @@ public class IncidentResourceTest {
         List<Incident> incidents = incidentRepository.findAll();
         assertThat(incidents).hasSize(1);
         Incident testIncident = incidents.iterator().next();
-        assertThat(testIncident.getCreate_time().toDateTime(DateTimeZone.UTC)).isEqualTo(DEFAULT_CREATE_TIME);
         assertThat(testIncident.getState()).isEqualTo(DEFAULT_STATE);
         assertThat(testIncident.getAck_time().toDateTime(DateTimeZone.UTC)).isEqualTo(DEFAULT_ACK_TIME);
         assertThat(testIncident.getResolve_time().toDateTime(DateTimeZone.UTC)).isEqualTo(DEFAULT_RESOLVE_TIME);
         assertThat(testIncident.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testIncident.getDetail()).isEqualTo(DEFAULT_DETAIL);
         assertThat(testIncident.getIncident_no()).isEqualTo(DEFAULT_INCIDENT_NO);
+        
+        Service s = testIncident.getService();
+        assertThat(s.getService_name()).isEqualTo(SERVICE_NAME);
+        
+        User assigner = testIncident.getAssign_user();
+        assertThat(assigner.getLogin()).isEqualTo("admin");
+        
+        //automatically insert an alert
+        List<Alert> alerts = alertRepository.findAll();
+        EscalationPolicy ep = incident.getService().getEscalationPolicy();
+        int expectAlertNum = 0;
+        for (PolicyRule rule: ep.getPolicyRules()) {
+        	expectAlertNum += rule.getUsers().size();
+        }
+        assertThat(alerts).hasSize(expectAlertNum);
     }
 
     @Test
@@ -185,9 +227,6 @@ public class IncidentResourceTest {
     public void getIncident() throws Exception {
         // Initialize the database
         incidentRepository.saveAndFlush(incident);
-
-        Incident i= incidentRepository.findOne(incident.getId());
-        assertThat(i.getService().getService_name().equals("Service Test"));
         
         // Get the incident
         restIncidentMockMvc.perform(get("/api/incidents/{id}", incident.getId()))
@@ -216,7 +255,7 @@ public class IncidentResourceTest {
     public void updateIncident() throws Exception {
         // Initialize the database
         incidentRepository.saveAndFlush(incident);
-
+        
         // Update the incident
         incident.setCreate_time(UPDATED_CREATE_TIME);
         incident.setState(UPDATED_STATE);
@@ -224,8 +263,9 @@ public class IncidentResourceTest {
         incident.setResolve_time(UPDATED_RESOLVE_TIME);
         incident.setDescription(UPDATED_DESCRIPTION);
         incident.setDetail(UPDATED_DETAIL);
-        incident.setIncident_no(UPDATED_INCIDENT_NO);
-        restIncidentMockMvc.perform(put("/api/incidents")
+        incident.setIncident_no(UPDATED_INCIDENT_NO);     
+        
+        restIncidentMockMvc.perform(put("/api/incidents/{id}", incident.getId())
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(incident)))
                 .andExpect(status().isOk());
@@ -254,8 +294,56 @@ public class IncidentResourceTest {
                 .accept(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
 
-        // Validate the database is empty
+        // Validate incident/alerts is empty
         List<Incident> incidents = incidentRepository.findAll();
         assertThat(incidents).hasSize(0);
+        List<Alert> alerts = alertRepository.findAll();
+        assertThat(alerts).hasSize(0);
+        
+        // validate user and sevice still exist
+        List<Service> services = serviceRepository.findAll();
+        assertThat(services).hasSize(1);
+        User user = userRepository.findOneByLogin("admin");
+        assertThat(user).isNotNull();
+    }
+    
+    @Test
+    @Transactional
+    public void ackowledgeIncident() throws Exception {
+        // Initialize the database
+        incidentRepository.saveAndFlush(incident);
+        
+        User user = userRepository.findOneByLogin("user");
+        
+     // acknowledge the incident
+        restIncidentMockMvc.perform(put("/api/incidents/{id}/acknowledge", incident.getId())
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(user.getId()))
+                .andExpect(status().isOk());
+        
+     // Validate the Incident in the database
+        Incident i = incidentRepository.findOne(incident.getId());
+        assertThat(i.getAck_user()).isEqualTo(user);
+        assertThat(i.getState()).isEqualTo(Incident.ACKNOWLEDGED);
+    }
+    
+    @Test
+    @Transactional
+    public void resolveIncident() throws Exception {
+        // Initialize the database
+        incidentRepository.saveAndFlush(incident);
+        
+        User user = userRepository.findOneByLogin("user");
+                
+     // acknowledge the incident
+        restIncidentMockMvc.perform(put("/api/incidents/{id}/resolve", incident.getId())
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(user.getId()))
+                .andExpect(status().isOk());
+        
+     // Validate the Incident in the database
+        Incident i = incidentRepository.findOne(incident.getId());
+        assertThat(i.getResolve_user()).isEqualTo(user);
+        assertThat(i.getState()).isEqualTo(Incident.RESOLVED);
     }
 }

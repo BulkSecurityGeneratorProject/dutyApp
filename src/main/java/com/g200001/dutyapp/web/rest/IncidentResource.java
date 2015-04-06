@@ -2,6 +2,7 @@ package com.g200001.dutyapp.web.rest;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -24,15 +25,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.codahale.metrics.annotation.Timed;
 import com.g200001.dutyapp.domain.Alert;
+<<<<<<< HEAD
 import com.g200001.dutyapp.domain.User;
+=======
+>>>>>>> master
 import com.g200001.dutyapp.domain.EscalationPolicy;
 import com.g200001.dutyapp.domain.Incident;
 import com.g200001.dutyapp.domain.PolicyRule;
-import com.g200001.dutyapp.domain.Service;
+import com.g200001.dutyapp.domain.User;
+import com.g200001.dutyapp.repository.AlertRepository;
 import com.g200001.dutyapp.repository.IncidentRepository;
 import com.g200001.dutyapp.repository.PolicyRuleRepository;
 import com.g200001.dutyapp.repository.ServiceRepository;
+<<<<<<< HEAD
 import com.g200001.dutyapp.web.rest.IncidentBL.IncidentCreateThread;
+=======
+import com.g200001.dutyapp.repository.UserRepository;
+>>>>>>> master
 import com.g200001.dutyapp.web.rest.util.PaginationUtil;
 
 
@@ -47,7 +56,66 @@ public class IncidentResource {
     private final Logger log = LoggerFactory.getLogger(IncidentResource.class);
 
     @Inject
+<<<<<<< HEAD
 	 private IncidentRepository incidentRepository;
+=======
+    private IncidentRepository incidentRepository;
+    @Inject
+    private PolicyRuleRepository policyRuleRepository;
+    @Inject
+    private ServiceRepository serviceRepository;
+    @Inject
+    private AlertRepository alertRepository;
+    @Inject
+    private UserRepository userRepository;
+    
+    //
+	private class CreateAlertThread extends Thread {
+		private final Logger log = LoggerFactory
+				.getLogger(IncidentResource.class);
+
+		private Incident _incident;
+		private List<Alert> _alerts;
+
+		public CreateAlertThread(Incident incident) {
+			_incident = incident;
+			_alerts = new ArrayList<>();
+		}
+
+		public void run() {
+			EscalationPolicy escalationPolicy = _incident.getService()
+					.getEscalationPolicy();
+			
+			if (escalationPolicy == null) 
+				throw new RuntimeException("Escalation Policy NULL");
+			
+			for (PolicyRule rule: escalationPolicy.getPolicyRules()) {
+				for(User user: rule.getUsers()) {
+					Alert alert = new Alert();
+					alert.setIncident(_incident);
+					alert.setUser(user);
+					
+					alert.setAlert_time(DateTime.now().plusMinutes(
+							rule.getEscalate_time()));
+					
+					_alerts.add(alert);
+				}
+			} 
+			
+			alertRepository.save(_alerts);
+			
+//    		System.out.println(DateTime.now().toString("hh:mm:ss")+ "incident id="+_incident.getId());
+//    		try {
+//                Thread.sleep(5000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace(); 
+//            }
+//    		System.out.println(DateTime.now().toString("hh:mm:ss")+ "incident id="+_incident.getId());
+    	}
+    }
+   
+    
+>>>>>>> master
     /**
      * POST  /incidents -> Create a new incident.
      */
@@ -61,6 +129,11 @@ public class IncidentResource {
             return ResponseEntity.badRequest().header("Failure", "A new incident cannot already have an ID").build();
         }
         
+        // TO-DO: should we set a assign user here??
+        // incident.setAssign_user(assign_user);
+        incident.setCreate_time(DateTime.now());
+        incident.setState(Incident.CREATED);
+        
         incidentRepository.save(incident);
 
         new IncidentCreateThread(incident).run();
@@ -68,18 +141,23 @@ public class IncidentResource {
     }
 
     /**
-     * PUT  /incidents -> Updates an existing incident.
+     * PUT  /incidents/:id -> Updates an existing incident.
      */
-    @RequestMapping(value = "/incidents",
+    @RequestMapping(value = "/incidents/{id}",
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Void> update(@RequestBody Incident incident) throws URISyntaxException {
+    public ResponseEntity<Void> update(@PathVariable String id, @RequestBody Incident incident) throws URISyntaxException {
         log.debug("REST request to update Incident : {}", incident);
-        if (incident.getId() == null) {
-            return create(incident);
+        
+        Incident i = incidentRepository.findOne(id);
+        if (i.getId() == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        incidentRepository.save(incident);
+      
+        incident.setId(id);
+        i = incident;
+        incidentRepository.save(i);
         return ResponseEntity.ok().build();
     }
 
@@ -123,6 +201,67 @@ public class IncidentResource {
     @Timed
     public void delete(@PathVariable String id) {
         log.debug("REST request to delete Incident : {}", id);
+        
+      //delete all the Alerts that belongs to the incidents
+        Incident incident = incidentRepository.findOne(id);
+        List<Alert> alerts = alertRepository.findAllByIncident(incident);
+        alertRepository.delete(alerts);
+        
         incidentRepository.delete(id);
+    }
+    
+    /**
+     * PUT  /incidents/:id/resolve -> Resolve an existing incident.
+     */
+    @RequestMapping(value = "/incidents/{id}/resolve",
+        method = RequestMethod.PUT,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<Void> resolve(@PathVariable String id, @RequestBody String userId) throws URISyntaxException {
+        log.debug("REST request to resolve Incident : {}", id);
+        
+        Incident incident = incidentRepository.findOne(id);
+        if (incident.getId() == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        
+        User user = userRepository.findOne(userId);
+        if (user == null)
+        	throw new RuntimeException("User should not be NULL");
+        
+        incident.setResolve_user(user);
+        incident.setResolve_time(DateTime.now());
+        incident.setState(Incident.RESOLVED);
+        
+        incidentRepository.save(incident);
+        return ResponseEntity.ok().build();
+    }
+    
+    /**
+     * PUT  /incidents/:id/acknowledge -> acknowledge an existing incident.
+     */
+    @RequestMapping(value = "/incidents/{id}/acknowledge",
+        method = RequestMethod.PUT,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<Void> acknowledge(@PathVariable String id, @RequestBody String userId) throws URISyntaxException {
+    	log.debug("REST request to acknowledge Incident : {}", id);
+        
+        Incident incident = incidentRepository.findOne(id);        
+
+        if (incident.getId() == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        
+        User user = userRepository.findOne(userId);
+        if (user == null)
+        	throw new RuntimeException("User should not be NULL");
+        
+        incident.setAck_user(user);
+        incident.setAck_time(DateTime.now());
+        incident.setState(Incident.ACKNOWLEDGED);
+        
+        incidentRepository.save(incident);
+        return ResponseEntity.ok().build();
     }
 }

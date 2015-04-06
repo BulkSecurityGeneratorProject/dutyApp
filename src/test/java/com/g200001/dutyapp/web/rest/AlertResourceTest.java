@@ -1,9 +1,23 @@
 package com.g200001.dutyapp.web.rest;
 
-import com.g200001.dutyapp.Application;
-import com.g200001.dutyapp.domain.Alert;
-import com.g200001.dutyapp.repository.AlertRepository;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,17 +32,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import com.g200001.dutyapp.Application;
+import com.g200001.dutyapp.domain.Alert;
+import com.g200001.dutyapp.domain.EscalationPolicy;
+import com.g200001.dutyapp.domain.Incident;
+import com.g200001.dutyapp.domain.Service;
+import com.g200001.dutyapp.repository.AlertRepository;
+import com.g200001.dutyapp.repository.EscalationPolicyRepository;
+import com.g200001.dutyapp.repository.IncidentRepository;
+import com.g200001.dutyapp.repository.ServiceRepository;
 
 /**
  * Test class for the AlertResource REST controller.
@@ -48,8 +60,18 @@ public class AlertResourceTest {
     private static final DateTime UPDATED_ALERT_TIME = new DateTime(DateTimeZone.UTC).withMillisOfSecond(0);
     private static final String DEFAULT_ALERT_TIME_STR = dateTimeFormatter.print(DEFAULT_ALERT_TIME);
 
+    private static final String SERVICE_NAME = "Service Test";
+    private static final String POLICY_NAME = "Policy Test";
+    private static final DateTime DEFAULT_CREATE_TIME = new DateTime(0L, DateTimeZone.UTC);
+    
     @Inject
     private AlertRepository alertRepository;
+    @Inject
+    private EscalationPolicyRepository escalationPolicyRepository;
+    @Inject
+    private ServiceRepository serviceRepository;
+    @Inject
+    private IncidentRepository incidentRepository;
 
     private MockMvc restAlertMockMvc;
 
@@ -65,8 +87,27 @@ public class AlertResourceTest {
 
     @Before
     public void initTest() {
+     // create EscalationPolicy
+    	EscalationPolicy escalationPolicy = new EscalationPolicy();
+        escalationPolicy.setPolicy_name(POLICY_NAME);
+        escalationPolicyRepository.saveAndFlush(escalationPolicy);   
+        
+     // Create the Service
+        Service service = new Service();
+        service.setService_name(SERVICE_NAME);
+        service.setEscalationPolicy(escalationPolicy);     
+        serviceRepository.saveAndFlush(service);
+    
+     //Create the Incident
+    	Incident incident = new Incident();
+    	incident.setDescription("Incident Test");
+    	incident.setCreate_time(DEFAULT_CREATE_TIME);
+        incident.setService(service);
+        incidentRepository.save(incident);
+    	
         alert = new Alert();
         alert.setAlert_time(DEFAULT_ALERT_TIME);
+        alert.setIncident(incident);
     }
 
     @Test
@@ -107,12 +148,13 @@ public class AlertResourceTest {
     public void getAlert() throws Exception {
         // Initialize the database
         alertRepository.saveAndFlush(alert);
-
+        
         // Get the alert
         restAlertMockMvc.perform(get("/api/alerts/{id}", alert.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(alert.getId()))
+            .andExpect(jsonPath("$.incident").doesNotExist())
             .andExpect(jsonPath("$.alert_time").value(DEFAULT_ALERT_TIME_STR));
     }
 
@@ -132,7 +174,8 @@ public class AlertResourceTest {
 
         // Update the alert
         alert.setAlert_time(UPDATED_ALERT_TIME);
-        restAlertMockMvc.perform(put("/api/alerts")
+        
+        restAlertMockMvc.perform(put("/api/alerts/{id}", alert.getId())
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(alert)))
                 .andExpect(status().isOk());

@@ -19,12 +19,8 @@
                 <constraints nullable="false" />
             </column>
             <column name="state" type="integer"/>
-            <column name="ack_time" type="timestamp">
-                <constraints nullable="false" />
-            </column>
-            <column name="resolve_time" type="timestamp">
-                <constraints nullable="false" />
-            </column>
+            <column name="ack_time" type="timestamp" />
+            <column name="resolve_time" type="timestamp" />
             <column name="description" type="varchar(255)"/>
             <column name="detail" type="varchar(255)"/>
             <column name="incident_no" type="bigint"/>

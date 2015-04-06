@@ -36,17 +36,16 @@ public class Service implements Serializable {
 
     @Column(name = "is_deleted")
     private Boolean is_deleted;
-
-    @ManyToOne
-    private EscalationPolicy escalationPolicy;
     
 	@ManyToOne
     private BillAccount billAccount;
 
-	@OneToMany(mappedBy = "service", fetch=FetchType.EAGER,cascade=CascadeType.ALL)
-    @JsonIgnore
+    @ManyToOne(fetch=FetchType.EAGER,cascade=CascadeType.DETACH)
+    private EscalationPolicy escalationPolicy;
+	
+/*	@OneToMany(mappedBy = "service", fetch=FetchType.EAGER,cascade=CascadeType.ALL)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Incident> incidents = new HashSet<>();
+    private Set<Incident> incidents = new HashSet<>();*/
 	
     public String getId() {
         return id;
@@ -104,13 +103,13 @@ public class Service implements Serializable {
       this.billAccount = billAccount;
     }
     
-	public Set<Incident> getIncidents() {
+/*	public Set<Incident> getIncidents() {
         return incidents;
     }
 
     public void setIncidents(Set<Incident> incidents) {
         this.incidents = incidents;
-    }
+    }*/
 
     @Override
     public boolean equals(Object o) {
@@ -130,7 +129,7 @@ public class Service implements Serializable {
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+    	return id==null? 0 : id.hashCode();
     }
 
     @Override

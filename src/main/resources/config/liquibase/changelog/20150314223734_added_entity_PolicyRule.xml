@@ -49,6 +49,15 @@
 								 constraintName="fk4_user_id"
                                  referencedColumnNames="id"
                                  referencedTableName="T_USER"/>						 
-					 
+		
+		<loadData encoding="UTF-8"
+                  file="config/liquibase/policyrule.csv"
+                  separator=";"
+                  tableName="T_POLICYRULE"/>
+
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/policyrule_user.csv"
+                  separator=";"
+                  tableName="T_POLICYRULE_USER"/>
     </changeSet>
 </databaseChangeLog>

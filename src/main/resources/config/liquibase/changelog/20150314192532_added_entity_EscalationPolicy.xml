@@ -16,9 +16,18 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="policy_name" type="varchar(255)"/>
-            <column name="has_cycle" type="bit"/>
+            <column name="has_cycle" type="boolean" valueBoolean="false">
+                <constraints nullable="false" />
+            </column>
             <column name="cycle_time" type="bigint"/>
         </createTable>
         
+		<loadData encoding="UTF-8"
+                  file="config/liquibase/escalationpolicy.csv"
+                  separator=";"
+                  tableName="T_ESCALATIONPOLICY">
+            <column name="has_cycle" type="boolean"/>
+            <column name="cycle_time" type="numeric"/>
+        </loadData>
     </changeSet>
 </databaseChangeLog>
