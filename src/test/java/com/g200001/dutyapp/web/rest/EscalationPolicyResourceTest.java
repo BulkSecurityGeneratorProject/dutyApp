@@ -85,6 +85,7 @@ public class EscalationPolicyResourceTest {
 
     @Before
     public void initTest() {    	
+    	//escalationPolicyRepository.deleteAll();
         escalationPolicy = new EscalationPolicy();
         escalationPolicy.setPolicy_name(DEFAULT_POLICY_NAME);
         escalationPolicy.setHas_cycle(DEFAULT_HAS_CYCLE);
@@ -213,20 +214,26 @@ public class EscalationPolicyResourceTest {
         // Initialize the database
         escalationPolicyRepository.saveAndFlush(escalationPolicy);
 
+        
+        List<User> users = userRepository.findAll();
+        int UserCount = users.size();
         // Get the escalationPolicy
         restEscalationPolicyMockMvc.perform(delete("/api/escalationPolicys/{id}", escalationPolicy.getId())
                 .accept(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
 
+        restEscalationPolicyMockMvc.perform(get("/api/escalationPolicys/{id}", escalationPolicy.getId()))
+        .andExpect(status().isNotFound());
+        
         // Validate the database is empty
-        List<EscalationPolicy> escalationPolicys = escalationPolicyRepository.findAll();
-        assertThat(escalationPolicys).hasSize(0);
-        List<PolicyRule> policyRules = policyRuleRepository.findAll();
-        assertThat(policyRules).hasSize(0);
+//        List<EscalationPolicy> escalationPolicys = escalationPolicyRepository.findAll();
+//        assertThat(escalationPolicys).hasSize(0);
+//        List<PolicyRule> policyRules = policyRuleRepository.findAll();
+//        assertThat(policyRules).hasSize(0);
         
         //Users should be not be deleted
-        List<User> users = userRepository.findAll();
-        assertThat(users).hasSize(4);
+         users = userRepository.findAll();
+        assertThat(users).hasSize(UserCount);
     }
     
     @Test

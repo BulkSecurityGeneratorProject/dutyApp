@@ -88,10 +88,13 @@ public class ServiceResourceTest {
 
     @Before
     public void initTest() {
+    	serviceRepository.deleteAll();
+    	incidentRepository.deleteAll();
+    	escalationPolicyRepository.deleteAll();
     	// Initialize to insert one EscalationPolicy
     	EscalationPolicy escalationPolicy = new EscalationPolicy();
         escalationPolicy.setPolicy_name("ServiceTest Escalate Policy");
-        
+        escalationPolicy.setHas_cycle(false);
         Set<PolicyRule> policyRules = new HashSet<PolicyRule>();        
         
         Set<User> users = new HashSet<User>();
@@ -114,7 +117,7 @@ public class ServiceResourceTest {
         service.setIs_deleted(false);
         service.setApi_key("###");
                     
-        //find existing Escalate Policy and set it to serivce
+        //find existing Escalate Policy and set it to service
         EscalationPolicy e = escalationPolicyRepository.findAll().iterator().next();
         service.setEscalationPolicy(e);
     }  
@@ -125,7 +128,8 @@ public class ServiceResourceTest {
         // Validate the database is empty
         assertThat(serviceRepository.findAll()).hasSize(0);
         assertThat(incidentRepository.findAll()).hasSize(0);
-
+        List<EscalationPolicy> escalationPolicys= escalationPolicyRepository.findAll();
+        assertThat(escalationPolicys).hasSize(1);
         // Create the Service
         restServiceMockMvc.perform(post("/api/services")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -168,7 +172,6 @@ public class ServiceResourceTest {
     public void getService() throws Exception {
         // Initialize the database
         serviceRepository.saveAndFlush(service);
-        
         // Get the service
         restServiceMockMvc.perform(get("/api/services/{id}", service.getId()))
             .andExpect(status().isOk())
@@ -184,7 +187,7 @@ public class ServiceResourceTest {
     @Transactional
     public void getNonExistingService() throws Exception {
         // Get the service
-        restServiceMockMvc.perform(get("/api/services/{id}", 1L))
+        restServiceMockMvc.perform(get("/api/services/{id}", 999))
                 .andExpect(status().isNotFound());
     }
 
@@ -192,8 +195,8 @@ public class ServiceResourceTest {
     @Transactional
     public void updateService() throws Exception {
         // Initialize the database
+    	serviceRepository.deleteAll();
         serviceRepository.saveAndFlush(service);
-
         // Update the service
         service.setService_name(UPDATED_SERVICE_NAME);
         service.setService_type(UPDATED_SERVICE_TYPE);
@@ -220,8 +223,7 @@ public class ServiceResourceTest {
     @Transactional
     public void deleteService() throws Exception {
         // Initialize the database
-        serviceRepository.saveAndFlush(service);
-
+    	serviceRepository.saveAndFlush(service);
         // create an Incident and save
         incident = new Incident();
         incident.setDescription("Test Incident");

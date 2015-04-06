@@ -90,12 +90,14 @@ public class AlertResourceTest {
      // create EscalationPolicy
     	EscalationPolicy escalationPolicy = new EscalationPolicy();
         escalationPolicy.setPolicy_name(POLICY_NAME);
+        escalationPolicy.setHas_cycle(false);
         escalationPolicyRepository.saveAndFlush(escalationPolicy);   
         
      // Create the Service
         Service service = new Service();
         service.setService_name(SERVICE_NAME);
-        service.setEscalationPolicy(escalationPolicy);     
+        service.setEscalationPolicy(escalationPolicy);    
+        service.setIs_deleted(false);
         serviceRepository.saveAndFlush(service);
     
      //Create the Incident

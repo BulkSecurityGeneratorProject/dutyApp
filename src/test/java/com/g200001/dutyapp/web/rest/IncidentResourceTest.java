@@ -119,6 +119,7 @@ public class IncidentResourceTest {
     @Before
     public void initTest() {             
      // Validate the database is empty
+    	incidentRepository.deleteAll();
         assertThat(serviceRepository.findAll()).hasSize(0);
         
      // create EscalationPolicy
