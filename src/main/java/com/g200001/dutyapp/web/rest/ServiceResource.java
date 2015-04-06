@@ -159,7 +159,7 @@ public class ServiceResource {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<Void> enable(@PathVariable String id) {
-    	log.debug("REST request to disable Service : {}", id);
+    	log.debug("REST request to enable Service : {}", id);
     	 Service service = serviceRepository.findOne(id);
     	 service.setIs_deleted(false);
     	 serviceRepository.save(service);

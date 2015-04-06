@@ -25,23 +25,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.codahale.metrics.annotation.Timed;
 import com.g200001.dutyapp.domain.Alert;
-<<<<<<< HEAD
+
 import com.g200001.dutyapp.domain.User;
-=======
->>>>>>> master
+
 import com.g200001.dutyapp.domain.EscalationPolicy;
 import com.g200001.dutyapp.domain.Incident;
 import com.g200001.dutyapp.domain.PolicyRule;
-import com.g200001.dutyapp.domain.User;
 import com.g200001.dutyapp.repository.AlertRepository;
 import com.g200001.dutyapp.repository.IncidentRepository;
 import com.g200001.dutyapp.repository.PolicyRuleRepository;
 import com.g200001.dutyapp.repository.ServiceRepository;
-<<<<<<< HEAD
+
 import com.g200001.dutyapp.web.rest.IncidentBL.IncidentCreateThread;
-=======
+
 import com.g200001.dutyapp.repository.UserRepository;
->>>>>>> master
+
 import com.g200001.dutyapp.web.rest.util.PaginationUtil;
 
 
@@ -56,9 +54,7 @@ public class IncidentResource {
     private final Logger log = LoggerFactory.getLogger(IncidentResource.class);
 
     @Inject
-<<<<<<< HEAD
-	 private IncidentRepository incidentRepository;
-=======
+
     private IncidentRepository incidentRepository;
     @Inject
     private PolicyRuleRepository policyRuleRepository;
@@ -104,18 +100,12 @@ public class IncidentResource {
 			
 			alertRepository.save(_alerts);
 			
-//    		System.out.println(DateTime.now().toString("hh:mm:ss")+ "incident id="+_incident.getId());
-//    		try {
-//                Thread.sleep(5000);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace(); 
-//            }
-//    		System.out.println(DateTime.now().toString("hh:mm:ss")+ "incident id="+_incident.getId());
+
     	}
     }
    
     
->>>>>>> master
+
     /**
      * POST  /incidents -> Create a new incident.
      */
