@@ -107,23 +107,29 @@ public class IncidentResourceTest {
 
     private Incident incident;
     private Service service;
+    
+    private int initServiceNum = 0;
+    private int initIncidentNum = 0;
+    private int initAlertNum = 0;
 
     @PostConstruct
     public void setup() {
         MockitoAnnotations.initMocks(this);
         //IncidentResource incidentResource = new IncidentResource();
-        ReflectionTestUtils.setField(incidentResource, "incidentRepository", incidentRepository);
+        //ReflectionTestUtils.setField(incidentResource, "incidentRepository", incidentRepository);
         this.restIncidentMockMvc = MockMvcBuilders.standaloneSetup(incidentResource).build();
+        
+    	initServiceNum = serviceRepository.findAll().size();
+    	initIncidentNum = incidentRepository.findAll().size();
+    	initAlertNum = alertRepository.findAll().size();
     }
 
     @Before
-    public void initTest() {             
-     // Validate the database is empty
-        assertThat(serviceRepository.findAll()).hasSize(0);
-        
+    public void initTest() {               
      // create EscalationPolicy
     	EscalationPolicy escalationPolicy = new EscalationPolicy();
         escalationPolicy.setPolicy_name("IncidentTest Escalate Policy");
+        escalationPolicy.setHas_cycle(false);
         
         Set<PolicyRule> policyRules = new HashSet<PolicyRule>();        
         
@@ -143,6 +149,7 @@ public class IncidentResourceTest {
         // Create the Service
         service = new Service();
         service.setService_name(SERVICE_NAME);
+        service.setIs_deleted(false);
         service.setEscalationPolicy(escalationPolicy);       
         serviceRepository.saveAndFlush(service);
     
@@ -166,8 +173,8 @@ public class IncidentResourceTest {
     @Transactional
     public void createIncident() throws Exception {
         // Validate the database is empty
-        assertThat(incidentRepository.findAll()).hasSize(0);
-        assertThat(alertRepository.findAll()).hasSize(0);
+        assertThat(incidentRepository.findAll()).hasSize(initIncidentNum);
+        assertThat(alertRepository.findAll()).hasSize(initAlertNum);
         
         // Create the Incident
         restIncidentMockMvc.perform(post("/api/incidents")
@@ -177,7 +184,7 @@ public class IncidentResourceTest {
 
         // Validate the Incident in the database
         List<Incident> incidents = incidentRepository.findAll();
-        assertThat(incidents).hasSize(1);
+        assertThat(incidents).hasSize(initIncidentNum + 1);
         Incident testIncident = incidents.iterator().next();
         assertThat(testIncident.getState()).isEqualTo(DEFAULT_STATE);
         assertThat(testIncident.getAck_time().toDateTime(DateTimeZone.UTC)).isEqualTo(DEFAULT_ACK_TIME);
@@ -272,7 +279,7 @@ public class IncidentResourceTest {
 
         // Validate the Incident in the database
         List<Incident> incidents = incidentRepository.findAll();
-        assertThat(incidents).hasSize(1);
+        assertThat(incidents).hasSize(initIncidentNum + 1);
         Incident testIncident = incidents.iterator().next();
         assertThat(testIncident.getCreate_time().toDateTime(DateTimeZone.UTC)).isEqualTo(UPDATED_CREATE_TIME);
         assertThat(testIncident.getState()).isEqualTo(UPDATED_STATE);
@@ -296,13 +303,13 @@ public class IncidentResourceTest {
 
         // Validate incident/alerts is empty
         List<Incident> incidents = incidentRepository.findAll();
-        assertThat(incidents).hasSize(0);
+        assertThat(incidents).hasSize(initIncidentNum);
         List<Alert> alerts = alertRepository.findAll();
-        assertThat(alerts).hasSize(0);
+        assertThat(alerts).hasSize(initAlertNum);
         
         // validate user and sevice still exist
         List<Service> services = serviceRepository.findAll();
-        assertThat(services).hasSize(1);
+        assertThat(services).hasSize(initServiceNum + 1);
         User user = userRepository.findOneByLogin("admin");
         assertThat(user).isNotNull();
     }

@@ -1,16 +1,21 @@
 package com.g200001.dutyapp.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.GenericGenerator;
-
-import javax.persistence.*;
-
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * A EscalationPolicy.
@@ -34,13 +39,15 @@ public class EscalationPolicy implements Serializable {
     @Column(name = "cycle_time")
     private Long cycle_time;
 
-    @OneToMany(mappedBy = "escalationPolicy")
+/*    @OneToMany(mappedBy = "escalationPolicy")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Service> services = new HashSet<>();
+    private Set<Service> services = new HashSet<>();*/
 
-    //@OneToMany(mappedBy = "escalationPolicy")
-    @OneToMany(mappedBy = "escalationPolicy",fetch=FetchType.EAGER, cascade=CascadeType.ALL )
+    @OneToMany(mappedBy = "escalationPolicy",fetch=FetchType.EAGER)
+    @Cascade(value = {org.hibernate.annotations.CascadeType.DELETE_ORPHAN,
+    	      org.hibernate.annotations.CascadeType.ALL})
+    //@OneToMany(mappedBy = "escalationPolicy",fetch=FetchType.EAGER, cascade=CascadeType.ALL )
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<PolicyRule> policyRules = new HashSet<>();
 
@@ -79,13 +86,13 @@ public class EscalationPolicy implements Serializable {
         this.cycle_time = cycle_time;
     }
 
-    public Set<Service> getServices() {
+/*    public Set<Service> getServices() {
         return services;
     }
 
     public void setServices(Set<Service> services) {
         this.services = services;
-    }
+    }*/
     
     public Set<PolicyRule> getPolicyRules() {
     	return policyRules;

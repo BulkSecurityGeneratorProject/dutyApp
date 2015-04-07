@@ -10,38 +10,96 @@
             <div class="modal-content">
                 <form name="editForm" role="form" novalidate
                       class="ng-scope ng-invalid ng-invalid-required ng-dirty ng-valid-minlength"
-                      ng-submit="create()">
+                      ng-submit="create(escalationPolicy.id)">
 
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                                 ng-click="clear()">&times;</button>
                         <h4 class="modal-title" id="myEscalationPolicyLabel" translate="dutyappApp.escalationPolicy.home.createOrEditLabel">Create or edit a EscalationPolicy</h4>
                     </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label>ID</label>
-                            <input type="text" class="form-control" name="id"
-                                   ng-model="escalationPolicy.id" readonly>
-                        </div>
+                        <div class="modal-body">
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th translate="entity.detail.field"> Field </th>
+                                        <th translate="entity.detail.value"> Value </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <span translate="dutyappApp.escalationPolicy.id"> ID </span>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="input-sm form-control" ng-model="escalationPolicy.id" readonly>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span translate="dutyappApp.escalationPolicy.policy_name"> Policy_name </span>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="input-sm form-control" ng-model="escalationPolicy.policy_name">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span translate="dutyappApp.escalationPolicy.has_cycle">  Has_cycle </span>
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" class="input-sm form-control" ng-model="escalationPolicy.has_cycle">
+                                        </td>
+                                    </tr>
+                                    <tr ng-show="escalationPolicy.has_cycle">
+                                        <td>
+                                            <span translate="dutyappApp.escalationPolicy.cycle_time"> Cycle_time </span>
+                                        </td>
+                                        <td>
+                                            <input type="number" class="input-sm form-control" ng-model="escalationPolicy.cycle_time" >
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div ng-repeat="policyRule in escalationPolicy.policyRules">
+                                <div class="pd-item-content">
+                                    <div class="pd-escalation-policy pd-escalation-policy-padded">
+                                        <div class="escalation-rules">
+                                            <div class="escalation-rule-list">
+                                                <div class="escalation-rule-container">
+                                                    <div class="escalation-policy-layer">
 
-                        <div class="form-group">
-                            <label translate="dutyappApp.escalationPolicy.policy_name">Policy_name</label>
-                            <input type="text" class="form-control" name="policy_name"
-                                   ng-model="escalationPolicy.policy_name">
-                        </div>
-                        <div class="form-group">
-                            <label translate="dutyappApp.escalationPolicy.has_cycle">Has_cycle</label>
-                            <input type="checkbox" class="form-control" name="has_cycle"
-                                   ng-model="escalationPolicy.has_cycle">
-                        </div>
-                        <div class="form-group">
-                            <label translate="dutyappApp.escalationPolicy.cycle_time">Cycle_time</label>
-                            <input type="number" class="form-control" name="cycle_time"
-                                   ng-model="escalationPolicy.cycle_time">
-                        </div>
+                                                        <div class="escalation-policy-circle">{{$index +1}}</div>
 
+                                                        <div class="escalation-policy-layer-content">
+                                                            <p>
+                                                                <i class="glyphicon glyphicon-th" 
+                                                                ng-model="$parent.escalationPolicy.policyRules[$index].id"> 
+                                                                </i> Rule ID: {{policyRule.id}} 
+                                                            </p>
+                                                            <div> Search: <input ng-model="query"> </div>
 
-                    </div>
+                                                            <ul class="escalation-recipient-list"  ng-repeat="user in policyRule.users | filter:query ">
+                                                                <li><a class="escalation-recipient">
+                                                                    <i class="glyphicon glyphicon-user"></i> {{user.login}}
+                                                                </a></li>
+                                                            </ul>
+                                                        </div>
+
+                                                        <div class="escalation-delay-in-minutes escalation-policy-layer-timeout">
+                                                            <p><i class="icon icon-arrow-down"></i> Escalatioin after <strong> 
+                                                                <input type="number" class="input-sm form-control" 
+                                                                ng-model="$parent.escalationPolicy.policyRules[$index].escalate_time" >
+                                                               min</strong></p>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
                             <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>

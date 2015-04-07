@@ -6,8 +6,11 @@
 
     <h2 translate="dutyappApp.service.home.title">Service</h2>
 
-    <div class="alert alert-success" ng-show="success" translate="global.messages.success.create" translate-values="{entity: 'Service'}">
+    <div class="alert alert-success" ng-show="success=='CREATE'" translate="global.messages.success.create" translate-values="{entity: 'Service'}">
         <strong>Service created!</strong>
+    </div>
+    <div class="alert alert-success" ng-show="success=='UPDATE'" translate="global.messages.success.update" translate-values="{entity: 'Service'}">
+        <strong>Service Updated!</strong>
     </div>
 
     <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#saveServiceModal" ng-click="clear()">
@@ -19,7 +22,7 @@
             <div class="modal-content">
                 <form name="editForm" role="form" novalidate
                       class="ng-scope ng-invalid ng-invalid-required ng-dirty ng-valid-minlength form-horizontal"
-                      ng-submit="create()">
+                      ng-submit="create(service.id)">
 
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"

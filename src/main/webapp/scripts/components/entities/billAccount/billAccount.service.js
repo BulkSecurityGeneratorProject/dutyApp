@@ -2,7 +2,7 @@
 
 angular.module('dutyappApp')
     .factory('BillAccount', function ($resource) {
-        return $resource('api/billAccounts/:id', {}, {
+        return $resource('api/billAccounts/:id', {id: '@id'}, {
             'query': { method: 'GET', isArray: true},
             'get': {
                 method: 'GET',

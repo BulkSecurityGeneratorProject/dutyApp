@@ -17,13 +17,22 @@ angular.module('dutyappApp')
         };
         $scope.loadAll();
 
-        $scope.create = function () {
-            EscalationPolicy.update($scope.escalationPolicy,
+        $scope.create = function (id) {
+            if (id == null) {
+                EscalationPolicy.save($scope.escalationPolicy,
                 function () {
                     $scope.loadAll();
                     $('#saveEscalationPolicyModal').modal('hide');
                     $scope.clear();
                 });
+            } else {
+                EscalationPolicy.update($scope.escalationPolicy,
+                function () {
+                    $scope.loadAll();
+                    $('#saveEscalationPolicyModal').modal('hide');
+                    $scope.clear();
+                });
+            }
         };
 
         $scope.update = function (id) {

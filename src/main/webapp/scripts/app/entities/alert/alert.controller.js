@@ -18,13 +18,22 @@ angular.module('dutyappApp')
         };
         $scope.loadAll();
 
-        $scope.create = function () {
-            Alert.update($scope.alert,
-                function () {
-                    $scope.loadAll();
-                    $('#saveAlertModal').modal('hide');
-                    $scope.clear();
+        $scope.create = function (id) {
+            if (id == null) {
+                Alert.save($scope.alert,
+                    function () {
+                        $scope.loadAll();
+                        $('#saveAlertModal').modal('hide');
+                        $scope.clear();
                 });
+            } else {
+                Alert.update($scope.alert,
+                    function () {
+                        $scope.loadAll();
+                        $('#saveAlertModal').modal('hide');
+                        $scope.clear();
+                });
+            }
         };
 
         $scope.update = function (id) {

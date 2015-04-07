@@ -97,6 +97,11 @@ public class PolicyRule implements Serializable {
 
         if (id != null ? !id.equals(policyRule.id) : policyRule.id != null) return false;
 
+        if (escalate_time != null ? 
+        		!escalate_time.equals(policyRule.escalate_time) 
+        		: policyRule.escalate_time != null) 
+        	return false;
+        
         return true;
     }
 

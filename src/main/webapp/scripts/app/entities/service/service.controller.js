@@ -20,21 +20,36 @@ angular.module('dutyappApp')
         };
         $scope.loadAll();
 
-        $scope.create = function () {
+        $scope.create = function (id) {
             $scope.error = null;
 
-            Service.update($scope.service,
-                function () {
-                    $scope.loadAll();
-                    $('#saveServiceModal').modal('hide');
-                    $scope.clear();
-                }).$promise.then(function () {
-                    $scope.success = 'OK';
-                }).catch(function (response) {
-                    $scope.success = null;
-                    if (response.status == 400)
-                        $scope.success = 'ERROR';
-                });
+            if (id == null) {
+                Service.save($scope.service,
+                    function () {
+                        $scope.loadAll();
+                        $('#saveServiceModal').modal('hide');
+                        $scope.clear();
+                    }).$promise.then(function () {
+                        $scope.success = 'CREATE';
+                    }).catch(function (response) {
+                        $scope.success = null;
+                        if (response.status == 400)
+                            $scope.success = 'ERROR';
+                    });
+            } else {
+                Service.update($scope.service,
+                    function () {
+                        $scope.loadAll();
+                        $('#saveServiceModal').modal('hide');
+                        $scope.clear();
+                    }).$promise.then(function () {
+                        $scope.success = 'UPDATE';
+                    }).catch(function (response) {
+                        $scope.success = null;
+                        if (response.status == 400)
+                            $scope.success = 'ERROR';
+                    });
+            }
         };
 
         $scope.update = function (id) {

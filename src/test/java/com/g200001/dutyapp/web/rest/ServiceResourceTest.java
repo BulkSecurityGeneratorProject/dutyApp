@@ -61,7 +61,7 @@ public class ServiceResourceTest {
 
     private static final Boolean DEFAULT_IS_DELETED = false;
     private static final Boolean UPDATED_IS_DELETED = true;
-
+    
     @Inject
     private ServiceRepository serviceRepository;
     @Inject
@@ -77,6 +77,10 @@ public class ServiceResourceTest {
 
     private Service service;
     private Incident incident;
+    
+    private int initServiceNum = 0;
+    private int initIncidentNum = 0;
+    private int initPolicyNum = 0;
 
     @PostConstruct
     public void setup() {
@@ -84,13 +88,18 @@ public class ServiceResourceTest {
         //ServiceResource serviceResource = new ServiceResource();
         ReflectionTestUtils.setField(serviceResource, "serviceRepository", serviceRepository);
         this.restServiceMockMvc = MockMvcBuilders.standaloneSetup(serviceResource).build();
+        
+    	initServiceNum = serviceRepository.findAll().size();
+    	initIncidentNum = incidentRepository.findAll().size();
+    	initPolicyNum = escalationPolicyRepository.findAll().size();
     }
 
     @Before
-    public void initTest() {
+    public void initTest() {    	
     	// Initialize to insert one EscalationPolicy
     	EscalationPolicy escalationPolicy = new EscalationPolicy();
         escalationPolicy.setPolicy_name("ServiceTest Escalate Policy");
+        escalationPolicy.setHas_cycle(false);
         
         Set<PolicyRule> policyRules = new HashSet<PolicyRule>();        
         
@@ -115,7 +124,7 @@ public class ServiceResourceTest {
         service.setApi_key("###");
                     
         //find existing Escalate Policy and set it to serivce
-        EscalationPolicy e = escalationPolicyRepository.findAll().iterator().next();
+        EscalationPolicy e = escalationPolicyRepository.findOne(escalationPolicy.getId());
         service.setEscalationPolicy(e);
     }  
     
@@ -123,8 +132,8 @@ public class ServiceResourceTest {
     @Transactional
     public void createService() throws Exception {
         // Validate the database is empty
-        assertThat(serviceRepository.findAll()).hasSize(0);
-        assertThat(incidentRepository.findAll()).hasSize(0);
+        assertThat(serviceRepository.findAll()).hasSize(initServiceNum);
+        assertThat(incidentRepository.findAll()).hasSize(initIncidentNum);
 
         // Create the Service
         restServiceMockMvc.perform(post("/api/services")
@@ -134,8 +143,9 @@ public class ServiceResourceTest {
 
         // Validate the Service in the database
         List<Service> services = serviceRepository.findAll();
-        assertThat(services).hasSize(1);
-        Service testService = services.iterator().next();
+        assertThat(services).hasSize(initServiceNum + 1);
+        Service testService = services.get(initServiceNum);
+        
         assertThat(testService.getService_name()).isEqualTo(DEFAULT_SERVICE_NAME);
         assertThat(testService.getService_type()).isEqualTo(DEFAULT_SERVICE_TYPE);
         assertThat(testService.getApi_key()).isNotEqualTo(null);
@@ -156,11 +166,11 @@ public class ServiceResourceTest {
         restServiceMockMvc.perform(get("/api/services"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.[0].id").value(service.getId()))
-                .andExpect(jsonPath("$.[0].service_name").value(DEFAULT_SERVICE_NAME.toString()))
-                .andExpect(jsonPath("$.[0].api_key").exists())
-                .andExpect(jsonPath("$.[0].service_type").value(DEFAULT_SERVICE_TYPE))
-                .andExpect(jsonPath("$.[0].is_deleted").value(DEFAULT_IS_DELETED.booleanValue()));
+                .andExpect(jsonPath("$.[" + initServiceNum + "].id").value(service.getId()))
+                .andExpect(jsonPath("$.[" + initServiceNum + "].service_name").value(DEFAULT_SERVICE_NAME.toString()))
+                .andExpect(jsonPath("$.[" + initServiceNum + "].api_key").exists())
+                .andExpect(jsonPath("$.[" + initServiceNum + "].service_type").value(DEFAULT_SERVICE_TYPE))
+                .andExpect(jsonPath("$.[" + initServiceNum + "].is_deleted").value(DEFAULT_IS_DELETED.booleanValue()));
     }
 
     @Test
@@ -205,8 +215,9 @@ public class ServiceResourceTest {
 
         // Validate the Service in the database
         List<Service> services = serviceRepository.findAll();
-        assertThat(services).hasSize(1);
-        Service testService = services.iterator().next();
+        assertThat(services).hasSize(initServiceNum + 1);
+        Service testService = services.get(initServiceNum);
+        
         assertThat(testService.getService_name()).isEqualTo(UPDATED_SERVICE_NAME);
         assertThat(testService.getService_type()).isEqualTo(UPDATED_SERVICE_TYPE);
         assertThat(testService.getIs_deleted()).isEqualTo(UPDATED_IS_DELETED);
@@ -233,9 +244,9 @@ public class ServiceResourceTest {
         
         //validate the incident is in database now
         List<Service> services = serviceRepository.findAll();
-        assertThat(services).hasSize(1);
+        assertThat(services).hasSize(initServiceNum + 1);
         List<Incident> incidents = incidentRepository.findAll();
-        assertThat(incidents).hasSize(1);
+        assertThat(incidents).hasSize(initIncidentNum + 1);
         
         // Get the service
         restServiceMockMvc.perform(delete("/api/services/{id}", service.getId())
@@ -244,13 +255,13 @@ public class ServiceResourceTest {
 
         // Validate the database is empty
         services = serviceRepository.findAll();
-        assertThat(services).hasSize(0);
+        assertThat(services).hasSize(initServiceNum);
         incidents = incidentRepository.findAll();
-        assertThat(incidents).hasSize(0);
+        assertThat(incidents).hasSize(initIncidentNum);
         
         //Escapolicy should be not be deleted
         List<EscalationPolicy> escalationPolicys = escalationPolicyRepository.findAll();
-        assertThat(escalationPolicys).hasSize(1);
+        assertThat(escalationPolicys).hasSize(initPolicyNum + 1);
     }
     
     @Test

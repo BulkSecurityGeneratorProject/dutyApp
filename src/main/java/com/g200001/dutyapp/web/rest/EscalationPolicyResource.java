@@ -56,12 +56,18 @@ public class EscalationPolicyResource {
             return ResponseEntity.badRequest().header("Failure", "A new escalationPolicy cannot already have an ID").build();
         }       
         
-        escalationPolicyRepository.save(escalationPolicy);
-        return ResponseEntity.created(new URI("/api/escalationPolicys/" + escalationPolicy.getId())).build();
+        for(PolicyRule rule: escalationPolicy.getPolicyRules())
+        	rule.setEscalationPolicy(escalationPolicy);
+        
+        escalationPolicyRepository.saveAndFlush(escalationPolicy);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("policyID", escalationPolicy.getId());
+        return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+        //return ResponseEntity.created(new URI("/api/escalationPolicys/" + escalationPolicy.getId())).build();
     }
 
     /**
-     * PUT  /escalationPolicys -> Updates an existing escalationPolicy.
+     * PUT  /escalationPolicys/:id -> Updates an existing escalationPolicy.
      */
     @RequestMapping(value = "/escalationPolicys/{id}",
         method = RequestMethod.PUT,
@@ -75,9 +81,10 @@ public class EscalationPolicyResource {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         
-        escalationPolicy.setId(id);
-        e = escalationPolicy;
-        escalationPolicyRepository.save(e);
+        for(PolicyRule rule: escalationPolicy.getPolicyRules())
+        	rule.setEscalationPolicy(escalationPolicy);
+        
+        escalationPolicyRepository.save(escalationPolicy);
         return ResponseEntity.ok().build();
     }
     
@@ -168,12 +175,15 @@ public class EscalationPolicyResource {
         if (escalationPolicy == null) {
         	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-                
+        
+        Set<PolicyRule> rules = escalationPolicy.getPolicyRules();
+        rules.clear();
+                       
         for(PolicyRule rule : policyRules) {
         	rule.setEscalationPolicy(escalationPolicy);
+        	rules.add(rule);
         }
-        escalationPolicy.setPolicyRules(policyRules);
-        
+              
         escalationPolicyRepository.save(escalationPolicy);
         return ResponseEntity.ok().build();
     }

@@ -19,13 +19,22 @@ angular.module('dutyappApp')
         };
         $scope.loadAll();
 
-        $scope.create = function () {
-            Incident.update($scope.incident,
-                function () {
-                    $scope.loadAll();
-                    $('#saveIncidentModal').modal('hide');
-                    $scope.clear();
-                });
+        $scope.create = function (id) {
+            if (id == null) {
+                Incident.save($scope.incident,
+                    function () {
+                        $scope.loadAll();
+                        $('#saveIncidentModal').modal('hide');
+                        $scope.clear();
+                    });
+            } else {
+                Incident.update($scope.incident,
+                    function () {
+                        $scope.loadAll();
+                        $('#saveIncidentModal').modal('hide');
+                        $scope.clear();
+                    });
+            }
         };
 
         $scope.update = function (id) {
