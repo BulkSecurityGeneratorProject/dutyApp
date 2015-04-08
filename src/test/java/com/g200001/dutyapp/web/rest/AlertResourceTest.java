@@ -156,7 +156,6 @@ public class AlertResourceTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(alert.getId()))
-            .andExpect(jsonPath("$.incident").doesNotExist())
             .andExpect(jsonPath("$.alert_time").value(DEFAULT_ALERT_TIME_STR));
     }
 
