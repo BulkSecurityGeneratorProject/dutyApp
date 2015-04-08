@@ -11,5 +11,6 @@
 
 5. 'CREATE DATABSE DUTYAPP' is a must;
    'CREATE TABLE' is not must; if table does not exist, Spring & Hibernate will help to create them.
+   MySQL setting is in src\main\resources\config\application-dev.yml
    
 6. Run Maven->Update Project, then Run As -> Spring Boot App.
