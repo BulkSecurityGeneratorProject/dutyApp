@@ -96,8 +96,8 @@
                 <tr ng-repeat="alert in alerts">
                     <td><a ui-sref="alertDetail({id:alert.id})">{{alert.id}}</a></td>
                     <td>{{alert.alert_time}}</td>
-                    <td>{{alert.Incident.description}}</td>
-                    <td>{{alert.User.login}}</td>
+                    <td>{{alert.incident.description}}</td>
+                    <td>{{alert.user.login}}</td>
                     <td>
                         <button type="submit"
                                 ui-sref="alertDetail({id:alert.id})"

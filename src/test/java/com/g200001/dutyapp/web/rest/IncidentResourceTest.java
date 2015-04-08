@@ -31,6 +31,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -147,12 +148,18 @@ public class IncidentResourceTest {
         escalationPolicyRepository.saveAndFlush(escalationPolicy);   
         
         // Create the Service
-        service = new Service();
-        service.setService_name(SERVICE_NAME);
-        service.setIs_deleted(false);
-        service.setEscalationPolicy(escalationPolicy);       
-        serviceRepository.saveAndFlush(service);
+        Service rservice = new Service();
+        rservice.setService_name(SERVICE_NAME);
+        rservice.setIs_deleted(false);
+        rservice.setEscalationPolicy(escalationPolicy);       
+        serviceRepository.saveAndFlush(rservice);
     
+        //----------------------
+        
+        // Need a serivce to represent front
+        service = new Service();
+        service.setId(rservice.getId());
+        
         // Create the Incident
         incident = new Incident();
         incident.setCreate_time(DEFAULT_CREATE_TIME);
@@ -177,11 +184,16 @@ public class IncidentResourceTest {
         assertThat(alertRepository.findAll()).hasSize(initAlertNum);
         
         // Create the Incident
-        restIncidentMockMvc.perform(post("/api/incidents")
+        ResultActions action =
+        		restIncidentMockMvc.perform(post("/api/incidents")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(incident)))
-                .andExpect(status().isCreated());
+                .content(TestUtil.convertObjectToJsonBytes(incident)));
+        
+        action.andExpect(status().isCreated());
 
+        String id = (String)action.andReturn().getResponse().getHeaderValue("incidentID");
+    	incident.setId(id);
+        
         // Validate the Incident in the database
         List<Incident> incidents = incidentRepository.findAll();
         assertThat(incidents).hasSize(initIncidentNum + 1);
@@ -201,9 +213,9 @@ public class IncidentResourceTest {
         
         //automatically insert an alert
         List<Alert> alerts = alertRepository.findAll();
-        EscalationPolicy ep = incident.getService().getEscalationPolicy();
+        Incident i = incidentRepository.findOne(incident.getId());
         int expectAlertNum = 0;
-        for (PolicyRule rule: ep.getPolicyRules()) {
+        for (PolicyRule rule: i.getService().getEscalationPolicy().getPolicyRules()) {
         	expectAlertNum += rule.getUsers().size();
         }
         assertThat(alerts).hasSize(expectAlertNum);

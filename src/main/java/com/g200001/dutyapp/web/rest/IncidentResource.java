@@ -28,6 +28,7 @@ import com.g200001.dutyapp.domain.Alert;
 import com.g200001.dutyapp.domain.EscalationPolicy;
 import com.g200001.dutyapp.domain.Incident;
 import com.g200001.dutyapp.domain.PolicyRule;
+import com.g200001.dutyapp.domain.Service;
 import com.g200001.dutyapp.domain.User;
 import com.g200001.dutyapp.repository.AlertRepository;
 import com.g200001.dutyapp.repository.IncidentRepository;
@@ -122,10 +123,17 @@ public class IncidentResource {
         incident.setCreate_time(DateTime.now());
         incident.setState(Incident.CREATED);
         
+        Service s = serviceRepository.findOne(incident.getService().getId());
+        incident.setService(s);
+        
         incidentRepository.save(incident);
 
         new CreateAlertThread(incident).run();
-        return ResponseEntity.created(new URI("/api/incidents/" + incident.getId())).build();
+        
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("incidentID", incident.getId());
+        return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+        //return ResponseEntity.created(new URI("/api/incidents/" + incident.getId())).build();
     }
 
     /**

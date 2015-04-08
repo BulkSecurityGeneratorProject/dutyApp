@@ -37,11 +37,11 @@ public class Alert implements Serializable {
     @Column(name = "alert_time", nullable = false)
     private DateTime alert_time;
 
-    @ManyToOne(fetch=FetchType.LAZY,cascade=CascadeType.DETACH)
-    @JsonIgnore
+    @ManyToOne(fetch=FetchType.EAGER,cascade=CascadeType.DETACH)
+    //@JsonIgnore
     private Incident incident;
 
-    @ManyToOne
+    @ManyToOne (fetch=FetchType.EAGER,cascade=CascadeType.DETACH)
     private User user;
 
     public String getId() {

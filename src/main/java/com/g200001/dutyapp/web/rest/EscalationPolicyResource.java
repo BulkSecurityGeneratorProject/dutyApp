@@ -251,7 +251,7 @@ public class EscalationPolicyResource {
     		@PathVariable String policyId, @PathVariable String id, 
     		HttpServletResponse response) throws Exception {
         log.debug("REST request to get Policy Rule : {}", id);
-        /*EscalationPolicy escalationPolicy = escalationPolicyRepository.findOne(policyId);
+        EscalationPolicy escalationPolicy = escalationPolicyRepository.findOne(policyId);
         if (escalationPolicy == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -261,14 +261,7 @@ public class EscalationPolicyResource {
         if (!rule.getEscalationPolicy().equals(escalationPolicy))
         	throw new RuntimeException("policy.rule does not equal to rule id");
         
-        ResponseEntity<PolicyRule> r = new ResponseEntity<>(rule, HttpStatus.OK);
-        System.out.println("---------------");
-        System.out.println(r.getHeaders());
-        System.out.println(r.getBody());
-        return r;*/
-        
-        PolicyRule rule = policyRuleRepository.findOne(id);
-        return new ResponseEntity<PolicyRule>(rule, HttpStatus.OK);
+        return new ResponseEntity<>(rule, HttpStatus.OK);
     }
     
     /**
