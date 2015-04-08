@@ -1,9 +1,12 @@
 package com.g200001.dutyapp.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
-import com.g200001.dutyapp.domain.User;
-import com.g200001.dutyapp.repository.UserRepository;
-import com.g200001.dutyapp.security.AuthoritiesConstants;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.security.RolesAllowed;
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -12,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.security.RolesAllowed;
-import javax.inject.Inject;
-import java.util.List;
-import javax.servlet.http.HttpServletResponse;
+import com.codahale.metrics.annotation.Timed;
+import com.g200001.dutyapp.domain.User;
+import com.g200001.dutyapp.repository.UserRepository;
+import com.g200001.dutyapp.security.AuthoritiesConstants;
 
 /**
  * REST controller for managing users.
@@ -40,7 +43,7 @@ public class UserResource {
         log.debug("REST request to get all Users");
         return userRepository.findAll();
     }
-
+    
     /**
      * GET  /users/:login -> get the "login" user.
      */

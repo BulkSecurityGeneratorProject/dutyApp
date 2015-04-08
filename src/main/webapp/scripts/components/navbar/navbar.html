@@ -18,17 +18,24 @@
                     </a>
                 </li>
 
-                <li ui-sref-active="active">
+                <li ui-sref-active="active" ng-class="{active: $state.includes('account')}">
                     <a ui-sref="billAccount">
-                        <span class="glyphicon glyphicon-home"></span>
+                        <span class="glyphicon glyphicon-th-list"></span>
                         <span translate="global.menu.entities.billAccount">billAccount</span>
                     </a>
                 </li>
 
-				<li ui-sref-active="active">
+				<li ui-sref-active="active" ng-class="{active: $state.includes('account')}">
                     <a ui-sref="service">
-                        <span class="glyphicon glyphicon-home"></span>
+                        <span class="glyphicon glyphicon-th-list"></span>
                         <span translate="global.menu.entities.service">service</span>
+                    </a>
+                </li>
+
+                <li ui-sref-active="active" ng-class="{active: $state.includes('account')}">
+                    <a ui-sref="escalationPolicy">
+                        <span class="glyphicon glyphicon-th-list"></span>
+                        <span translate="global.menu.entities.escalationPolicy">escalationPolicy</span>
                     </a>
                 </li>
 				
@@ -43,8 +50,6 @@
                                 </span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li ui-sref-active="active" ><a ui-sref="escalationPolicy"><span class="glyphicon glyphicon-asterisk"></span>
-                        &#xA0;<span translate="global.menu.entities.escalationPolicy">escalationPolicy</span></a></li>
                         <li ui-sref-active="active" ><a ui-sref="policyRule"><span class="glyphicon glyphicon-asterisk"></span>
                         &#xA0;<span translate="global.menu.entities.policyRule">policyRule</span></a></li>
                         <li ui-sref-active="active" ><a ui-sref="incident"><span class="glyphicon glyphicon-asterisk"></span>
@@ -101,7 +106,7 @@
                             &#xA0;<span translate="global.menu.admin.apidocs">API Docs</span></a></li>
                     </ul>
                 </li>
-                <li ui-sref-active="active" class="dropdown pointer" ng-controller="LanguageController">
+                <!-- <li ui-sref-active="active" class="dropdown pointer" ng-controller="LanguageController">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="">
                                 <span>
                                     <span class="glyphicon glyphicon-flag"></span>
@@ -114,7 +119,7 @@
                             <a href="" ng-click="changeLanguage(language)">{{'language.' + language| translate}}</a>
                         </li>
                     </ul>
-                </li>
+                </li> -->
             </ul>
         </div>
     </div>

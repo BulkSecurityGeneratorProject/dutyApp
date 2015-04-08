@@ -2,7 +2,7 @@
 
 angular.module('dutyappApp')
     .factory('Incident', function ($resource) {
-        return $resource('api/incidents/:id', {id:'@id'}, {
+        return $resource('api/incidents/:id', {}, {
             'query': { method: 'GET', isArray: true},
             'get': {
                 method: 'GET',

@@ -60,6 +60,32 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            
+                            <div class="pd-item-content">
+                                    <div class="pd-escalation-policy pd-escalation-policy-padded">
+                                        <div class="escalation-rules">
+                                            <div class="escalation-rule-list">
+                                                <div class="escalation-rule-container">
+                                                    <div class="escalation-policy-layer">
+
+                                                        <div class="escalation-policy-circle">
+                                                        </div>
+
+                                                        <div class="escalation-policy-layer-content">
+                                                            <a class="pull-right remove-rule" ng-click="addRule()">
+                                                                <i class="glyphicon glyphicon-plus title="plus"> </i>
+                                                            </a>
+                                                            
+                                                            <i class="glyphicon glyphicon-th" />
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+
                             <div ng-repeat="policyRule in escalationPolicy.policyRules">
                                 <div class="pd-item-content">
                                     <div class="pd-escalation-policy pd-escalation-policy-padded">
@@ -68,28 +94,51 @@
                                                 <div class="escalation-rule-container">
                                                     <div class="escalation-policy-layer">
 
-                                                        <div class="escalation-policy-circle">{{$index +1}}</div>
+                                                        <div class="escalation-policy-circle">{{$index +1}}
+                                                        </div>
 
                                                         <div class="escalation-policy-layer-content">
+                                                            <a class="pull-right remove-rule" ng-click="removeRule($index)">
+                                                                <i class="glyphicon glyphicon-remove title="remove"> 
+                                                                </i>
+                                                            </a>
+                                                        
                                                             <p>
-                                                                <i class="glyphicon glyphicon-th" 
-                                                                ng-model="$parent.escalationPolicy.policyRules[$index].id"> 
-                                                                </i> Rule ID: {{policyRule.id}} 
+                                                            <i class="glyphicon glyphicon-th" 
+                                                                ng-model="escalationPolicy.policyRules[$index].id" >                                                               
+                                                            </i> Rule ID: {{policyRule.id}} 
                                                             </p>
-                                                            <div> Search: <input ng-model="query"> </div>
+                                                            
+                                                            <!-- <div> Search: <input ng-model="query"> </div>  -->
+                                                            
+                                                            <form class="form-inline">
+                                                                <ol class="nya-bs-select" ng-model="escalationPolicy.policyRules[$index].users" multiple="true" data-live-search="true" data-size="4"> 
+                                                                    <li nya-bs-option="u in users">
+                                                                        <a> {{ u.login }}
+                                                                            <span class="glyphicon glyphicon-pushpin check-mark"></span>
+                                                                        </a>
+                                                                    </li>
+                                                                </ol>
+                                                            </form>
 
                                                             <ul class="escalation-recipient-list"  ng-repeat="user in policyRule.users | filter:query ">
                                                                 <li><a class="escalation-recipient">
                                                                     <i class="glyphicon glyphicon-user"></i> {{user.login}}
+                                                                    <a class="pull-right remove-rule" ng-click="removeUser($parent.$index, $index)">
+                                                                        <i class="glyphicon glyphicon-remove"></i>
+                                                                    </a>
                                                                 </a></li>
                                                             </ul>
                                                         </div>
 
                                                         <div class="escalation-delay-in-minutes escalation-policy-layer-timeout">
-                                                            <p><i class="icon icon-arrow-down"></i> Escalatioin after <strong> 
+                                                            <i class="icon icon-arrow-down"></i> 
+                                                            <p> Escalatioin after </p>
+                                                                <p>
                                                                 <input type="number" class="input-sm form-control" 
                                                                 ng-model="$parent.escalationPolicy.policyRules[$index].escalate_time" >
-                                                               min</strong></p>
+                                                                </p>
+                                                               min
                                                         </div>
 
                                                     </div>

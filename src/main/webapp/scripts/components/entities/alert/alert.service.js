@@ -2,7 +2,7 @@
 
 angular.module('dutyappApp')
     .factory('Alert', function ($resource) {
-        return $resource('api/alerts/:id', {id,'@id'}, {
+        return $resource('api/alerts/:id', {}, {
             'query': { method: 'GET', isArray: true},
             'get': {
                 method: 'GET',
