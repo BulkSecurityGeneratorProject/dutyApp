@@ -113,13 +113,12 @@
                                                             
                                                            
                                                             <ol class="nya-bs-select" ng-model="escalationPolicy.policyRules[$index].users" multiple="true" data-live-search="true" data-size="4"> 
-                                                                    <li nya-bs-option="u in users">
-                                                                        <a> {{ u.login }}
-                                                                            <span class="glyphicon glyphicon-pushpin check-mark"></span>
-                                                                        </a>
-                                                                    </li>
+                                                                <li nya-bs-option="u in users">
+                                                                    <a> {{ u.login }}
+                                                                       <span class="glyphicon glyphicon-pushpin check-mark"></span>
+                                                                    </a>
+                                                                </li>
                                                             </ol>
-                                                            
 
                                                             <ul class="escalation-recipient-list"  ng-repeat="user in policyRule.users | filter:query ">
                                                                 <li><a class="escalation-recipient">

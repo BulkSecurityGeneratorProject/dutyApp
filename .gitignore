@@ -4,6 +4,8 @@ node_modules
 .idea
 *.iml
 .classpath
+.project
+.settings
 .tmp
 .merge_file*
 .sass-cache
