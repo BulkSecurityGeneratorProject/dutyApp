@@ -11,8 +11,10 @@
 
 5. 'CREATE DATABSE DUTYAPP' is a must;
    'CREATE TABLE' is not must; if table does not exist, Spring & Hibernate will help to create them.
+   MySQL setting is in src\main\resources\config\application-dev.yml
    
 6. Run Maven->Update Project, then Run As -> Spring Boot App.
+<<<<<<< HEAD
 
 API:
 POST /api/escalationPolicys  -> add a new escalationPolicy
@@ -52,3 +54,5 @@ PUT  /api/alerts/:id -> Updates an existing alert.
 GET  /api/alerts -> get all the alerts.
 GET  /api/alerts/:id -> get the "id" alert.
 DELETE  /api/alerts/:id -> delete the "id" alert.
+=======
+>>>>>>> master

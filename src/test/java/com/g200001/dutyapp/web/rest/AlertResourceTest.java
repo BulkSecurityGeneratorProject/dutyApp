@@ -96,7 +96,11 @@ public class AlertResourceTest {
      // Create the Service
         Service service = new Service();
         service.setService_name(SERVICE_NAME);
+<<<<<<< HEAD
         service.setEscalationPolicy(escalationPolicy);
+=======
+        service.setEscalationPolicy(escalationPolicy);    
+>>>>>>> master
         service.setIs_deleted(false);
         serviceRepository.saveAndFlush(service);
     
