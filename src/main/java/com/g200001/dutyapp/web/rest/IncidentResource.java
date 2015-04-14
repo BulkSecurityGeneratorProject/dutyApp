@@ -181,6 +181,22 @@ public class IncidentResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/incidents", offset, limit);
         return new ResponseEntity<List<Incident>>(page.getContent(), headers, HttpStatus.OK);
     }
+    
+    /**
+     * GET  /incidents/new -> get all the new incidents.
+     */
+    @RequestMapping(value = "/incidents/New/",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<List<Incident>> getNew(@RequestParam(value = "page" , required = false) Integer offset,
+                                  @RequestParam(value = "per_page", required = false) Integer limit)
+        throws URISyntaxException {
+        Page<Incident> page = incidentRepository.findAll(PaginationUtil.generatePageRequest(offset, limit));
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/incidents", offset, limit);
+        return new ResponseEntity<List<Incident>>(page.getContent(), headers, HttpStatus.OK);
+    }
+    
 
     /**
      * GET  /incidents/:id -> get the "id" incident.

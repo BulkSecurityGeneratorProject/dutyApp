@@ -1,13 +1,13 @@
 package com.g200001.dutyapp.web.rest;
 
-<<<<<<< HEAD
+
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
-=======
+
 import com.codahale.metrics.annotation.Timed;
 import com.g200001.dutyapp.domain.Service;
 import com.g200001.dutyapp.domain.User;
@@ -17,7 +17,7 @@ import com.g200001.dutyapp.repository.UserRepository;
 import com.g200001.dutyapp.security.AuthoritiesConstants;
 import com.g200001.dutyapp.security.xauth.Token;
 import com.g200001.dutyapp.security.xauth.TokenProvider;
->>>>>>> master
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,12 +36,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-<<<<<<< HEAD
+
 import com.codahale.metrics.annotation.Timed;
 import com.g200001.dutyapp.domain.User;
 import com.g200001.dutyapp.repository.UserRepository;
 import com.g200001.dutyapp.security.AuthoritiesConstants;
-=======
+
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 
@@ -50,7 +50,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
->>>>>>> master
+
 
 /**
  * REST controller for managing users.

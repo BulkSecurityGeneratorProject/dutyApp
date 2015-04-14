@@ -95,22 +95,14 @@ public class ServiceResourceTest {
     }
 
     @Before
-<<<<<<< HEAD
+
     public void initTest() {    	
-=======
-    public void initTest() {
-    	serviceRepository.deleteAll();
-    	incidentRepository.deleteAll();
-    	escalationPolicyRepository.deleteAll();
->>>>>>> master
+
     	// Initialize to insert one EscalationPolicy
     	EscalationPolicy escalationPolicy = new EscalationPolicy();
         escalationPolicy.setPolicy_name("ServiceTest Escalate Policy");
         escalationPolicy.setHas_cycle(false);
-<<<<<<< HEAD
-        
-=======
->>>>>>> master
+
         Set<PolicyRule> policyRules = new HashSet<PolicyRule>();        
         
         Set<User> users = new HashSet<User>();
@@ -133,30 +125,26 @@ public class ServiceResourceTest {
         service.setIs_deleted(false);
         service.setApi_key("###");
                     
-<<<<<<< HEAD
+
         //find existing Escalate Policy and set it to serivce
         EscalationPolicy e = escalationPolicyRepository.findOne(escalationPolicy.getId());
-=======
-        //find existing Escalate Policy and set it to service
-        EscalationPolicy e = escalationPolicyRepository.findAll().iterator().next();
->>>>>>> master
+
+
         service.setEscalationPolicy(e);
     }  
     
     @Test
     @Transactional
     public void createService() throws Exception {
-        // Validate the database is empty
-<<<<<<< HEAD
+
+
         assertThat(serviceRepository.findAll()).hasSize(initServiceNum);
         assertThat(incidentRepository.findAll()).hasSize(initIncidentNum);
 
-=======
-        assertThat(serviceRepository.findAll()).hasSize(0);
-        assertThat(incidentRepository.findAll()).hasSize(0);
+
         List<EscalationPolicy> escalationPolicys= escalationPolicyRepository.findAll();
-        assertThat(escalationPolicys).hasSize(1);
->>>>>>> master
+        
+
         // Create the Service
         restServiceMockMvc.perform(post("/api/services")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -222,9 +210,7 @@ public class ServiceResourceTest {
     @Test
     @Transactional
     public void updateService() throws Exception {
-        // Initialize the database
-    	serviceRepository.deleteAll();
-        serviceRepository.saveAndFlush(service);
+        
         // Update the service
         service.setService_name(UPDATED_SERVICE_NAME);
         service.setService_type(UPDATED_SERVICE_TYPE);
@@ -236,7 +222,7 @@ public class ServiceResourceTest {
 
         // Validate the Service in the database
         List<Service> services = serviceRepository.findAll();
-        assertThat(services).hasSize(initServiceNum + 1);
+        assertThat(services).hasSize(initServiceNum );
         Service testService = services.get(initServiceNum);
         
         assertThat(testService.getService_name()).isEqualTo(UPDATED_SERVICE_NAME);

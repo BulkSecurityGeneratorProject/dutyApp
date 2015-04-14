@@ -271,16 +271,16 @@ public class EscalationPolicyResourceTest {
         .andExpect(status().isNotFound());
         
         // Validate the database is empty
-<<<<<<< HEAD
+
         List<EscalationPolicy> escalationPolicys = escalationPolicyRepository.findAll();
         assertThat(escalationPolicys).hasSize(initPolicyNum);
         List<PolicyRule> policyRules = policyRuleRepository.findAll();
         assertThat(policyRules).hasSize(initRuleNum);
         
         //Users should be not be deleted
-        List<User> users = userRepository.findAll();
+         users = userRepository.findAll();
         assertThat(users).hasSize(initUserNum);
-=======
+
 //        List<EscalationPolicy> escalationPolicys = escalationPolicyRepository.findAll();
 //        assertThat(escalationPolicys).hasSize(0);
 //        List<PolicyRule> policyRules = policyRuleRepository.findAll();
@@ -289,7 +289,7 @@ public class EscalationPolicyResourceTest {
         //Users should be not be deleted
          users = userRepository.findAll();
         assertThat(users).hasSize(UserCount);
->>>>>>> master
+
     }
     
     @Test
