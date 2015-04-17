@@ -1,7 +1,7 @@
 <div>
 
     <h2 translate="dutyappApp.escalationPolicy.home.title">EscalationPolicy</h2>
-    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#saveEscalationPolicyModal" ng-click="clear()">
+    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#saveEscalationPolicyModal" ng-click="clear()" id="createPolicyBtn">
         <span class="glyphicon glyphicon-flash"></span> <span translate="dutyappApp.escalationPolicy.home.createLabel">Create a new EscalationPolicy</span>
     </button>
     <div class="modal fade" id="saveEscalationPolicyModal" tabindex="-1" role="dialog" aria-labelledby="myEscalationPolicyLabel"
@@ -47,7 +47,7 @@
                                             <span translate="dutyappApp.escalationPolicy.has_cycle">  Has_cycle </span>
                                         </td>
                                         <td>
-                                            <input type="checkbox" class="input-sm form-control" ng-model="escalationPolicy.has_cycle">
+                                            <input type="checkbox" class="input-sm form-control" ng-model="escalationPolicy.has_cycle" >
                                         </td>
                                     </tr>
                                     <tr ng-show="escalationPolicy.has_cycle">
@@ -152,7 +152,7 @@
                         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
                             <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
                         </button>
-                        <button type="submit" ng-disabled="editForm.$invalid" class="btn btn-primary">
+                        <button type="submit" ng-disabled="editForm.$invalid" class="btn btn-primary" id="savePolicyBtn">
                             <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
                         </button>
                     </div>
@@ -198,7 +198,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="escalationPolicy in escalationPolicys">
+                <tr ng-repeat="escalationPolicy in escalationPolicys" >
                     <td><a ui-sref="escalationPolicyDetail({id:escalationPolicy.id})">{{escalationPolicy.id}}</a></td>
                     <td>{{escalationPolicy.policy_name}}</td>
                     <td>{{escalationPolicy.has_cycle}}</td>

@@ -1,4 +1,4 @@
-// Generated on 2015-03-14 using generator-jhipster 2.5.1
+// Generated on 2015-04-10 using generator-jhipster 2.5.1
 'use strict';
 var fs = require('fs');
 
@@ -388,8 +388,49 @@ module.exports = function (grunt) {
                     VERSION: parseVersionFromPomXml()
                 }
             }
-        }
+        },
+
+        protractor: {
+            options: {
+                // Location of your protractor config file
+                configFile: "src/test/e2e/conf.js",              
+                // Do you want the output to use fun colors?
+                noColor: false,            
+                args: { }
+            },
+            e2e: {
+                options: {
+                  // Stops Grunt process if a test fails
+                  keepAlive: false
+                }
+            },
+              continuous: {
+                options: {
+                  keepAlive: true
+                }
+            }
+        },
+
+        connect: {
+			options: {
+				port: 9000,
+				hostname: 'localhost'
+			},    
+			test: {
+				options: {
+				base: ['src/main/webapp']
+				}
+			}
+		}
     });
+    
+    grunt.loadNpmTasks('grunt-contrib-connect');
+    grunt.loadNpmTasks('grunt-protractor-runner');
+
+    grunt.registerTask('e2e-test', [
+        //'connect:test',
+        'protractor:e2e'
+    ]);
 
     grunt.registerTask('serve', [
         'clean:server',

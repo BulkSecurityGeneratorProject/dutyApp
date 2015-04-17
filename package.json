@@ -49,5 +49,8 @@
   },
   "engines": {
     "node": ">=0.10.0"
+  },
+  "scripts": {
+    "start": "http-server ./src/main/webapp -a localhost -p 9000"
   }
 }

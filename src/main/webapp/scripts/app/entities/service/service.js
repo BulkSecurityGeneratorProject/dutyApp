@@ -4,7 +4,7 @@ angular.module('dutyappApp')
     .config(function ($stateProvider) {
         $stateProvider
             .state('service', {
-                parent: 'entity',
+                parent: 'site',
                 url: '/service',
                 data: {
                     roles: ['ROLE_USER'],
@@ -24,7 +24,7 @@ angular.module('dutyappApp')
                 }
             })
             .state('serviceDetail', {
-                parent: 'entity',
+                parent: 'service',
                 url: '/service/:id',
                 data: {
                     roles: ['ROLE_USER'],

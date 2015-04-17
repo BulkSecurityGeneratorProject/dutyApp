@@ -18,6 +18,7 @@ angular.module('dutyappApp')
                     $state.go('home');
                 } else {
                     $rootScope.back();
+                    //$state.go('escalationPolicy');
                 }
             }).catch(function () {
                 $scope.authenticationError = true;

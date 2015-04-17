@@ -18,28 +18,28 @@
                     </a>
                 </li>
 
-                <li ui-sref-active="active" ng-class="{active: $state.includes('account')}">
+                <li ng-class="{active: $state.includes('billAccount')}">
                     <a ui-sref="billAccount">
                         <span class="glyphicon glyphicon-th-list"></span>
                         <span translate="global.menu.entities.billAccount">billAccount</span>
                     </a>
                 </li>
 
-				<li ui-sref-active="active" ng-class="{active: $state.includes('account')}">
+				<li ng-class="{active: $state.includes('service')}">
                     <a ui-sref="service">
                         <span class="glyphicon glyphicon-th-list"></span>
                         <span translate="global.menu.entities.service">service</span>
                     </a>
                 </li>
 
-                <li ui-sref-active="active" ng-class="{active: $state.includes('account')}">
+                <li ng-class="{active: $state.includes('escalationPolicy')}">
                     <a ui-sref="escalationPolicy">
                         <span class="glyphicon glyphicon-th-list"></span>
                         <span translate="global.menu.entities.escalationPolicy">escalationPolicy</span>
                     </a>
                 </li>
 				
-                <li ui-sref-active="active" ng-switch-when="true" class="dropdown pointer">
+                <li ng-class="{active: $state.includes('entity')}" ng-switch-when="true" class="dropdown pointer">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="">
                                 <span>
                                     <span class="glyphicon glyphicon-th-list"></span>

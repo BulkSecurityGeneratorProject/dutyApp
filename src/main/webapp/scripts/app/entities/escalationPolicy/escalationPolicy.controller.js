@@ -21,6 +21,9 @@ angular.module('dutyappApp')
 
         $scope.create = function (id) {
             if (id == null) {
+                if ($scope.escalationPolicy.has_cycle == null)
+                    $scope.escalationPolicy.has_cycle = false;
+
                 EscalationPolicy.save($scope.escalationPolicy,
                 function () {
                     $scope.loadAll();
