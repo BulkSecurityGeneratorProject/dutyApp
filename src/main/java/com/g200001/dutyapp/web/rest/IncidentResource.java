@@ -290,7 +290,7 @@ public class IncidentResource {
     /**
      * PUT  /incidents/:id/assign/:useId -> assign an existing incident.
      */
-    @RequestMapping(value = "/incidents/{id}/acknowledge/{assignToUserId}",
+    @RequestMapping(value = "/incidents/{id}/reassign/{assignToUserId}",
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
