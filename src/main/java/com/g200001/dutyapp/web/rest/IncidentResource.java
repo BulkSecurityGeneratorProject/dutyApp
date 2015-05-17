@@ -307,7 +307,7 @@ public class IncidentResource {
         if (user == null)
         	throw new RuntimeException("User should not be NULL");
         
-        User assignUsr = userRepository.findOne(userId);
+        User assignUsr = userRepository.findOne(assignToUserId);
         if (assignUsr == null)
         	throw new RuntimeException("User should not be NULL");
         
