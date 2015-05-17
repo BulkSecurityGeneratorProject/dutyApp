@@ -286,4 +286,36 @@ public class IncidentResource {
         incidentRepository.save(incident);
         return ResponseEntity.ok().build();
     }
+    
+    /**
+     * PUT  /incidents/:id/assign/:useId -> assign an existing incident.
+     */
+    @RequestMapping(value = "/incidents/{id}/acknowledge/{assignToUserId}",
+        method = RequestMethod.PUT,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<Void> assign(@PathVariable String id, @PathVariable String assignToUserId, @RequestBody String userId) throws URISyntaxException {
+    	log.debug("REST request to assign Incident : {}", id);
+        
+        Incident incident = incidentRepository.findOne(id);        
+
+        if (incident.getId() == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        
+        User user = userRepository.findOne(userId);
+        if (user == null)
+        	throw new RuntimeException("User should not be NULL");
+        
+        User assignUsr = userRepository.findOne(userId);
+        if (assignUsr == null)
+        	throw new RuntimeException("User should not be NULL");
+        
+        incident.setAssign_user(assignUsr);
+        incident.setAck_time(DateTime.now());
+        incident.setState(Incident.REASSIGNED);
+        
+        incidentRepository.save(incident);
+        return ResponseEntity.ok().build();
+    }
 }
